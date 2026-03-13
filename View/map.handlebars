@@ -1,387 +1,290 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bản đồ Thảo Cầm Viên</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <style>
-        /* === GLOBAL & LAYOUT === */
+        /* layout */
+
         html,
         body {
             margin: 0;
-            height: 100vh;
-            font-family: 'Nunito', sans-serif;
-            display: flex;
-            /* Dùng Flexbox để chia layout */
-            background-color: #f8f9fa;
-            overflow: hidden;
+            height: 100%;
+            font-family: Arial;
         }
 
-        /* === SIDEBAR === */
+        #map {
+            position: fixed;
+            top: 0;
+            left: 300px;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* sidebar */
+
         .sidebar {
-            width: 340px;
-            min-width: 340px;
-            height: 100%;
-            background: #ffffff;
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 300px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            display: flex;
-            flex-direction: column;
+            overflow: auto;
         }
 
         .sidebar-header {
-            padding: 20px;
-            background: #2E7D32;
-            /* Màu xanh lá cây mảng rùng */
-            color: white;
-            font-size: 24px;
-            font-weight: 800;
-            text-align: center;
-            letter-spacing: 0.5px;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
         }
 
         .search-box {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            background: #fafafa;
+            padding: 10px;
         }
 
         .search-box input {
             width: 100%;
-            box-sizing: border-box;
-            padding: 12px 16px;
-            border-radius: 20px;
-            border: 1px solid #d1d5db;
-            font-family: 'Nunito', sans-serif;
-            font-size: 15px;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
-        }
-
-        .search-box input:focus {
-            border-color: #2E7D32;
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
         }
 
         .animal-list {
-            flex: 1;
-            overflow-y: auto;
             padding: 10px;
         }
 
-        /* Custom Scrollbar cho Sidebar */
-        .animal-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .animal-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .animal-list::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-        }
-
-        .animal-list::-webkit-scrollbar-thumb:hover {
-            background: #aaa;
-        }
-
         .animal-item {
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 12px;
+            padding: 8px;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: white;
-            border: 1px solid transparent;
-            transition: all 0.2s ease;
+            gap: 8px;
         }
 
         .animal-item:hover {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            background: #f0f0f0;
         }
 
-        .animal-item-icon {
-            font-size: 24px;
-            background: #e8f5e9;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
+        /* popup */
 
-        .animal-item-name {
-            font-weight: 600;
-            font-size: 16px;
-            color: #333;
-        }
-
-        /* === MAP === */
-        #map {
-            flex-grow: 1;
-            /* Tự động chiếm hết phần bên phải */
-            height: 100%;
-            background-color: #e5e5f7;
-            /* Màu nền dự phòng cho map */
-            z-index: 1;
-        }
-
-        /* === CUSTOM MARKERS === */
-        .custom-marker {
-            background: white;
-            border: 3px solid #2E7D32;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            font-size: 24px;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-        }
-
-        .custom-marker:hover {
-            transform: scale(1.2);
-            background: #e8f5e9;
-            z-index: 1000 !important;
-        }
-
-        /* === LEAFLET POPUP OVERRIDE === */
-        .leaflet-popup-content-wrapper {
-            padding: 0;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .leaflet-popup-content {
-            margin: 0;
-            width: 260px !important;
-        }
-
-        .leaflet-container a.leaflet-popup-close-button {
-            color: white;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-            padding: 6px 8px;
-        }
-
-        /* === POPUP CARD === */
         .popup-card {
-            display: flex;
-            flex-direction: column;
-            font-family: 'Nunito', sans-serif;
+            width: 220px;
         }
 
         .popup-img {
             width: 100%;
-            height: 150px;
+            height: 120px;
             object-fit: cover;
-            border-bottom: 2px solid #2E7D32;
-        }
-
-        .popup-info {
-            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 6px;
         }
 
         .popup-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #1f2937;
-            margin-bottom: 5px;
+            font-weight: bold;
         }
 
         .popup-status {
-            font-size: 14px;
-            color: #4b5563;
-            line-height: 1.5;
-        }
-
-        .popup-status span {
-            font-weight: 700;
-            color: #2E7D32;
+            font-size: 13px;
+            color: #555;
         }
     </style>
+
 </head>
 
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-header">🌿 Thảo Cầm Viên</div>
-        <div class="search-box">
-            <input id="search" placeholder="🔍 Tìm kiếm tên con vật...">
+
+        <div class="sidebar-header">
+            Thảo Cầm Viên
         </div>
+
+        <div class="search-box">
+            <input id="search" placeholder="Search animal...">
+        </div>
+
         <div class="animal-list" id="animalList">
         </div>
+
     </div>
 
     <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        /* === MAP SETUP === */
+
+        /* map setup */
+
         const map = L.map("map", {
             crs: L.CRS.Simple,
-            minZoom: -1,
-            maxZoom: 2,
-            zoomControl: true,
-            zoomAnimation: true
-        });
+            minZoom: -3,
+            maxZoom: 2
+        })
 
-        /* Kích thước thật của ảnh bản đồ */
-        const imgWidth = 2000;
-        const imgHeight = 1100;
-        const bounds = [[0, 0], [imgHeight, imgWidth]];
+        const width = 2000
+        const height = 1100
 
-        /* Load Image Overlay */
-        const overlay = L.imageOverlay("/assets1/zoo.jpg", bounds);
-        overlay.addTo(map);
+        const bounds = [[0, 0], [height, width]]
 
-        map.fitBounds(bounds);
-        map.setMaxBounds(bounds);
-        map.options.maxBoundsViscosity = 1.0;
+        L.imageOverlay("/assets1/zoo.jpg", bounds)
+            .addTo(map)
 
-        /* === DATA === */
-        // Handlebars sẽ tiêm dữ liệu vào đây
-        const animals = {{{ animals }}};
+        map.fitBounds(bounds)
 
-        /* === LOGIC: EMOJI THEO LOÀI === */
-        function getAnimalEmoji(type) {
-            const t = type?.toLowerCase() || "";
-            if (t.includes("tiger")) return "🐯";
-            if (t.includes("elephant")) return "🐘";
-            if (t.includes("giraffe")) return "🦒";
-            if (t.includes("lion")) return "🦁";
-            if (t.includes("bird")) return "🦜";
-            if (t.includes("monkey")) return "🐒";
-            if (t.includes("bear")) return "🐻";
-            if (t.includes("snake")) return "🐍";
-            if (t.includes("crocodile")) return "🐊";
-            return "🐾";
-        }
+        /* animals */
 
-        /* Tạo Leaflet DivIcon HTML */
-        function createCustomMarker(emoji) {
+        const animals = {{{ animals }}}
+
+        /* icon function */
+
+        function animalIcon(type) {
+
+            let icon = "🐾"
+
+            if (type?.toLowerCase().includes("tiger")) icon = "🐯"
+            else if (type?.toLowerCase().includes("elephant")) icon = "🐘"
+            else if (type?.toLowerCase().includes("giraffe")) icon = "🦒"
+            else if (type?.toLowerCase().includes("lion")) icon = "🦁"
+            else if (type?.toLowerCase().includes("bird")) icon = "🦜"
+
             return L.divIcon({
-                html: `<div class="custom-marker">${emoji}</div>`,
-                iconSize: [50, 50], // Tăng vùng click
-                iconAnchor: [25, 25], // Căn giữa marker
-                popupAnchor: [0, -20], // Đẩy popup lên trên marker 1 chút
-                className: "" // Cực kỳ quan trọng: Xóa class mặc định của Leaflet để không bị viền trắng
-            });
+                html: `<div style="font-size:28px">${icon}</div>`,
+                iconSize: [30, 30],
+                className: "animal-marker"
+            })
+
         }
 
-        /* === RENDER MARKERS === */
-        const markerMap = {};
-        let highlightCircle;
+        /* markers */
+
+        const markerMap = {}
+
+        let highlightCircle
 
         animals.forEach(a => {
-            const emoji = getAnimalEmoji(a.species);
 
             const marker = L.marker(
                 [a.map_y, a.map_x],
-                { icon: createCustomMarker(emoji) }
-            ).addTo(map);
+                { icon: animalIcon(a.species) }
+            ).addTo(map)
 
-            markerMap[a.id] = marker;
+            markerMap[a.id] = marker
 
-            /* Hover Highlight Circle */
+            /* hover highlight */
+
             marker.on("mouseover", () => {
-                if (highlightCircle) map.removeLayer(highlightCircle);
-                highlightCircle = L.circle([a.map_y, a.map_x], {
-                    radius: 50,
-                    color: "#2E7D32",
-                    weight: 2,
-                    fillColor: "#4CAF50",
-                    fillOpacity: 0.2
-                }).addTo(map);
-            });
+
+                if (highlightCircle) map.removeLayer(highlightCircle)
+
+                highlightCircle = L.circle(
+                    [a.map_y, a.map_x],
+                    {
+                        radius: 40,
+                        color: "#00aaff",
+                        weight: 2,
+                        fillOpacity: 0.2
+                    }
+                ).addTo(map)
+
+            })
 
             marker.on("mouseout", () => {
-                if (highlightCircle) map.removeLayer(highlightCircle);
-            });
+                if (highlightCircle) map.removeLayer(highlightCircle)
+            })
 
-            /* Gắn Popup (Thẻ thông tin hiển thị đẹp) */
+            /* popup */
+
             marker.bindPopup(`
-                <div class="popup-card">
-                    <img class="popup-img" src="${a.image_url || '/images/animal.jpg'}" alt="${a.name}">
-                    <div class="popup-info">
-                        <div class="popup-title">${a.name}</div>
-                        <div class="popup-status">
-                            Loài: <span>${a.species || "Chưa rõ"}</span><br>
-                            Tình trạng: <span>${a.status || "Bình thường"}</span>
-                        </div>
-                    </div>
-                </div>
-            `);
-        });
 
-        /* === SIDEBAR RENDER === */
-        const list = document.getElementById("animalList");
+<div class="popup-card">
+
+<img class="popup-img"
+src="${a.image_url || '/images/animal.jpg'}">
+
+<div class="popup-title">
+${a.name}
+</div>
+
+<div class="popup-status">
+Species: ${a.species || "unknown"}<br>
+Status: ${a.status || "normal"}
+</div>
+
+</div>
+
+`)
+
+        })
+
+        /* sidebar render */
+
+        const list = document.getElementById("animalList")
 
         function renderList(data) {
-            list.innerHTML = "";
 
-            if (data.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding: 20px; color: #888;">Không tìm thấy con vật nào.</div>`;
-                return;
-            }
+            list.innerHTML = ""
 
             data.forEach(a => {
-                const item = document.createElement("div");
-                item.className = "animal-item";
 
-                const emoji = getAnimalEmoji(a.species);
+                const item = document.createElement("div")
+                item.className = "animal-item"
 
                 item.innerHTML = `
-                    <div class="animal-item-icon">${emoji}</div>
-                    <div class="animal-item-name">${a.name}</div>
-                `;
+<span style="font-size:20px">
+${animalIcon(a.species).options.html}
+</span>
+${a.name}
+`
 
                 item.onclick = () => {
-                    const marker = markerMap[a.id];
-                    // Bay mượt mà đến vị trí con vật
-                    map.flyTo([a.map_y, a.map_x], 1, {
-                        animate: true,
-                        duration: 1.5
-                    });
 
-                    // Mở popup
-                    setTimeout(() => { marker.openPopup(); }, 500);
-                };
+                    const marker = markerMap[a.id]
 
-                list.appendChild(item);
-            });
+                    map.setView(
+                        [a.map_y, a.map_x],
+                        1
+                    )
+
+                    marker.openPopup()
+
+                }
+
+                list.appendChild(item)
+
+            })
+
         }
 
-        // Render lần đầu
-        renderList(animals);
+        renderList(animals)
 
-        /* === TÌM KIẾM === */
-        document.getElementById("search").addEventListener("input", e => {
-            const keyword = e.target.value.toLowerCase();
-            const filtered = animals.filter(a =>
-                a.name.toLowerCase().includes(keyword) ||
-                (a.species && a.species.toLowerCase().includes(keyword))
-            );
-            renderList(filtered);
-        });
+        /* search */
+
+        document
+            .getElementById("search")
+            .addEventListener("input", e => {
+
+                const keyword = e.target.value.toLowerCase()
+
+                const filtered = animals.filter(a =>
+                    a.name.toLowerCase().includes(keyword)
+                )
+
+                renderList(filtered)
+
+            })
+
     </script>
+
 </body>
 
 </html>
