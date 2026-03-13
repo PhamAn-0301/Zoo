@@ -16,13 +16,18 @@ let index = 0;
 
 // Highlight active menu item based on current page URL
 function setActiveMenuItem() {
-  const path = window.location.pathname.split("/").pop();
-  const currentFile = path || "index.html";
+  const currentPath = window.location.pathname || "/";
+  const routes = window.APP_ROUTES || {
+    home: "/",
+    ticket: "/ticket",
+    shopping: "/shopping",
+    user: "/user",
+  };
   const menuMap = {
-    "Trang chủ": "index.html",
-    "Mua vé": "ticket.html",
-    "Mua sắm": "shopping.html",
-    "Tài khoản": "user.html",
+    "Trang chủ": routes.home,
+    "Mua vé": routes.ticket,
+    "Mua sắm": routes.shopping,
+    "Tài khoản": routes.user,
   };
   document.querySelectorAll(".menuItemLink").forEach((link) => {
     const parent = link.closest(".menuItem");
@@ -30,8 +35,8 @@ function setActiveMenuItem() {
     const contentElem = parent.querySelector(".menuItemContent");
     if (!contentElem) return;
     const menuText = contentElem.textContent.trim();
-    const expectedFile = menuMap[menuText];
-    if (expectedFile && currentFile === expectedFile) {
+    const expectedPath = menuMap[menuText];
+    if (expectedPath && currentPath === expectedPath) {
       parent.classList.add("active");
     } else {
       parent.classList.remove("active");
@@ -47,7 +52,9 @@ const dropdownList = document.querySelector(".dropdown-list");
 const arrow = document.querySelector(".arrow");
 const input = document.getElementById("calendar-input");
 const calendar = document.getElementById("calendar");
-const destinationSpan = dropdownHeader.querySelector("span");
+const destinationSpan = dropdownHeader
+  ? dropdownHeader.querySelector("span")
+  : null;
 const continueBtn = document.querySelector(".btn-container");
 
 // ======== STATE ========
@@ -55,11 +62,22 @@ let currentDate = new Date();
 let selectedDate = null;
 let selectedDestination = null;
 
+const hasTicketForm =
+  dropdownHeader &&
+  dropdownList &&
+  arrow &&
+  input &&
+  calendar &&
+  destinationSpan &&
+  continueBtn;
+
 // ======== DROPDOWN ========
-dropdownHeader.addEventListener("click", (e) => {
-  e.stopPropagation();
-  toggleDropdown();
-});
+if (hasTicketForm) {
+  dropdownHeader.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleDropdown();
+  });
+}
 
 function toggleDropdown(show = null) {
   const shouldShow = show ?? !dropdownList.classList.contains("show");
@@ -68,14 +86,16 @@ function toggleDropdown(show = null) {
 }
 
 // Click chọn điểm đến
-document.querySelectorAll(".dropdown-list p").forEach((item) => {
-  item.addEventListener("click", () => {
-    selectedDestination = item.textContent;
-    destinationSpan.textContent = selectedDestination;
-    toggleDropdown(false);
-    checkFormComplete();
+if (hasTicketForm) {
+  document.querySelectorAll(".dropdown-list p").forEach((item) => {
+    item.addEventListener("click", () => {
+      selectedDestination = item.textContent;
+      destinationSpan.textContent = selectedDestination;
+      toggleDropdown(false);
+      checkFormComplete();
+    });
   });
-});
+}
 
 function renderCalendar(date) {
   calendar.innerHTML = "";
@@ -190,13 +210,16 @@ function hideCalendar() {
 }
 
 // Sự kiện input
-input.addEventListener("click", (e) => {
-  e.stopPropagation();
-  toggleCalendar();
-});
+if (hasTicketForm) {
+  input.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleCalendar();
+  });
+}
 
 // Click ngoài để ẩn cả dropdown & calendar
 document.addEventListener("click", (e) => {
+  if (!hasTicketForm) return;
   if (!dropdownList.contains(e.target) && !dropdownHeader.contains(e.target))
     toggleDropdown(false);
   if (!calendar.contains(e.target) && e.target !== input) hideCalendar();
@@ -211,15 +234,19 @@ function checkFormComplete() {
   continueBtn.style.opacity = isComplete ? "1" : "0.6";
 }
 
-checkFormComplete();
+if (hasTicketForm) {
+  checkFormComplete();
+}
 
-continueBtn.addEventListener("click", () => {
-  if (!selectedDestination || !selectedDate) return;
+if (hasTicketForm) {
+  continueBtn.addEventListener("click", () => {
+    if (!selectedDestination || !selectedDate) return;
 
-  const location = encodeURIComponent(selectedDestination);
-  const date = encodeURIComponent(formatDate(selectedDate));
+    const location = encodeURIComponent(selectedDestination);
+    const date = encodeURIComponent(formatDate(selectedDate));
 
-  // Mở trang ticket-detail.html kèm dữ liệu
-  const targetUrl = `ticket-detail.html?location=${location}&date=${date}`;
-  window.location.href = targetUrl;
-});
+    // Mở trang ticket-detail.html kèm dữ liệu
+    const targetUrl = `ticket-detail.html?location=${location}&date=${date}`;
+    window.location.href = targetUrl;
+  });
+}

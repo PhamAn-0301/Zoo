@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   
 <!-- Mirrored from vinwondersnhatrang.vercel.app/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:35:27 GMT -->
@@ -148,7 +148,7 @@
             <i class="fa-solid fa-chevron-left"></i>
           </button>
           <div class="bodySlider">
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider1.jpg" alt="" class="sliderImage" />
                 <p class="sliderContent">Tham quan công viên VinWonders</p>
@@ -158,7 +158,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider2.jpg" alt="" class="sliderImage" />
                 <p class="sliderContent">Đu quay dây văng</p>
@@ -168,7 +168,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/hammo.webp" alt="" class="sliderImage" />
                 <p class="sliderContent">Cuộc phiêu lưu hầm mỏ</p>
@@ -178,7 +178,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider3.jpg" alt="" class="sliderImage" />
                 <p class="sliderContent">Vui chơi thủy cung VinWonders</p>
@@ -188,7 +188,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider5.webp" alt="" class="sliderImage" />
                 <p class="sliderContent">Mãng xà giao chiến</p>
@@ -198,7 +198,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider6.webp" alt="" class="sliderImage" />
                 <p class="sliderContent">Cơn cuồng nộ của Hải Vương</p>
@@ -208,7 +208,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider7.jpg" alt="" class="sliderImage" />
                 <p class="sliderContent">Vương quốc kẹo ngọt</p>
@@ -218,7 +218,7 @@
                 </p>
               </div>
             </a>
-            <a href="ticket.html">
+            <a href="/ticket">
               <div class="sliderItem">
                 <img src="assets/slider8.jpg" alt="" class="sliderImage" />
                 <p class="sliderContent">Đường lượn nhớ đời</p>
@@ -240,7 +240,7 @@
         <div class="journey-section">
           <div class="journey-content">
             <p>Xây dựng hành trình trải nghiệm cho riêng bạn cùng VinWonders</p>
-            <a href="ticket.html">
+            <a href="/ticket">
               <button class="journey-btn">Tạo hành trình</button>
             </a>
           </div>
@@ -265,24 +265,24 @@
           </a>
         </div>
         <div class="menuItem">
-          <a href="ticket.html" class="menuItemLink">
+          <a href="/ticket" class="menuItemLink">
             <i class="fa-solid fa-ticket menuItemIcon"></i>
             <p class="menuItemContent">Mua vé</p>
           </a>
         </div>
         <div class="menuMap">
-          <a href="map-game.html" class="menuItemLink">
+          <a href="/map-game" class="menuItemLink">
             <i class="fa-solid fa-location-dot menuMapIcon"></i>
           </a>
         </div>
         <div class="menuItem">
-          <a href="shopping.html" class="menuItemLink">
+          <a href="/shopping" class="menuItemLink">
             <i class="fa-solid fa-bag-shopping menuItemIcon"></i>
             <p class="menuItemContent">Mua sắm</p>
           </a>
         </div>
         <div class="menuItem">
-          <a href="user.html" class="menuItemLink">
+          <a href="/user" class="menuItemLink">
             <i class="fa-solid fa-circle-user menuItemIcon"></i>
             <p class="menuItemContent">Tài khoản</p>
           </a>
@@ -313,7 +313,7 @@
           joinQueueBtnFirst.addEventListener("click", (e) => {
             e.preventDefault();
             console.log("Đã bấm nút tham gia");
-            window.location.href = "game.html";
+            window.location.href = "/game";
           });
         } else {
           console.log("Không tìm thấy joinQueueBtnFirst");
@@ -464,6 +464,8 @@
       document.addEventListener("DOMContentLoaded", autoScrollSlider);
     </script>
     <script src="config.js"></script>
+    <script src="route/routes.js"></script>
+    <script src="model/storageModel.js"></script>
     <script src="main.js"></script>
     <!-- ========== CHATBOT BÉ VIN ========== -->
 
@@ -497,3 +499,4 @@
 
 <!-- Mirrored from vinwondersnhatrang.vercel.app/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:35:45 GMT -->
 </html>
+
