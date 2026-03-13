@@ -3,9 +3,9 @@ import knex from 'knex';
 const db = knex({
   client: 'pg',
   connection: {
-    host: 'db.gspygwrbemidbytcuumh.supabase.co',
+    host: 'aws-1-ap-south-1.pooler.supabase.com',
     port: 5432,
-    user: 'postgres',
+    user: 'postgres.gspygwrbemidbytcuumh',
     password: 'Baoan0902727331',
     database: 'postgres',
     pool: { min: 0, max: 20 },
