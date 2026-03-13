@@ -3,17 +3,14 @@ import * as mapModel from "../model/mapModel.js";
 
 const router = express.Router();
 
-router.get("/map", async (req, res, next) => {
-  try {
-    const pageData = await mapModel.getMapPageData();
+router.get("/map", async (req, res) => {
 
-    res.render("map", {
-      ...pageData
-    });
+  const animals = await mapModel.getAnimals();
 
-  } catch (error) {
-    next(error);
-  }
+  res.render("map", {
+    animals: JSON.stringify(animals)
+  });
+
 });
 
 export default router;
