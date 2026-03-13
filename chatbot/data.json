@@ -1,0 +1,43 @@
+{
+  "info": {
+    "name": "Thảo Cầm Viên Sài Gòn",
+    "address": "2 Nguyễn Bỉnh Khiêm, Quận 1, TP.HCM",
+    "open_time": "07:00 - 17:30",
+    "adult_ticket": "60.000 VNĐ",
+    "child_ticket": "40.000 VNĐ",
+    "parking": "Có bãi giữ xe máy và ô tô",
+    "founded": "1864",
+    "animals": [
+      "Hổ",
+      "Voi",
+      "Hươu cao cổ",
+      "Cá sấu",
+      "Khỉ",
+      "Hà mã",
+      "Công"
+    ]
+  },
+
+  "faq": [
+    {
+      "keywords": ["giờ mở cửa", "mấy giờ mở cửa"],
+      "answer": "Thảo Cầm Viên mở cửa từ 7:00 đến 17:30 mỗi ngày."
+    },
+    {
+      "keywords": ["giá vé", "vé bao nhiêu"],
+      "answer": "Giá vé người lớn là 60.000 VNĐ và trẻ em là 40.000 VNĐ."
+    },
+    {
+      "keywords": ["địa chỉ", "ở đâu"],
+      "answer": "Thảo Cầm Viên Sài Gòn nằm tại 2 Nguyễn Bỉnh Khiêm, Quận 1, TP.HCM."
+    },
+    {
+      "keywords": ["gửi xe", "bãi xe"],
+      "answer": "Thảo Cầm Viên có bãi giữ xe cho xe máy và ô tô ngay cổng vào."
+    },
+    {
+      "keywords": ["động vật", "có con gì"],
+      "answer": "Thảo Cầm Viên có nhiều loài như hổ, voi, hươu cao cổ, cá sấu, khỉ, hà mã và nhiều loài chim."
+    }
+  ]
+}
