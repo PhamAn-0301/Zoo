@@ -28,7 +28,48 @@
         }
 
         /* sidebar */
+        /* Sidebar hiện đại hơn */
+.sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 300px;
+    background: #ffffff;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
 
+.sidebar-header {
+    padding: 25px 20px;
+    font-size: 22px;
+    color: #2c3e50;
+    background: #f8f9fa;
+    border-bottom: 2px solid #eee;
+}
+
+.animal-item {
+    padding: 12px 15px;
+    margin: 8px 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease; /* Tạo hiệu ứng mượt */
+    border: 1px solid transparent;
+}
+
+.animal-item:hover {
+    background: #e3f2fd;
+    transform: translateX(5px);
+    border-color: #2196f3;
+}
+
+/* Tùy chỉnh thanh cuộn cho đẹp */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
         .sidebar {
             position: fixed;
             left: 0;
@@ -125,21 +166,52 @@
 
         /* map setup */
 
+     /* map setup */
+       /* map setup */
+        const width = 2000;
+        const height = 1100;
+        const bounds = [[0, 0], [height, width]];
+
+        // Khởi tạo map, tạm thời chưa set minZoom
         const map = L.map("map", {
             crs: L.CRS.Simple,
-            minZoom: -3,
-            maxZoom: 2
-        })
+            maxZoom: 2,
+            zoomSnap: 0.1, // Bắt buộc phải có để mức zoom tính toán (số lẻ) hoạt động mượt
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0 // Không cho kéo nảy ra ngoài viền ảnh
+        });
 
-        const width = 2000
-        const height = 1100
+        L.imageOverlay("/assets1/zoo.jpg", bounds).addTo(map);
 
-        const bounds = [[0, 0], [height, width]]
+        // Hàm tự động tính toán minZoom để ảnh luôn FULL khung bên phải
+        function updateMinZoom() {
+            const mapContainer = document.getElementById("map");
 
-        L.imageOverlay("/assets1/zoo.jpg", bounds)
-            .addTo(map)
+            // Tính tỷ lệ giữa khung chứa bản đồ và kích thước thật của ảnh
+            const scaleX = mapContainer.clientWidth / width;
+            const scaleY = mapContainer.clientHeight / height;
 
-        map.fitBounds(bounds)
+            // Math.max giúp ảnh luôn phủ kín viền (cover). 
+            // Không bao giờ để lộ khoảng trắng dù màn hình tỷ lệ nào.
+            const scale = Math.max(scaleX, scaleY);
+
+            // Đổi từ tỷ lệ (scale) sang mức zoom của Leaflet (hệ số logarit cơ số 2)
+            const minZoom = Math.log2(scale);
+
+            // Cập nhật minZoom mới cho bản đồ
+            map.setMinZoom(minZoom);
+        }
+
+        // Chạy hàm tính toán khi vừa load trang
+        updateMinZoom();
+
+        // Căn giữa bản đồ ở mức zoom nhỏ nhất vừa tính toán
+        map.setView([height / 2, width / 2], map.getMinZoom());
+
+        // Tự động tính toán lại nếu người dùng thay đổi kích thước cửa sổ trình duyệt
+        window.addEventListener("resize", () => {
+            updateMinZoom();
+        });
 
         /* animals */
 
@@ -246,19 +318,20 @@ ${animalIcon(a.species).options.html}
 ${a.name}
 `
 
-                item.onclick = () => {
+               item.onclick = () => {
+                    const marker = markerMap[a.id];
 
-                    const marker = markerMap[a.id]
+                    // 1. Lướt đến vị trí với mức zoom = 1 (hoặc thay bằng map.getZoom() nếu bạn muốn giữ nguyên mức zoom hiện tại không bị giật vào trong)
+                    map.flyTo([a.map_y, a.map_x], 1, {
+                        animate: true,
+                        duration: 1.2 // Lướt đi trong 1.2 giây
+                    });
 
-                    map.setView(
-                        [a.map_y, a.map_x],
-                        1
-                    )
-
-                    marker.openPopup()
-
-                }
-
+                    // 2. Lắng nghe sự kiện: Đợi bản đồ dừng hẳn hiệu ứng lướt thì mới mở Popup
+                    map.once('moveend', () => {
+                        marker.openPopup();
+                    });
+                };
                 list.appendChild(item)
 
             })
