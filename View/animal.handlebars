@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #122620;
+      --accent: #ee6c23;
+      --accent-deep: #c74f0b;
+      --mint: #dff3e7;
+      --paper: #fffdf8;
+      --line: #eedfce;
+      --muted: #5e6965;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Be Vietnam Pro", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      padding: 26px 18px 40px;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 700px at 85% -12%, #ffd7b2 0%, transparent 60%),
+        radial-gradient(900px 500px at -8% 105%, #cceedd 0%, transparent 50%),
+        linear-gradient(160deg, #fffefb 0%, #f6fbf8 46%, #f9f4ed 100%);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 20px;
+      background:
+        linear-gradient(140deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 247, 236, 0.9) 60%, rgba(255, 239, 220, 0.86) 100%);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(18, 38, 32, 0.08);
+      animation: reveal 0.45s ease-out;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 38px);
+      letter-spacing: 0.2px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .subtitle {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .home-link {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--accent-deep);
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .home-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(199, 79, 11, 0.16);
+    }
+
+    .meta {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: #1a6442;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .alert {
+      margin-top: 14px;
+      border: 1px solid #f2bd8f;
+      background: #fff4e8;
+      color: #8a490f;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(18, 38, 32, 0.07);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: reveal 0.45s ease-out both;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(18, 38, 32, 0.14);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .name {
+      margin: 0;
+      font-weight: 800;
+      font-size: 19px;
+      color: #0f3528;
+    }
+
+    .species {
+      margin: 5px 0 10px;
+      font-style: italic;
+      color: #4e5f59;
+      font-size: 14px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid #dfd5c8;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #fffaf3;
+      color: #27443b;
+    }
+
+    .desc {
+      margin: 0;
+      color: #2f3f3a;
+      line-height: 1.42;
+      font-size: 14px;
+      min-height: 42px;
+    }
+
+    .empty {
+      margin-top: 8px;
+      border: 1px dashed #d7c8b4;
+      background: rgba(255, 255, 255, 0.78);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      color: #5f605c;
+      font-weight: 600;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 16px;
+      }
+
+      .hero-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .card-image {
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>Animal Directory</h1>
+          <p class="subtitle">{{subtitle}}</p>
+        </div>
+        <a class="home-link" href="/">Quay ve trang chu</a>
+      </div>
+
+      <div class="meta">Cap nhat: {{updatedAt}}</div>
+
+      {{#if errorMessage}}
+      <div class="alert">
+        Khong the tai du lieu Supabase: {{errorMessage}}
+      </div>
+      {{/if}}
+    </section>
+
+    {{#if hasAnimals}}
+    <section class="grid">
+      {{#each animals}}
+      <article class="card">
+        <img class="card-image" src="{{imageUrl}}" alt="{{name}}" loading="lazy" />
+        <div class="card-body">
+          <h2 class="name">{{name}}</h2>
+          <p class="species">{{species}}</p>
+
+          <div class="chips">
+            <span class="chip">Khu: {{zoneName}}</span>
+            <span class="chip">Tuoi: {{age}}</span>
+            <span class="chip">Gioi tinh: {{gender}}</span>
+          </div>
+
+          <p class="desc">{{description}}</p>
+        </div>
+      </article>
+      {{/each}}
+    </section>
+    {{else}}
+    <section class="empty">
+      Chua co du lieu dong vat de hien thi.
+    </section>
+    {{/if}}
+  </div>
+</body>
+</html>

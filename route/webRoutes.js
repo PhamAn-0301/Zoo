@@ -1,7 +1,17 @@
-const express = require("express");
-const path = require("path");
+import express from "express";
+import path from "path";
+import animalRoutes from "./animalRoutes.js";
+import mapRoutes from "./mapRoutes.js";
+import { fileURLToPath } from "url";
 
 const router = express.Router();
+
+// fix __dirname cho ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+router.use("/", animalRoutes);
+router.use("/", mapRoutes);
 
 const pages = {
   "/": "index.html",
@@ -45,4 +55,4 @@ Object.entries(legacyRedirects).forEach(([fromPath, toPath]) => {
   });
 });
 
-module.exports = router;
+export default router;

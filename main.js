@@ -19,7 +19,7 @@ function setActiveMenuItem() {
   const currentPath = window.location.pathname || "/";
   const routes = window.APP_ROUTES || {
     home: "/",
-    ticket: "/ticket",
+    ticket: "/map",
     shopping: "/shopping",
     user: "/user",
   };

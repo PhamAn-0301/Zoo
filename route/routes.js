@@ -1,7 +1,7 @@
 (function () {
   const routes = {
     home: "/",
-    ticket: "/ticket",
+    ticket: "/map",
     shopping: "/shopping",
     user: "/user",
     mapGame: "/map-game",
