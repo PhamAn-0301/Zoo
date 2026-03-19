@@ -1,14 +1,16 @@
 import db from '../utils/db.js';
 
 export const getAnimals = async () => {
-  return await db("animals")
-    .leftJoin("animal_status", "animals.id", "animal_status.animal_id")
+  return await db("animal")
     .select(
-      "animals.id",
-      "animals.name",
-      "animals.species", // Thêm cột này để icon hiển thị đúng 🐯🐘
-      "animals.map_x",
-      "animals.map_y",
-      "animal_status.status"
+      "id",
+      "name",
+      "family as species",   // dùng family làm icon
+      "map_x",
+      "map_y",
+      "image_url",
+      "feeding_time",
+      "active_time",
+      "status"
     );
 };
