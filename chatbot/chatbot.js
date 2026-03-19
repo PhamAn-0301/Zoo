@@ -1,7 +1,7 @@
 // ===== CHATBOT THẢO CẦM VIÊN SÀI GÒN =====
 
 // API KEY
-let OPENAI_API_KEY = "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";
+let OPENAI_API_KEY = "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";
 let zooData = null;
 
 // ---------------- LOAD DATA ----------------

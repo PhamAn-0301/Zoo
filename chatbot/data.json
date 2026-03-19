@@ -2,7 +2,7 @@
   "info": {
     "name": "Thảo Cầm Viên Sài Gòn",
     "address": "2 Nguyễn Bỉnh Khiêm, Quận 1, TP.HCM",
-    "open_time": "07:00 - 17:30",
+    "open_time": "07:00 - 18:30",
     "adult_ticket": "60.000 VNĐ",
     "child_ticket": "40.000 VNĐ",
     "parking": "Có bãi giữ xe máy và ô tô",
@@ -21,7 +21,7 @@
   "faq": [
     {
       "keywords": ["giờ mở cửa", "mấy giờ mở cửa"],
-      "answer": "Thảo Cầm Viên mở cửa từ 7:00 đến 17:30 mỗi ngày."
+      "answer": "Thảo Cầm Viên mở cửa từ 7:00 đến 18:30 mỗi ngày."
     },
     {
       "keywords": ["giá vé", "vé bao nhiêu"],

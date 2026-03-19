@@ -3,16 +3,30 @@ import * as animalModel from "../model/animalModel.js";
 
 const router = express.Router();
 
-router.get("/animal", async (req, res, next) => {
+/**
+ * GET /animals
+ * Có thể filter theo ?zone=1
+ */
+router.get("/animals", async (req, res, next) => {
   try {
-    const animals = await animalModel.findAll();
+    const { zone } = req.query;
+
+    let animals;
+
+    if (zone) {
+      animals = await animalModel.findByZone(zone);
+    } else {
+      animals = await animalModel.findAll();
+    }
 
     res.render("animal", {
       title: "Animals",
-      subtitle: "Danh sach dong vat",
+      subtitle: "Danh sách động vật",
       updatedAt: new Date().toISOString(),
+
       animals,
       hasAnimals: animals.length > 0,
+
       errorMessage: null
     });
 
