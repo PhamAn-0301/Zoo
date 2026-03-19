@@ -11,17 +11,19 @@ function formatAnimalRecord(record) {
     ecology: record.ecology || '',
     diet: record.diet || '',
     reproduction: record.reproduction || '',
-
+    fun_fact: record.fun_fact || '',
     conservationStatus: record.conservation_status || '',
     status: record.status || 'Hoạt động',
-
+    feedingTime: record.feeding_time,
+    activeTime: record.active_time,
     imageUrl:
       record.image_url ||
       'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7',
 
     zone: record.zone,
     mapX: record.map_x,
-    mapY: record.map_y
+    mapY: record.map_y,
+    
   };
 }
 

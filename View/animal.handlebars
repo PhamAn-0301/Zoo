@@ -375,10 +375,7 @@
             <div class="chips">
               <span class="chip">Khu: {{zone}}</span>
               <span class="chip">{{conservationStatus}}</span>
-            </div>
-      
-            <p class="desc">{{description}}</p>
-          </div>
+            
         </article>
         {{/each}}
       </section>
@@ -390,7 +387,7 @@
           <!-- HEADER IMAGE -->
           <div class="modal-header">
             <img id="modal-img" />
-            <div class="status-badge">● Đang mở cửa</div>
+            <div class="status-badge" id="modal-status-badge"></div>
           </div>
       
           <!-- CONTENT -->
@@ -399,10 +396,13 @@
             <p class="latin-name" id="modal-latin"></p>
       
             <div class="info-box">
+              <p><b>🔍 Thông tin chi tiết:</b> <span id="modal-description"></span></p>
               <p><b>🌍 Môi trường sống:</b> <span id="modal-ecology"></span></p>
               <p><b>🍖 Thức ăn:</b> <span id="modal-diet"></span></p>
               <p><b>📍 Phân bố:</b> <span id="modal-distribution"></span></p>
               <p><b>🍼 Sinh sản:</b> <span id="modal-reproduction"></span></p>
+              <p><b>🕒 Giờ ăn:</b> <span id="modal-feeding"></span></p>
+              <p><b>🌙 Sinh hoạt:</b> <span id="modal-active"></span></p>
             </div>
       
             <div class="fun-fact">
@@ -422,20 +422,47 @@
       const modal = document.getElementById("modal");
 
       function openModal(animal) {
-          console.log(animal);
-
           modal.classList.add("show");
 
           document.getElementById("modal-img").src = animal.imageUrl;
           document.getElementById("modal-name").innerText = animal.name;
 
-          document.getElementById("modal-desc").innerText = animal.description || "";
+          document.getElementById("modal-desc").innerText = animal.fun_fact || "";
+          document.getElementById("modal-ecology").innerText = animal.ecology || "";
+          document.getElementById("modal-diet").innerText = animal.diet || "";
+          document.getElementById("modal-distribution").innerText = animal.distribution || "";
+          document.getElementById("modal-reproduction").innerText = animal.reproduction || "";
+          document.getElementById("modal-description").innerText = animal.description || "";
 
-          document.getElementById("modal-ecology").innerText = animal.ecology || "Chưa cập nhật";
-          document.getElementById("modal-diet").innerText = animal.diet || "Chưa cập nhật";
-          document.getElementById("modal-distribution").innerText = animal.distribution || "Chưa cập nhật";
-          document.getElementById("modal-reproduction").innerText = animal.reproduction || "Chưa cập nhật";
+          // 🌙 Sinh hoạt
+          const activeMap = {
+            "Ban ngày": "🌞 Ban ngày",
+            "Ban đêm": "🌙 Ban đêm"
+          };
+
+          document.getElementById("modal-active").innerText =
+            activeMap[animal.activeTime] || animal.activeTime || "Chưa cập nhật";
+
+          // 🕒 Giờ ăn
+          document.getElementById("modal-feeding").innerText =
+            animal.feedingTime || "Chưa cập nhật";
+
+          // 🔥 STATUS BADGE (PHẦN QUAN TRỌNG)
+        const badge = document.getElementById("modal-status-badge");
+
+        const isActive = animal.status === true || animal.status === "true";
+
+        badge.innerText = isActive
+          ? "🟢 Đang hoạt động"
+          : "⚪ Đang nghỉ ngơi";
+        badge.style.color = isActive
+          ? "white"
+          : "black";
+        badge.style.backgroundColor = isActive
+          ? "#2ecc71"   // xanh
+          : "#bdc3c7";  // xám
         }
+        
 
       function closeModal() {
         modal.classList.remove("show");
