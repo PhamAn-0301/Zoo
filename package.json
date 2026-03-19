@@ -10,6 +10,7 @@
     "dev": "nodemon --watch . --ext js,json,html,css,hbs,handlebars server.js"
   },
   "dependencies": {
+    "dotenv": "^17.3.1",
     "express": "^4.22.1",
     "express-handlebars": "^8.0.4",
     "hbs": "^4.2.0",

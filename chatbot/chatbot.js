@@ -1,7 +1,6 @@
 // ===== CHATBOT THẢO CẦM VIÊN SÀI GÒN =====
 
 // API KEY
-let OPENAI_API_KEY = "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";
 let zooData = null;
 
 // ---------------- LOAD DATA ----------------
@@ -83,7 +82,7 @@ ${JSON.stringify(zooData.info, null, 2)}
 
   const payload = {
 
-    model: "gpt-3.5-turbo",
+    model: "openai/gpt-4o-mini",
 
     messages: [
       { role: "system", content: systemPrompt },
@@ -96,27 +95,27 @@ ${JSON.stringify(zooData.info, null, 2)}
 
   try {
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      }
-    );
+    const response = await fetch("/api/chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+});
 
-    const data = await response.json();
+const data = await response.json();
 
-    if (data.choices && data.choices[0]) {
+if (data.error) {
+  return "Lỗi AI: " + data.error.message;
+}
 
-      return data.choices[0].message.content.trim();
+if (data.choices?.length > 0) {
+  return data.choices[0].message.content.trim();
+}
 
-    }
+return "Xin lỗi, tôi chưa có câu trả lời.";
+             
 
-    return "Xin lỗi, tôi chưa có câu trả lời.";
 
   } catch (error) {
 
@@ -215,7 +214,7 @@ function initChatbot() {
 
       const avatar = document.createElement("img");
 
-      avatar.src = "../assets/avartar2.png";
+      avatar.src = "../assets1/icon3.jpg";
       avatar.alt = "AI";
       avatar.className = "message-avatar";
 
