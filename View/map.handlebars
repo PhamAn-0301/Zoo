@@ -298,6 +298,37 @@ Status: ${a.status || "normal"}
 
         })
 
+        function focusAnimalById(animalId) {
+            const target = animals.find(a => String(a.id) === String(animalId));
+            const marker = markerMap[animalId];
+            if (!target || !marker) return;
+
+            const targetZoom = Math.min(Math.max(map.getMinZoom() + 1.1, 1), map.getMaxZoom());
+
+            map.flyTo([target.map_y, target.map_x], targetZoom, {
+                duration: 0.8
+            });
+
+            marker.openPopup();
+
+            if (highlightCircle) map.removeLayer(highlightCircle);
+            highlightCircle = L.circle(
+                [target.map_y, target.map_x],
+                {
+                    radius: 60,
+                    color: "#00aaff",
+                    weight: 2,
+                    fillOpacity: 0.2
+                }
+            ).addTo(map);
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const focusAnimalId = params.get("animalId");
+        if (focusAnimalId) {
+            focusAnimalById(focusAnimalId);
+        }
+
         /* sidebar render */
 
         const list = document.getElementById("animalList")

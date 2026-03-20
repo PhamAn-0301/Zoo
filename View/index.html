@@ -91,7 +91,7 @@
           <p style="color: #426A1B;">KHÁM PHÁ THẢO CẦM VIÊN</p>
           
         </div>
-        ,cl
+
         <div class="bodyContainer">
           <a href="/animals">
             <div class="card">
@@ -352,10 +352,14 @@
         const leftBtn = document.querySelector(".slider-nav-left");
         const rightBtn = document.querySelector(".slider-nav-right");
         if (!slider || !wrapper || !leftBtn || !rightBtn) return;
+        if (slider.dataset.initialized === "true") return;
 
         const originalItems = Array.from(
           slider.querySelectorAll(".sliderItem"),
         );
+        if (originalItems.length === 0) return;
+
+        slider.dataset.initialized = "true";
         let currentIndex = 0;
         let autoScrollInterval;
 
@@ -440,8 +444,55 @@
         });
       }
 
-      // Start auto-scroll carousel
-      document.addEventListener("DOMContentLoaded", autoScrollSlider);
+      function buildAnimalCard(animal) {
+        const image = animal.imageUrl || "assets/slider1.jpg";
+        const name = animal.name || "Động vật";
+        const family = animal.family || "Chưa cập nhật";
+        const zone = animal.zone || "Chưa cập nhật";
+        const animalId = animal.id;
+
+        return `
+          <a href="/map?animalId=${encodeURIComponent(animalId)}">
+            <div class="sliderItem">
+              <img src="${image}" alt="${name}" class="sliderImage" />
+              <p class="sliderContent">${name}</p>
+              <p class="sliderLocation">
+                <i class="fa-solid fa-paw"></i>
+                Họ: ${family}
+              </p>
+              <p class="sliderLocation">
+                <i class="fa-solid fa-map-location-dot"></i>
+                Khu vực: ${zone}
+              </p>
+            </div>
+          </a>
+        `;
+      }
+
+      async function renderRandomAnimals() {
+        const slider = document.querySelector(".bodySlider");
+        if (!slider) return;
+
+        try {
+          const response = await fetch("/api/animals/random?limit=8");
+          if (!response.ok) throw new Error("Failed to fetch animals");
+
+          const data = await response.json();
+          if (!data?.animals?.length) {
+            autoScrollSlider();
+            return;
+          }
+
+          slider.innerHTML = data.animals.map(buildAnimalCard).join("");
+          autoScrollSlider();
+        } catch (error) {
+          console.error("Không tải được dữ liệu động vật:", error);
+          autoScrollSlider();
+        }
+      }
+
+      // Load dynamic cards then start carousel
+      document.addEventListener("DOMContentLoaded", renderRandomAnimals);
     </script>
     <script src="config.js"></script>
     <script src="route/routes.js"></script>
