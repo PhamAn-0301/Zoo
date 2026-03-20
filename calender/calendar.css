@@ -259,3 +259,66 @@ header h2 {
     width: 1000px;
   }
 }
+.tour-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.tour-info-list p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 8px 10px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* ICON */
+.gameicon {
+  width: 20px;
+  text-align: center;
+  
+  font-size: 16px;
+}
+
+/* highlight giá */
+.tour-info-list .price {
+  background: #eafaf1;
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* hover nhẹ cho xịn */
+.tour-info-list p:hover {
+  background: #eef9f1;
+  transform: translateX(3px);
+  transition: 0.2s;
+}
+.fa-moon {
+  color: #34495e;
+}
+
+.fa-user-group {
+  color: #3498db;
+}
+
+.fa-users {
+  color: #9b59b6;
+}
+
+.fa-money-bill-wave {
+  color: #27ae60;
+}
+
+.fa-calendar-days {
+  color: #e67e22;
+}
+
+.fa-clock {
+  color: #e74c3c;
+}

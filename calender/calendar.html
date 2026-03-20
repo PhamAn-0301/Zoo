@@ -1,119 +1,236 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="vi">
-  
+
 <!-- Mirrored from vinwondersnhatrang.vercel.app/calender/calendar.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:35:54 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <title>VinWonders</title>
-      <link rel="icon" type="image/png" href="../assets/iconlogo.png" />
-    <link rel="stylesheet" href="calendar.css" />
-    <link
-      rel="stylesheet"
-      href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <a href="/">
-          <i class="fa-solid fa-chevron-left"></i>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VinWonders</title>
+  <link rel="icon" type="image/png" href="../assets/iconlogo.png" />
+  <link rel="stylesheet" href="calendar.css" />
+  <link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <a href="/">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+      <h2>Danh sách các hoạt động </h2>
+      <i class="fa-solid fa-filter"></i>
+    </header>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Tìm kiếm trò chơi" class="searchIcon" />
+      <i class="fa-solid fa-magnifying-glass iconSearch"></i>
+    </div>
+
+    <div class="card" id="hammoCard">
+      <img src="../assets1/tourdem.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
+      <div class="card-content">
+        <div>
+          <h3>Tour đêm Thảo Cầm Viên</h3>
+          <p><i class="fa-solid fa-map-pin"></i>“Khi màn đêm buông xuống”</p>
+          <p><i class="fa-solid fa-ruler-vertical"></i> Giá vé: 200.000 VNĐ/người.</p>
+          <p><i class="fa-regular fa-clock"></i>Thời gian Hoạt động: Tối thứ Bảy hàng tuần có 2 ca</p>
+          <p><i class="fa-regular fa-clock"></i> Chuyến 1: 19:00 – 20:00</p>
+          <p><i class="fa-regular fa-clock"></i> Chuyến 2: 20:15 – 21:15</p>
+        </div>
+        <a href="/map-game">
+          <button class="direction-btn">Chỉ đường</button>
         </a>
-        <h2>Danh sách sự kiện</h2>
-        <i class="fa-solid fa-filter"></i>
-      </header>
-
-      <div class="search-bar">
-        <input type="text" placeholder="Tìm kiếm trò chơi" class="searchIcon" />
-        <i class="fa-solid fa-magnifying-glass iconSearch"></i>
       </div>
+    </div>
+    <div class="card" id="tataCard">
+      <img src="../assets1/dixe.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
+      <div class="card-content">
+        <div>
+          <h3>Tham quan bằng xe lửa</h3>
+          <p><i class="fa-solid fa-map-pin"></i> Dạo Một Vòng Thảo Cầm Viên</p>
+          <p><i class="fa-solid fa-ruler-vertical"></i> Giá vé:30.000 VNĐ/người.</p>
+          <p><i class="fa-solid fa-ruler-vertical"></i> Thời lượng: 15 - 20 phút</p>
+          <p><i class="fa-regular fa-clock"></i>Ngày thường: 8h00 - 16h30</p>
+          <p><i class="fa-regular fa-clock"></i>Thứ 7, CN, Lễ Tết: 8h00 - 17h30</p>
+        </div>
+        <a href="/map">
+          <button class="direction-btn">Chỉ đường</button>
+        </a>
+      </div>
+    </div>
+    <div class="card" id="tataCard1">
+      <img src="../assets1/xedien.png" alt="Cuộc phiêu lưu hầm mỏ" />
+      <div class="card-content">
+        <div>
+          <h3>Tham quan bằng xe điện VIP (Có thuyết minh)</h3>
+          <p><i class="fa-solid fa-map-pin"></i> Dạo Một Vòng Thảo Cầm Viên</p>
+          <p><i class="fa-solid fa-ruler-vertical"></i> Giá vé:200.000 VNĐ/người.</p>
+          <p><i class="fa-solid fa-ruler-vertical"></i> Thời lượng:60 phút</p>
+          <p><i class="fa-regular fa-clock"></i>Ngày thường: 8h00 - 16h30</p>
+          <p><i class="fa-regular fa-clock"></i>Thứ 7, CN, Lễ Tết: 8h00 - 17h30</p>
+          <p><i class="fa-regular fa-clock"></i>Ưu điểm: Dừng 10-12 điểm (theo chương trình hoặc khách yêu cầu)
+</p>
 
-      <div class="card" id="hammoCard">
-        <img src="../assets/lichbieudien.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
-        <div class="card-content">
-          <div>
-            <h3>Tata show 5.0 ⭐</h3>
-            <p><i class="fa-solid fa-map-pin"></i> Fairy Land</p>
-            <p><i class="fa-solid fa-ruler-vertical"></i> Không giới hạn chiều cao</p>
-            <p><i class="fa-regular fa-clock"></i> 19:30 - 20:10</p>
+        </div>
+        <a href="/map">
+          <button class="direction-btn">Chỉ đường</button>
+        </a>
+      </div>
+    </div>
+
+
+    <div class="modal" id="hammoModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img src="../assets1/tourdem.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
+          <span class="close-btn" id="closeModal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <h2>Tour đêm Thảo Cầm Viên </h2>
+          <div class="info-grid">
+            <div class="tour-info-list">
+              <p><i class="fa-solid fa-moon gameicon"></i>Khi màn đêm buông xuống</p>
+
+              <p><i class="fa-solid fa-user-group gameicon"></i>Trẻ em, Người lớn</p>
+
+              <p><i class="fa-solid fa-users gameicon"></i>10–20 khách/chuyến</p>
+
+              <p class="price">
+                <i class="fa-solid fa-money-bill-wave gameicon"></i>200.000 VNĐ/người
+              </p>
+
+              <p><i class="fa-solid fa-calendar-days gameicon"></i>Tối thứ Bảy hàng tuần (2 ca)</p>
+
+              <p><i class="fa-regular fa-clock gameicon"></i>Chuyến 1: 19:00 – 20:00</p>
+
+              <p><i class="fa-regular fa-clock gameicon"></i>Chuyến 2: 20:15 – 21:15</p>
+            </div>
+
+
           </div>
-         <a href="/map-game">
-           <button class="direction-btn">Chỉ đường</button>
-         </a>
+
+          <div class="note">
+            <strong>Giới thiệu:</strong><br />
+            Khi màn đêm buông xuống, Thảo Cầm Viên Sài Gòn khoác lên mình một vẻ đẹp huyền bí và yên tĩnh nhưng vẫn đầy
+            sức sống.
+            Tham gia tour đêm, du khách sẽ được khám phá thế giới động vật khi chúng bắt đầu hoạt động, lắng nghe âm
+            thanh thiên
+            nhiên và quan sát những tập tính hiếm thấy vào ban ngày; chuyến xe điện nhẹ nhàng đưa bạn qua từng khu vực,
+            nơi mỗi câu
+            chuyện về các loài được hướng dẫn viên chia sẻ sinh động, tạo nên một hành trình vừa thú vị vừa giúp bạn kết
+            nối gần hơn
+            với thiên nhiên.
+          </div>
         </div>
       </div>
-      <div class="card" id="tataCard">
-        <img src="../assets/bg-ticket.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
-        <div class="card-content">
-          <div>
-            <h3>Biểu diễn nhạc nước 5.0 ⭐</h3>
-            <p><i class="fa-solid fa-map-pin"></i> Sea world</p>
-            <p><i class="fa-solid fa-ruler-vertical"></i> Không giới hạn chiều cao</p>
-            <p><i class="fa-regular fa-clock"></i>19:00 - 19:30</p>
+    </div>
+
+    <div class="modal" id="tataModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img src="../assets1/dixe.jpg" alt="Tata ở xứ sở thần tiên" />
+          <span class="close-btn" id="closeTataModal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <h2>Tham quan bằng xe lửa</h2>
+          <div class="tour-info-list">
+            <p><i class="fa-solid fa-moon gameicon"></i>Dạo Một Vòng Thảo Cầm Viên</p>
+          
+            <p><i class="fa-solid fa-user-group gameicon"></i>Trẻ em, Người lớn</p>
+          
+         
+          
+            <p class="price">
+              <i class="fa-solid fa-money-bill-wave gameicon"></i>Người lớn: 30.000 VNĐ/người
+              <i class="fa-solid fa-money-bill-wave gameicon"></i>Trẻ em: từ 0.8 m - dưới 1.3m: 20.000/lượt
+              <i class="fa-solid fa-money-bill-wave gameicon"></i>Trẻ dưới 0.8 m đi cùng miễn phí
+            </p>
+          
+            <p><i class="fa-solid fa-calendar-days gameicon"></i>Thời lượng: 15 - 20 phút
+            </p>
+            <p><i class="fa-solid fa-calendar-days gameicon"></i>Thời lượng: 15 - 20 phút
+              Giờ hoạt động:</p>
+          
+            <p><i class="fa-regular fa-clock gameicon"></i>Ngày thường: 8h00 - 16h30
+</p>
+          
+            <p><i class="fa-regular fa-clock gameicon"></i>Thứ 7, CN, Lễ Tết: 8h00 - 17h30
+</p>
           </div>
-         <a href="/map-game">
-           <button class="direction-btn">Chỉ đường</button>
-         </a>
+          <div class="note">
+            <strong>Giới thiệu:</strong><br />
+            Hoạt động tham quan bằng xe lửa tại Thảo Cầm Viên Sài Gòn mang đến trải nghiệm dạo quanh khuôn viên một cách nhẹ nhàng
+            và thú vị. Chuyến tàu sẽ đưa du khách đi qua nhiều khu vực nổi bật, giúp ngắm nhìn đa dạng các loài động vật và không
+            gian xanh mát mà không cần di chuyển nhiều. Đây là lựa chọn phù hợp cho cả gia đình, đặc biệt là trẻ nhỏ và người lớn
+            tuổi, vừa tiện lợi vừa mang lại cảm giác thư giãn khi khám phá Thảo Cầm Viên.
+
+          </div>
         </div>
       </div>
-
-
-      <div class="modal" id="hammoModal">
+    </div>
+      <div class="modal" id="tataModal1">
         <div class="modal-content">
           <div class="modal-header">
-            <img src="../assets/lichbieudien.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
-            <span class="close-btn" id="closeModal">&times;</span>
+            <img src="../assets1/xedien.png" alt="Tata ở xứ sở thần tiên" />
+            <span class="close-btn" id="closeTataModal1">&times;</span>
           </div>
           <div class="modal-body">
-            <h2>Tata show 5.0 </h2>
-            <div class="info-grid">
-              <p><i class="fa-solid fa-map-pin gameicon"></i> Fairy Land</p>
-              <p><i class="fa-solid fa-user gameicon"></i> Trẻ em, Người lớn</p>
-              <p><i class="fa-solid fa-heart-pulse gameicon"></i> Mức độ: không thể bỏ lở</p>
-              <p><i class="fa-solid fa-ruler-vertical gameicon"></i> Không giới hạn chiều cao</p>
-              <p><i class="fa-solid fa-cloud-rain gameicon"></i> Dừng khi thời tiết xấu: Có</p>
+            <h2>Tham quan bằng xe điện VIP (Có thuyết minh)</h2>
+            <div class="tour-info-list">
+              <p><i class="fa-solid fa-moon gameicon"></i>Dạo Một Vòng Thảo Cầm Viên</p>
+      
+              <p><i class="fa-solid fa-user-group gameicon"></i>Trẻ em, Người lớn</p>
+      
+      
+      
+              <p class="price">
+                <i class="fa-solid fa-money-bill-wave gameicon"></i>Người lớn: 200.000 VNĐ/người
+                <i class="fa-solid fa-money-bill-wave gameicon"></i>Trẻ em: từ 0.8 m - dưới 1.3m: 100.000/lượt
+                <i class="fa-solid fa-money-bill-wave gameicon"></i>Trẻ dưới 0.8 m đi cùng miễn phí
+              </p>
+      
+              <p><i class="fa-solid fa-calendar-days gameicon"></i>Thời lượng: 60 phút
+              </p>
+              <p><i class="fa-solid fa-calendar-days gameicon"></i>
+                Giờ hoạt động:</p>
+      
+              <p><i class="fa-regular fa-clock gameicon"></i>Ngày thường: 8h00 - 16h30
+              </p>
+      
+              <p><i class="fa-regular fa-clock gameicon"></i>Thứ 7, CN, Lễ Tết: 8h00 - 17h30
+              </p>
+              <p><i class="fa-regular fa-clock gameicon"></i>Ưu điểm: Dừng 10-12 điểm (theo chương trình hoặc khách yêu cầu)
 
+              </p>
             </div>
-
             <div class="note">
               <strong>Giới thiệu:</strong><br />
-Sự kết hợp giữa công nghệ 3D mapping hiện đại bậc nhất, trình diễn ánh sáng, khói lửa và đặc biệt phần biểu diễn của hơn 100 diễn viên trong nước và quốc tế đã tạo ra màn trình diễn hoành tráng và mãn nhãn người xem. Vở diễn là hành trình khám phá, phiêu lưu kỳ thú của công chúa Tata và những người bạn thân thiết trong thế giới cổ tích diệu kỳ. Tại đây, du khách sẽ được khám phá xứ sở Vạn Hoa rực rỡ, lặn xuống biển sâu muôn cảnh thần tiên của thế giới Đại Dương và chứng kiến tận cùng lãnh địa Bóng Tối qua màn trình diễn hoành tráng.
+              Hoạt động tham quan bằng xe lửa tại Thảo Cầm Viên Sài Gòn mang đến trải nghiệm dạo quanh khuôn viên một cách nhẹ
+              nhàng
+              và thú vị. Chuyến tàu sẽ đưa du khách đi qua nhiều khu vực nổi bật, giúp ngắm nhìn đa dạng các loài động vật và
+              không
+              gian xanh mát mà không cần di chuyển nhiều. Đây là lựa chọn phù hợp cho cả gia đình, đặc biệt là trẻ nhỏ và
+              người lớn
+              tuổi, vừa tiện lợi vừa mang lại cảm giác thư giãn khi khám phá Thảo Cầm Viên.
+      
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="modal" id="tataModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img src="../assets/bg-ticket.jpg" alt="Tata ở xứ sở thần tiên" />
-        <span class="close-btn" id="closeTataModal">&times;</span>
-      </div>
-      <div class="modal-body">
-        <h2>Biểu diễn nhạc nước 5.0</h2>
-        <div class="info-grid">
-          <p><i class="fa-solid fa-map-pin gameicon"></i> Sea world</p>
-          <p><i class="fa-solid fa-user gameicon"></i> Mọi lứa tuổi</p>
-          <p><i class="fa-solid fa-heart-pulse gameicon"></i> Mức độ: Thư giãn</p>
-          <p><i class="fa-solid fa-ruler-vertical gameicon"></i> Không giới hạn chiều cao</p>
-          <p><i class="fa-solid fa-cloud-rain gameicon"></i> Dừng khi thời tiết xấu: Không</p>
-        </div>
-
-        <div class="note">
-          <strong>Giớ thiệu:</strong><br />
-          Màn trình diễn ẩn tượng bởi những sự kết hợp hoàn hảo của nước, ánh sáng laze công nghệ tối tân và âm nhạc sống động.
-        </div>
-      </div>
-      </div>
+        
 
     </div>
-     <script>
-        const cards = [
+    <script>
+      const cards = [
         { card: "hammoCard", modal: "hammoModal", close: "closeModal" },
         { card: "tataCard", modal: "tataModal", close: "closeTataModal" },
+        { card: "tataCard1", modal: "tataModal1", close: "closeTataModal1" },
+
       ];
 
       cards.forEach(({ card, modal, close }) => {
@@ -139,9 +256,8 @@ Sự kết hợp giữa công nghệ 3D mapping hiện đại bậc nhất, trì
         });
       });
     </script>
-  </body>
+</body>
 
 <!-- Mirrored from vinwondersnhatrang.vercel.app/calender/calendar.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:35:55 GMT -->
+
 </html>
-
-
