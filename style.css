@@ -490,6 +490,7 @@
   right: 0;
   bottom: 110px;
   z-index: 999999;
+  pointer-events: none;
 }
 
 .contact-btn {
@@ -506,6 +507,7 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(36, 66, 29, 0.4);
   transition: all 0.3s ease;
+  pointer-events: auto;
 }
 
 .contact-btn:hover {
@@ -537,6 +539,7 @@
   width: 257px;
   overflow: hidden;
   animation: slideUp 0.3s ease;
+  pointer-events: auto;
 }
 
 .contactBox.active {
@@ -583,17 +586,35 @@
 .menuMap {
   width: 50px;
   height: 50px;
-  background-color: #f77119;
+  background-color: #183c05;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+.menuMap {
+  position: relative;
+  z-index: 100002;
+  /* cao hơn tất cả */
+}
+.menuMap {
+  pointer-events: auto;
+}
+
+.menuMap .menuItemLink {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.menuMap * {
+  pointer-events: auto;
+}
 
 .menuItem.active,
 .menuItem.active .menuItemIcon,
 .menuItem.active .menuItemContent {
-  color: #f77119;
+  color: #0e500a;
 }
 
 .menuItemIcon {
