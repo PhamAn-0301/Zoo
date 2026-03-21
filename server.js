@@ -56,12 +56,25 @@ app.use(express.json());
 
 app.post("/api/chat", async (req, res) => {
   try {
+    const apiKey = (
+      process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY || ""
+    ).trim();
+
+    if (!apiKey) {
+      return res.status(500).json({
+        error: {
+          message:
+            "Missing server API key. Set OPENROUTER_API_KEY (or OPENAI_API_KEY) in environment variables.",
+        },
+      });
+    }
+
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(req.body)
@@ -69,11 +82,20 @@ app.post("/api/chat", async (req, res) => {
     );
    
     const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
     res.json(data);
 
   } catch (error) {
     console.error("❌ Server AI error:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      error: {
+        message: "Server error"
+      }
+    });
   }
 });
 
