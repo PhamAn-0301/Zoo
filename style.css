@@ -358,7 +358,7 @@
 
 .sliderLocation {
   font-size: 14px;
-  color: #183c05;
+  color: #000000;
   padding: 0 10px;
 }
 .bodySlider a {
@@ -386,14 +386,14 @@
 .sliderContent {
   font-size: 16px;
   font-weight: 600;
-  color: rgb(101, 101, 101);
+  color: #24421D;
   padding: 0 10px;
   margin-bottom: 10px;
 }
 
 .sliderLocation {
   font-size: 14px;
-  color: #183c05;
+  color: #000000;
   padding: 0 10px;
 }
 
@@ -500,7 +500,7 @@
   width: 65px;
   height: 65px;
   border-radius: 50%;
-  background-color:  #1d5b0b;  
+  background-color: #416D21;  
   border: none;
   color: #fff;
   font-size: 28px;
@@ -586,11 +586,17 @@
 .menuMap {
   width: 50px;
   height: 50px;
-  background-color: #183c05;
+  background-color: #416D21;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.menuMap:hover,
+.menuMap:active,
+.menuMap:focus-within {
+  background-color: #416D21;
 }
 .menuMap {
   position: relative;
