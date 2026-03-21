@@ -15,7 +15,8 @@ router.use("/", mapRoutes);
 
 const pages = {
   "/": "index.html",
-  "/ticket": "ticket.html",
+  "/ticket": "buy-tickets.html",
+  "/buy-tickets": "buy-tickets.html",
   "/shopping": "shopping.html",
   "/user": "user.html",
   "/policy": "policy.html",
@@ -35,7 +36,7 @@ Object.entries(pages).forEach(([routePath, fileName]) => {
 
 const legacyRedirects = {
   "/index.html": "/",
-  "/ticket.html": "/ticket",
+  "/ticket.html": "/buy-tickets",
   "/shopping.html": "/shopping",
   "/user.html": "/user",
   "/policy.html": "/policy",
@@ -46,7 +47,7 @@ const legacyRedirects = {
   "/cart.html": "/cart",
   "/scanner.html": "/scanner",
   "/View/index.html": "/",
-  "/View/ticket.html": "/ticket",
+  "/View/ticket.html": "/buy-tickets",
   "/View/shopping.html": "/shopping",
   "/View/user.html": "/user",
   "/View/policy.html": "/policy",

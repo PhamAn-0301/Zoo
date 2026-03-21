@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mua vé</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --green-900: #12371d;
+        --green-700: #2f6523;
+        --green-600: #416d21;
+        --green-100: #e8f3e3;
+        --line: #c6dcb9;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Montserrat", "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(165deg, #f4faf2 0%, #ecf5e8 100%);
+        color: var(--green-900);
+        min-height: 100vh;
+        padding: 16px;
+      }
+
+      .page {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .back-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4f8a33 0%, #2d5f1f 100%);
+        color: #fff;
+        text-decoration: none;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 8px 16px rgba(25, 69, 21, 0.25);
+      }
+
+      .title {
+        font-size: 30px;
+        font-weight: 800;
+      }
+
+      .section {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: 0 10px 20px rgba(18, 55, 29, 0.1);
+      }
+
+      .section + .section {
+        margin-top: 16px;
+      }
+
+      .section h2 {
+        font-size: 24px;
+        color: var(--green-700);
+        margin-bottom: 12px;
+      }
+
+      .option-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .ticket-option {
+        width: 100%;
+        border: 1.5px solid #b8d2ab;
+        border-radius: 16px;
+        background: #fcfffb;
+        text-align: left;
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .ticket-option:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 18px rgba(21, 70, 24, 0.16);
+      }
+
+      .ticket-option.active {
+        border-color: var(--green-600);
+        box-shadow: 0 0 0 3px rgba(65, 109, 33, 0.15);
+      }
+
+      .ticket-image {
+        height: 140px;
+        width: 100%;
+        background: linear-gradient(135deg, #d7edd0 0%, #eaf6e3 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ticket-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .ticket-image span {
+        font-size: 42px;
+        color: #2f6523;
+        opacity: 0.7;
+      }
+
+      .ticket-body {
+        padding: 12px;
+      }
+
+      .ticket-name {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--green-700);
+      }
+
+      .ticket-desc {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #4a5d4e;
+      }
+
+      .gate-types {
+        display: none;
+      }
+
+      .gate-types.show {
+        display: block;
+      }
+
+      .hint {
+        margin-top: 8px;
+        color: #4f6352;
+        font-size: 13px;
+      }
+
+      @media (max-width: 700px) {
+        .option-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .title {
+          font-size: 24px;
+        }
+
+        .section h2 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="topbar">
+        <a href="/" class="back-btn" aria-label="Quay lại trang chủ" title="Quay lại trang chủ">
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <h1 class="title">Mua vé</h1>
+      </div>
+
+      <section class="section">
+        <h2>Chọn loại vé</h2>
+        <div class="option-grid">
+          <button type="button" class="ticket-option" id="option-tour-night">
+            <div class="ticket-image">
+              <img src="assets1/tour-night.jpg" alt="Tour đêm" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
+              <span style="display:none;"><i class="fa-solid fa-moon"></i></span>
+            </div>
+            <div class="ticket-body">
+              <p class="ticket-name">Tour đêm</p>
+              <p class="ticket-desc">Khám phá sở thú về đêm</p>
+            </div>
+          </button>
+
+          <button type="button" class="ticket-option" id="option-gate-ticket">
+            <div class="ticket-image">
+              <img src="assets1/gate-ticket.jpg" alt="Vé vào cổng" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
+              <span style="display:none;"><i class="fa-solid fa-ticket"></i></span>
+            </div>
+            <div class="ticket-body">
+              <p class="ticket-name">Vé vào cổng</p>
+              <p class="ticket-desc">Mua vé tham quan tiêu chuẩn</p>
+            </div>
+          </button>
+        </div>
+        <p class="hint">Bạn có thể import 2 ảnh vào: assets1/tour-night.jpg và assets1/gate-ticket.jpg.</p>
+      </section>
+
+      <section class="section gate-types" id="gate-types-section">
+        <h2>Vé vào cổng</h2>
+        <div class="option-grid">
+          <button type="button" class="ticket-option">
+            <div class="ticket-body">
+              <p class="ticket-name">Vé trẻ em</p>
+              <p class="ticket-desc">Dành cho khách nhí theo quy định chiều cao</p>
+            </div>
+          </button>
+
+          <button type="button" class="ticket-option">
+            <div class="ticket-body">
+              <p class="ticket-name">Vé người lớn</p>
+              <p class="ticket-desc">Dành cho khách người lớn</p>
+            </div>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const tourOption = document.getElementById("option-tour-night");
+      const gateOption = document.getElementById("option-gate-ticket");
+      const gateSection = document.getElementById("gate-types-section");
+
+      function setActive(option) {
+        [tourOption, gateOption].forEach((el) => el.classList.remove("active"));
+        option.classList.add("active");
+      }
+
+      tourOption.addEventListener("click", () => {
+        setActive(tourOption);
+        gateSection.classList.remove("show");
+      });
+
+      gateOption.addEventListener("click", () => {
+        setActive(gateOption);
+        gateSection.classList.add("show");
+        gateSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    </script>
+  </body>
+</html>

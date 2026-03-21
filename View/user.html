@@ -6,20 +6,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VinWonders</title>
-      <link rel="icon" type="image/png" href="assets/iconlogo.png" />
+    <title>Thảo Cầm Viên</title>
+      <link rel="icon" type="image/png" href="assets1/logo.png" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="chatbot/chatbot.css" />
     <link
       rel="stylesheet"
-      href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
       integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
   </head>
   <body>
-    <div class="userImage"></div>
+    <div class="userImage">
+      <a href="/" class="userBackBtn" aria-label="Quay lại trang chủ" title="Quay lại trang chủ">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </div>
     <div class="profile-grid">
       <a href="profile/profile.html">
         <div class="profile-card">
@@ -34,21 +38,6 @@
           <p>Vé của tôi</p>
         </div>
       </a>
-
-      <a href="myorder/myorder.html">
-        <div class="profile-card">
-          <i class="fa-solid fa-file-lines icon"></i>
-          <p>Đơn hàng của tôi</p>
-        </div>
-      </a>
-
-      <a href="voucher/voucher.html">
-        <div class="profile-card">
-          <i class="fa-solid fa-percent icon"></i>
-          <p>Ưu đãi</p>
-        </div>
-      </a>
-
       <a href="/cart">
         <div class="profile-card">
           <i class="fa-solid fa-cart-shopping icon"></i>
@@ -56,17 +45,14 @@
         </div>
       </a>
 
-      <a href="game-cart/game-cart.html">
-        <div class="profile-card">
-          <i class="fa-solid fa-gamepad icon"></i>
-          <p>Vé trò chơi</p>
+      <a href="#" class="sysinfoCardLink">
+        <div class="profile-card sysinfoCard">
+          <i class="fa-solid fa-leaf icon"></i>
+          <p>Thông tin chung Thảo Cầm Viên</p>
         </div>
       </a>
-    </div>
-    
-    <div class="sysinfo">
-      <p class="sysinfoText"><i class="fa-solid fa-info"></i> Thông tin chung VinWonders</p>
-      <p class="sysinfoText"><i class="fa-solid fa-info"></i> Thông tin chung VinClub</p>
+
+
     </div>
 
     <div class="menu">
@@ -77,7 +63,7 @@
         </a>
       </div>
       <div class="menuItem">
-        <a href="/map" class="menuItemLink">
+        <a href="/buy-tickets" class="menuItemLink">
           <i class="fa-solid fa-ticket menuItemIcon"></i>
           <p class="menuItemContent">Mua vé</p>
         </a>
@@ -93,7 +79,7 @@
           <p class="menuItemContent">Mua sắm</p>
         </a>
       </div>
-      <div class="menuItem">
+      <div class="menuItem active">
         <a href="/user" class="menuItemLink">
           <i class="fa-solid fa-circle-user menuItemIcon"></i>
           <p class="menuItemContent">Tài khoản</p>
