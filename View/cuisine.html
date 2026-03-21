@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ẩm thực</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #dcedd0;
+      }
+
+      .cuisine-image {
+        width: 100%;
+        height: 100%;
+        max-width: 100vw;
+        max-height: 100vh;
+        object-fit: contain;
+        object-position: center;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <picture>
+      <source srcset="assets1/menu2.png" type="image/jpeg" />
+      <img src="assets1/menu2.png" alt="Ẩm thực" class="cuisine-image" />
+    </picture>
+  </body>
+</html>
