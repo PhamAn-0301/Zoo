@@ -57,8 +57,13 @@ app.use(express.json());
 app.post("/api/chat", async (req, res) => {
   try {
     const apiKey = (
-      process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY || ""
+      process.env.OPENROUTER_API_KEY ||
+      process.env.OPENAI_API_KEY ||
+      process.env.OPENAI_KEY ||
+      ""
     ).trim();
+    const appUrl = process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || "http://localhost";
+    const appName = process.env.APP_NAME || "Zoo Chatbot";
 
     if (!apiKey) {
       return res.status(500).json({
@@ -69,21 +74,63 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
+    const isOpenRouterKey = apiKey.startsWith("sk-or-v1-");
+    const isOpenAIKey = apiKey.startsWith("sk-") && !isOpenRouterKey;
+
+    if (!isOpenRouterKey && !isOpenAIKey) {
+      return res.status(500).json({
+        error: {
+          message:
+            "Unknown API key format. Use OPENROUTER_API_KEY (sk-or-v1-...) or OPENAI_API_KEY (sk-...).",
+        },
+      });
+    }
+
+    const endpoint = isOpenRouterKey
+      ? "https://openrouter.ai/api/v1/chat/completions"
+      : "https://api.openai.com/v1/chat/completions";
+
+    const requestBody = { ...req.body };
+
+    // OpenAI expects model names without provider prefix, e.g. gpt-4o-mini.
+    if (isOpenAIKey && typeof requestBody.model === "string" && requestBody.model.includes("/")) {
+      requestBody.model = requestBody.model.split("/").pop();
+    }
+
+    const headers = {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    };
+
+    if (isOpenRouterKey) {
+      headers["HTTP-Referer"] = appUrl;
+      headers["X-Title"] = appName;
+    }
+
     const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
+      endpoint,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(req.body)
+        headers,
+        body: JSON.stringify(requestBody)
       }
     );
    
     const data = await response.json();
 
     if (!response.ok) {
+      const providerMessage = data?.error?.message || "Unknown provider error";
+
+      if (/user not found/i.test(providerMessage)) {
+        return res.status(401).json({
+          error: {
+            message:
+              "OpenRouter key is invalid, expired, or belongs to a deleted account. Please set a valid OPENROUTER_API_KEY.",
+            providerMessage
+          }
+        });
+      }
+
       return res.status(response.status).json(data);
     }
 
