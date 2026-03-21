@@ -24,6 +24,7 @@ function formatAnimalRecord(record) {
     mapX: record.map_x,
     mapY: record.map_y,
     
+    
   };
 }
 

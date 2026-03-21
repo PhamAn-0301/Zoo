@@ -43,8 +43,7 @@
         border-radius: 22px;
         padding: 22px;
         margin-bottom: 20px;
-        background:
-          linear-gradient(140deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 247, 236, 0.9) 60%, rgba(255, 239, 220, 0.86) 100%);
+        background: #1f5f2f;
         border: 1px solid var(--line);
         box-shadow: 0 12px 34px rgba(18, 38, 32, 0.08);
         animation: reveal 0.45s ease-out;
@@ -62,12 +61,12 @@
         font-size: clamp(26px, 4vw, 38px);
         letter-spacing: 0.2px;
         font-weight: 800;
-        color: var(--ink);
+        color: #ffffff;
       }
 
       .subtitle {
         margin: 7px 0 0;
-        color: var(--muted);
+        color: #d6dde2;
         font-weight: 500;
       }
 
@@ -76,7 +75,7 @@
         border: 1px solid var(--line);
         padding: 10px 14px;
         border-radius: 999px;
-        color: var(--accent-deep);
+        color: #000000;
         text-decoration: none;
         font-weight: 600;
         white-space: nowrap;
@@ -134,6 +133,10 @@
   object-fit: cover;
 }
 
+    .card-body {
+      padding: 12px 12px 14px;
+    }
+
   .card::after {
     content: "";
     position: absolute;
@@ -161,7 +164,8 @@
   backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
+  padding: 16px;
   z-index: 999;
 
   opacity: 0;
@@ -174,15 +178,17 @@
   pointer-events: auto;
 }
 
-/* dạng bottom sheet */
+/* centered modal */
 .modal-sheet {
   width: 100%;
   max-width: 420px;
   background: #fff;
-  border-radius: 20px 20px 0 0;
-  overflow: hidden;
+  border-radius: 20px;
+  max-height: 88vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  transform: translateY(100%);
+  transform: translateY(18px) scale(0.98);
   transition: 0.35s ease;
 }
 
@@ -297,6 +303,35 @@
         color: #27443b;
       }
 
+      .chip-zone {
+        border: 2px solid #5b5960;
+        color: #3f4751;
+      }
+
+      .chip-zone.zone-1 {
+        background: #d4d8d7;
+      }
+
+      .chip-zone.zone-2 {
+        background: #d4dcc2;
+      }
+
+      .chip-zone.zone-3 {
+        background: #ece3b8;
+      }
+
+      .chip-zone.zone-4 {
+        background: #f0d1c2;
+      }
+
+      .chip-zone.zone-5 {
+        background: #dcc9dc;
+      }
+
+      .chip-zone.zone-6 {
+        background: #bcd1c1;
+      }
+
       .desc {
         margin: 0;
         color: #2f3f3a;
@@ -348,13 +383,13 @@
       <section class="hero">
         <div class="hero-top">
           <div>
-            <h1>Animal Directory</h1>
+            <h1>THAM QUAN SỞ THÚ</h1>
             <p class="subtitle">{{subtitle}}</p>
           </div>
-          <a class="home-link" href="/">Quay ve trang chu</a>
+          <a class="home-link" href="/">Quay về trang chủ</a>
         </div>
 
-        <div class="meta">Cap nhat: {{updatedAt}}</div>
+        <div class="meta">Cập nhật: {{updatedAt}}</div>
 
         {{#if errorMessage}}
         <div class="alert">
@@ -369,11 +404,11 @@
         <article class="card" onclick='openModal({{{json this}}})'>
           <img class="card-image" src="{{imageUrl}}" alt="{{name}}" loading="lazy" />
           <div class="card-body">
-            <h2 class="name">{{name}}</h2>
-            <p class="species">Họ: {{family}}</p>
+            <h2 class="name">  {{name}}</h2>
+            <p class="species">  Họ: {{family}}</p>
       
             <div class="chips">
-              <span class="chip">Khu: {{zone}}</span>
+              <span class="chip chip-zone" data-zone="{{zone}}">Khu: {{zone}}</span>
               <span class="chip">{{conservationStatus}}</span>
             
         </article>
@@ -405,7 +440,7 @@
               <p><b>🌙 Sinh hoạt:</b> <span id="modal-active"></span></p>
             </div>
       
-            <div class="fun-fact">
+            <div class="fun-fact" id="modal-fun-fact">
               💡 <span id="modal-desc"></span>
             </div>
           </div>
@@ -427,7 +462,11 @@
           document.getElementById("modal-img").src = animal.imageUrl;
           document.getElementById("modal-name").innerText = animal.name;
 
-          document.getElementById("modal-desc").innerText = animal.fun_fact || "";
+          const funFactBox = document.getElementById("modal-fun-fact");
+          const funFactText = (animal.fun_fact || "").trim();
+
+          document.getElementById("modal-desc").innerText = funFactText;
+          funFactBox.style.display = funFactText ? "block" : "none";
           document.getElementById("modal-ecology").innerText = animal.ecology || "";
           document.getElementById("modal-diet").innerText = animal.diet || "";
           document.getElementById("modal-distribution").innerText = animal.distribution || "";
@@ -481,6 +520,22 @@
           closeModal();
         }
       });
+
+      function applyZoneChipColors() {
+        const chips = document.querySelectorAll(".chip-zone");
+        chips.forEach((chip) => {
+          const zoneText = (chip.getAttribute("data-zone") || chip.textContent || "").toLowerCase();
+          const match = zoneText.match(/\d+/);
+          if (!match) return;
+
+          const zoneNum = Number(match[0]);
+          if (zoneNum >= 1 && zoneNum <= 6) {
+            chip.classList.add(`zone-${zoneNum}`);
+          }
+        });
+      }
+
+      applyZoneChipColors();
     </script>
       {{else}}
       <section class="empty">

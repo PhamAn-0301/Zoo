@@ -54,7 +54,11 @@ router.get("/animals", async (req, res, next) => {
     res.render("animal", {
       title: "Animals",
       subtitle: "Danh sách động vật",
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Intl.DateTimeFormat("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }).format(new Date()),
 
       animals,
       hasAnimals: animals.length > 0,
