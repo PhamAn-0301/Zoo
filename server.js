@@ -8,6 +8,7 @@ dotenv.config();
 const app = express(); // ✅ luôn đứng đầu
 const PORT = process.env.PORT || 5000;
 const isDev = process.env.NODE_ENV !== "production";
+const enableLiveReload = isDev && process.env.npm_lifecycle_event === "dev";
 
 // fix __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -25,8 +26,8 @@ app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "View"));
 
-// ✅ LIVE RELOAD
-if (isDev) {
+// ✅ LIVE RELOAD (only when running `npm run dev`)
+if (enableLiveReload) {
   const livereload = (await import("livereload")).default;
   const connectLivereload = (await import("connect-livereload")).default;
 
