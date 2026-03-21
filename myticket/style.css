@@ -34,7 +34,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 0 22.5px 0 20px;
-  background-color: #f77119;
+  background-color: #183c05;
   margin-bottom: 30px;
 }
 
@@ -129,7 +129,7 @@ header a {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 8px;
-  color: #f77119;
+  color: #183c05;
 }
 
 .ticket-right p {
@@ -167,7 +167,7 @@ header a {
 
 .expire-date {
   margin-left: 10px;
-  color: #f77119;
+  color: #183c05;
   font-weight: 700;
   font-size: 15px;
 }
@@ -305,3 +305,4 @@ header a {
     font-size: 20px;
   }
 }
+

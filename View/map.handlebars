@@ -10,134 +10,393 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
-        /* layout */
+        :root {
+            --sidebar-width: 320px;
+            --green-900: #0e3417;
+            --green-800: #183c05;
+            --green-700: #245f13;
+            --green-100: #eaf7e7;
+            --green-050: #f6fbf4;
+            --text-main: #102118;
+            --text-soft: #4f6456;
+            --line-soft: #dce8d8;
+        }
 
         html,
         body {
             margin: 0;
             height: 100%;
-            font-family: Arial;
+            font-family: "Be Vietnam Pro", "Segoe UI", sans-serif;
+            color: var(--text-main);
+        }
+
+        body {
+            background: linear-gradient(145deg, #f8fcf7 0%, #ecf5ea 100%);
         }
 
         #map {
             position: fixed;
             top: 0;
-            left: 300px;
+            left: var(--sidebar-width);
             right: 0;
             bottom: 0;
         }
 
-        /* sidebar */
-        /* Sidebar hiện đại hơn */
-.sidebar {
-    position: fixed;
-    left: 0; top: 0; bottom: 0;
-    width: 300px;
-    background: #ffffff;
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-header {
-    padding: 25px 20px;
-    font-size: 22px;
-    color: #2c3e50;
-    background: #f8f9fa;
-    border-bottom: 2px solid #eee;
-}
-
-.animal-item {
-    padding: 12px 15px;
-    margin: 8px 12px;
-    border-radius: 12px;
-    transition: all 0.3s ease; /* Tạo hiệu ứng mượt */
-    border: 1px solid transparent;
-}
-
-.animal-item:hover {
-    background: #e3f2fd;
-    transform: translateX(5px);
-    border-color: #2196f3;
-}
-
-/* Tùy chỉnh thanh cuộn cho đẹp */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 300px;
-            background: white;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            width: var(--sidebar-width);
             z-index: 1000;
-            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(36, 95, 19, 0.14) 0%, rgba(255, 255, 255, 0) 55%),
+                linear-gradient(180deg, #fbfefb 0%, #f3f8f2 100%);
+            border-right: 1px solid #cfdfcb;
+            box-shadow: 8px 0 28px rgba(11, 43, 17, 0.18);
+            overflow: hidden;
         }
 
         .sidebar-header {
-            padding: 15px;
-            font-size: 20px;
-            font-weight: bold;
-            border-bottom: 1px solid #ddd;
+            padding: 16px 16px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--line-soft);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 252, 246, 0.98) 100%);
+            backdrop-filter: blur(6px);
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(135deg, #2f7d1e 0%, #183c05 100%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 16px rgba(24, 60, 5, 0.32);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .back-home svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .back-home:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(24, 60, 5, 0.38);
+        }
+
+        .sidebar-title-wrap {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .sidebar-title {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1;
+            letter-spacing: 0.2px;
+            color: var(--green-900);
+            font-weight: 800;
+        }
+
+        .sidebar-sub {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--text-soft);
+            font-weight: 500;
         }
 
         .search-box {
-            padding: 10px;
+            padding: 12px 12px 10px;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7a8d80;
+            pointer-events: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-icon svg {
+            width: 16px;
+            height: 16px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
+            box-sizing: border-box;
+            padding: 11px 12px 11px 38px;
+            border-radius: 12px;
+            border: 1px solid #cadad2;
+            background: rgba(255, 255, 255, 0.94);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #4f8c3f;
+            box-shadow: 0 0 0 4px rgba(79, 140, 63, 0.15);
         }
 
         .animal-list {
-            padding: 10px;
+            flex: 1;
+            overflow: auto;
+            padding: 8px 10px 14px;
         }
 
         .animal-item {
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            width: 100%;
+            margin: 7px 0;
+            padding: 10px 12px;
+            border-radius: 14px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.82);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
         }
 
         .animal-item:hover {
-            background: #f0f0f0;
+            transform: translateY(-2px);
+            border-color: #c7dfc0;
+            box-shadow: 0 10px 18px rgba(34, 75, 16, 0.1);
+            background: #ffffff;
+        }
+
+        .animal-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #eff9ed 0%, #dff1da 100%);
+            border: 1px solid #cfe5c8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .animal-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .animal-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #122a17;
+        }
+
+        .animal-meta {
+            margin-top: 4px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .mini-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid #cde0c7;
+            color: #3e5d49;
+            background: #f4faf3;
+            line-height: 1;
+        }
+
+        .mini-badge.zone-1 {
+            background: #cfd3cf;
+            border-color: #a8afa9;
+            color: #2f3731;
+        }
+
+        .mini-badge.zone-2 {
+            background: #cfd8bf;
+            border-color: #a8b395;
+            color: #33402a;
+        }
+
+        .mini-badge.zone-3 {
+            background: #ece2bf;
+            border-color: #c5ba93;
+            color: #464025;
+        }
+
+        .mini-badge.zone-4 {
+            background: #efcfbe;
+            border-color: #c9a695;
+            color: #4a352b;
+        }
+
+        .mini-badge.zone-5 {
+            background: #dcc7da;
+            border-color: #b49eb1;
+            color: #473445;
+        }
+
+        .mini-badge.zone-6 {
+            background: #bfd5c3;
+            border-color: #97ae9c;
+            color: #2f4234;
+        }
+
+        .mini-badge.status-on {
+            border-color: #8ec78e;
+            color: #1c6d2e;
+            background: #ecf9ef;
+        }
+
+        .mini-badge.status-off {
+            border-color: #d2d9d1;
+            color: #66746b;
+            background: #f6f8f5;
+        }
+
+        .empty-state {
+            margin: 16px 8px;
+            border-radius: 14px;
+            border: 1px dashed #c8d8c4;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 14px;
+            text-align: center;
+            color: #557060;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .animal-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .animal-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .animal-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #b3cdaa 0%, #8fb984 100%);
+            border-radius: 999px;
+            border: 2px solid #eef6eb;
         }
 
         /* popup */
+        .animal-popup .leaflet-popup-content-wrapper {
+            border-radius: 14px;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+            animation: popup-in 0.22s ease-out;
+        }
+
+        .animal-popup .leaflet-popup-content {
+            margin: 10px;
+        }
 
         .popup-card {
-            width: 220px;
+            width: 250px;
         }
 
         .popup-img {
             width: 100%;
-            height: 120px;
+            height: 130px;
             object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 6px;
+            border-radius: 10px;
+            margin-bottom: 8px;
         }
 
         .popup-title {
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #1f2a2b;
+        }
+
+        .popup-meta {
+            font-size: 13px;
+            color: #4d5b5c;
+            display: grid;
+            gap: 4px;
+            margin-bottom: 8px;
         }
 
         .popup-status {
             font-size: 13px;
-            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #2f3a3b;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            display: inline-block;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .status-dot.active {
+            background: #17b26a;
+        }
+
+        .status-dot.inactive {
+            background: #9aa4ad;
+        }
+
+        @keyframes popup-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 900px) {
+            :root {
+                --sidebar-width: 100%;
+            }
+
+            .sidebar {
+                height: 50%;
+                bottom: auto;
+                border-right: none;
+                border-bottom: 1px solid #cfdfcb;
+                box-shadow: 0 6px 22px rgba(11, 43, 17, 0.2);
+            }
+
+            #map {
+                left: 0;
+                top: 50%;
+            }
         }
     </style>
 
@@ -148,11 +407,25 @@
     <div class="sidebar">
 
         <div class="sidebar-header">
-            Thảo Cầm Viên
+            <a class="back-home" href="/" title="Quay lại trang chủ" aria-label="Quay lại trang chủ">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <div class="sidebar-title-wrap">
+                <h1 class="sidebar-title">Bản Đồ </h1>
+                
+            </div>
         </div>
 
         <div class="search-box">
-            <input id="search" placeholder="Search animal...">
+            <span class="search-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"></circle>
+                    <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+            </span>
+            <input id="search" placeholder="Tìm động vật...">
         </div>
 
         <div class="animal-list" id="animalList">
@@ -215,7 +488,63 @@
 
         /* animals */
 
-        const animals = {{{ animals }}}
+        const animalsRaw = {{{ animals }}}
+
+        function normalizeAnimalRecord(record) {
+            const source = record && typeof record === "object" ? record : {};
+            const normalizedKeys = {};
+
+            Object.keys(source).forEach((key) => {
+                normalizedKeys[String(key).trim().toLowerCase()] = source[key];
+            });
+
+            const zoneValue =
+                source.zone ??
+                source.Zone ??
+                source.zone_id ??
+                source.zoneId ??
+                source.khu ??
+                normalizedKeys.zone ??
+                normalizedKeys.zone_id ??
+                normalizedKeys.zoneid ??
+                normalizedKeys.khu;
+
+            const zoneLabelValue =
+                source.zoneLabel ??
+                source.zone_label ??
+                normalizedKeys.zonelabel ??
+                normalizedKeys.zone_label;
+
+            const statusValue =
+                source.status ??
+                source.Status ??
+                normalizedKeys.status;
+
+            const mapX =
+                source.map_x ??
+                source.mapX ??
+                normalizedKeys.map_x ??
+                normalizedKeys.mapx;
+
+            const mapY =
+                source.map_y ??
+                source.mapY ??
+                normalizedKeys.map_y ??
+                normalizedKeys.mapy;
+
+            return {
+                ...source,
+                zone: zoneValue,
+                zoneLabel: zoneLabelValue,
+                status: statusValue,
+                map_x: Number(mapX),
+                map_y: Number(mapY),
+            };
+        }
+
+        const animals = Array.isArray(animalsRaw)
+            ? animalsRaw.map(normalizeAnimalRecord).filter(a => Number.isFinite(a.map_x) && Number.isFinite(a.map_y))
+            : [];
 
         /* icon function */
 
@@ -243,11 +572,115 @@
 
         let highlightCircle
 
+        function showHighlight(latlng, marker, radius = 40) {
+            if (highlightCircle) map.removeLayer(highlightCircle);
+
+            highlightCircle = L.circle(latlng, {
+                radius,
+                color: "#00aaff",
+                weight: 2,
+                fillOpacity: 0.2,
+                interactive: true
+            }).addTo(map);
+
+            // Click vao vong tron xanh cung mo popup con vat.
+            highlightCircle.on("click", (e) => {
+                if (e.originalEvent) {
+                    L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                marker.openPopup();
+            });
+        }
+
+        function isAnimalActive(statusValue) {
+            if (statusValue === true || statusValue === 1) return true;
+            if (statusValue === false || statusValue === 0) return false;
+
+            const normalized = String(statusValue ?? "").trim().toLowerCase();
+
+            if (["false", "0", "inactive", "rest", "nghi", "nghi ngoi", "nghỉ", "nghỉ ngơi"].includes(normalized)) {
+                return false;
+            }
+
+            return ["true", "1", "active", "hoat dong", "hoạt động", "dang hoat dong", "đang hoạt động"].includes(normalized);
+        }
+
+        function resolveZoneValue(a) {
+            const rawZone = a?.zone ?? a?.Zone ?? a?.khu ?? a?.area ?? a?.zone_id;
+            if (rawZone === null || rawZone === undefined || rawZone === "") {
+                return null;
+            }
+
+            const asNumber = Number(rawZone);
+            if (!Number.isNaN(asNumber)) {
+                return asNumber;
+            }
+
+            const matched = String(rawZone).match(/\d+/);
+            if (matched) {
+                return Number(matched[0]);
+            }
+
+            return String(rawZone).trim();
+        }
+
+        function formatZoneLabel(a) {
+            if (a?.zoneLabel) return String(a.zoneLabel);
+            const zoneValue = resolveZoneValue(a);
+            if (zoneValue === null) return "Chua ro khu";
+            return typeof zoneValue === "number" ? `Khu ${zoneValue}` : zoneValue;
+        }
+
+        function getZoneClassName(a) {
+            const zoneValue = resolveZoneValue(a);
+            if (typeof zoneValue !== "number") return "";
+            if (zoneValue < 1 || zoneValue > 6) return "";
+            return `zone-${zoneValue}`;
+        }
+
+        function buildAnimalPopup(a) {
+            const imageUrl = a.image_url || a.imageUrl || "/images/animal.jpg";
+            const species = a.species || a.family || "Chưa cập nhật";
+            const zone = formatZoneLabel(a);
+            const feedingTime = a.feeding_time || a.feedingTime || "Chưa cập nhật";
+            const activeTime = a.active_time || a.activeTime || "Chưa cập nhật";
+            const conservation = a.conservation_status || a.conservationStatus || "Chưa cập nhật";
+
+            const active = isAnimalActive(a.status);
+            const statusText = active ? "Đang hoạt động" : "Đang nghỉ ngơi";
+            const statusClass = active ? "active" : "inactive";
+
+            return `
+<div class="popup-card">
+<img class="popup-img" src="${imageUrl}" alt="${a.name || "Animal"}">
+<div class="popup-title">${a.name || "Chưa cập nhật"}</div>
+<div class="popup-meta">
+<div><b>Họ:</b> ${species}</div>
+<div><b>Khu:</b> ${zone}</div>
+<div><b>Bảo tồn:</b> ${conservation}</div>
+<div><b>Giờ cho ăn:</b> ${feedingTime}</div>
+<div><b>Sinh hoạt:</b> ${activeTime}</div>
+</div>
+<div class="popup-status"><span class="status-dot ${statusClass}"></span>${statusText}</div>
+</div>
+`;
+        }
+
         animals.forEach(a => {
 
-            const marker = L.marker(
+            // Dung circle marker trong suot voi ban kinh lon hon de de bam trung.
+            const marker = L.circleMarker(
                 [a.map_y, a.map_x],
-                { opacity: 0 }   // 👈 ẩn hoàn toàn
+                {
+                    radius: 18,
+                    stroke: true,
+                    weight: 18,
+                    color: "transparent",
+                    opacity: 0,
+                    fillColor: "transparent",
+                    fillOpacity: 0,
+                    interactive: true,
+                }
             ).addTo(map)
 
             markerMap[a.id] = marker
@@ -255,46 +688,19 @@
             /* hover highlight */
 
             marker.on("mouseover", () => {
+                showHighlight([a.map_y, a.map_x], marker, 40);
 
-                if (highlightCircle) map.removeLayer(highlightCircle)
-
-                highlightCircle = L.circle(
-                    [a.map_y, a.map_x],
-                    {
-                        radius: 40,
-                        color: "#00aaff",
-                        weight: 2,
-                        fillOpacity: 0.2
-                    }
-                ).addTo(map)
-
-            })
-
-            marker.on("mouseout", () => {
-                if (highlightCircle) map.removeLayer(highlightCircle)
             })
 
             /* popup */
 
-            marker.bindPopup(`
-
-<div class="popup-card">
-
-<img class="popup-img"
-src="${a.image_url || '/images/animal.jpg'}">
-
-<div class="popup-title">
-${a.name}
-</div>
-
-<div class="popup-status">
-Species: ${a.species || "unknown"}<br>
-Status: ${a.status || "normal"}
-</div>
-
-</div>
-
-`)
+            marker.bindPopup(buildAnimalPopup(a), {
+                className: "animal-popup",
+                autoPan: true,
+                autoPanPadding: [30, 30],
+                maxWidth: 280,
+                minWidth: 240
+            })
 
         })
 
@@ -310,17 +716,7 @@ Status: ${a.status || "normal"}
             });
 
             marker.openPopup();
-
-            if (highlightCircle) map.removeLayer(highlightCircle);
-            highlightCircle = L.circle(
-                [target.map_y, target.map_x],
-                {
-                    radius: 60,
-                    color: "#00aaff",
-                    weight: 2,
-                    fillOpacity: 0.2
-                }
-            ).addTo(map);
+            showHighlight([target.map_y, target.map_x], marker, 60);
         }
 
         const params = new URLSearchParams(window.location.search);
@@ -337,16 +733,31 @@ Status: ${a.status || "normal"}
 
             list.innerHTML = ""
 
+            if (!data.length) {
+                list.innerHTML = `<div class="empty-state">Khong tim thay dong vat phu hop.</div>`;
+                return;
+            }
+
             data.forEach(a => {
 
                 const item = document.createElement("div")
                 item.className = "animal-item"
 
+                const zone = formatZoneLabel(a);
+                const zoneClass = getZoneClassName(a);
+                const active = isAnimalActive(a.status);
+                const statusClass = active ? "status-on" : "status-off";
+                const statusText = active ? "Dang hoat dong" : "Dang nghi";
+
                 item.innerHTML = `
-<span style="font-size:20px">
-${animalIcon(a.species).options.html}
-</span>
-${a.name}
+<span class="animal-icon">${animalIcon(a.species).options.html}</span>
+<div class="animal-main">
+<div class="animal-name">${a.name}</div>
+<div class="animal-meta">
+<span class="mini-badge ${zoneClass}">${zone}</span>
+<span class="mini-badge ${statusClass}">${statusText}</span>
+</div>
+</div>
 `
 
                item.onclick = () => {
@@ -389,6 +800,11 @@ ${a.name}
 
 
     map.on("click", function (e) {
+            // Bo qua click tu cac layer interactive (vd: vong tron highlight)
+            if (e.originalEvent?.target?.closest?.(".leaflet-interactive")) {
+                return;
+            }
+
             const x = e.latlng.lng;
             const y = e.latlng.lat;
 

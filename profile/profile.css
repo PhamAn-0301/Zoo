@@ -27,7 +27,7 @@ body {
   justify-content: space-between;
   padding: 0 80px 0 20px;
   height: 72px;
-  background: #f77119;
+  background: #183c05;
   color: white;
   box-shadow: 0 2px 10px rgba(255, 106, 0, 0.2);
   position: relative;
@@ -323,3 +323,4 @@ input[type="date"] {
     padding: 12px 15px;
   }
 }
+

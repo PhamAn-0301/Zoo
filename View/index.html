@@ -30,7 +30,7 @@
           </h2>
         </div>
 
-        <div class="headerRight">
+        <!-- <div class="headerRight">
           <div class="wrapperIcon1">
             <i class="fa-solid fa-bell headerRightIcon"></i>
           </div>
@@ -83,7 +83,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="body">
         <div class="bodyTitle">
@@ -95,9 +95,9 @@
         <div class="bodyContainer">
           <a href="/animals">
             <div class="card">
-              <img src="assets/Tro%20choi.png" alt="" class="cardImage" />
+              <img src="assets1/nen6.png" alt="" class="cardImage" />
               <div class="card-content">
-                <i class="fa-solid fa-place-of-worship cardIcon"></i>
+                <i class="fa-solid fa-paw cardIcon"></i>
                 <div class="card-details">
                   <p class="cardTitle" style="color: #24421D;"> Tham quan sở thú</p>
                   <p class="cardDescription">Cùng tìm hiểu thế giới động vật!</p>
@@ -107,7 +107,7 @@
           </a>
           <a href="calender/calendar.html">
             <div class="card">
-              <img src="assets/Lich%20bieu%20dien.png" alt="" class="cardImage" />
+              <img src="assets1/nen4.png" alt="" class="cardImage" />
               <div class="card-content">
                 <i class="fa-solid fa-calendar-days cardIcon"></i>
                 <div class="card-details">
@@ -119,7 +119,7 @@
           </a>
           <a href="food/food.html">
             <div class="card">
-              <img src="assets/Do%20an.png" alt="" class="cardImage" />
+              <img src="assets1/nen5.png" alt="" class="cardImage" />
               <div class="card-content">
                 <i class="fa-solid fa-utensils cardIcon"></i>
                 <div class="card-details">
@@ -131,12 +131,12 @@
           </a>
           <a href="ship/ship.html">
             <div class="card">
-              <img src="assets/Gian%20hang.png" alt="" class="cardImage" />
+              <img src="assets1/nen7.png" alt="" class="cardImage" />
               <div class="card-content">
                 <i class="fa-solid fa-store cardIcon"></i>
                 <div class="card-details">
-                  <p class="cardTitle" style="color: #24421D;">Mua sắm</p>
-                  <p class="cardDescription">Shopping thôi!</p>
+                  <p class="cardTitle" style="color: #24421D;">Điểm vui chơi</p>
+                  <p class="cardDescription">Khám phá các điểm vui chơi hấp dẫn!</p>
                 </div>
               </div>
             </div>
@@ -273,18 +273,20 @@
       const bell = document.querySelector(".wrapperIcon1");
       const box = document.querySelector(".notificationBox");
 
-      // prevent accidental selection when opening the box
-      bell.addEventListener('click', () => {
-        box.classList.toggle('active');
-        if (window.getSelection) window.getSelection().removeAllRanges();
-      });
+      if (bell && box) {
+        // prevent accidental selection when opening the box
+        bell.addEventListener('click', () => {
+          box.classList.toggle('active');
+          if (window.getSelection) window.getSelection().removeAllRanges();
+        });
 
-      // Click ngoài để đóng
-      document.addEventListener("click", (e) => {
-        if (!bell.contains(e.target) && !box.contains(e.target)) {
-          box.classList.remove("active");
-        }
-      });
+        // Click ngoài để đóng
+        document.addEventListener("click", (e) => {
+          if (!bell.contains(e.target) && !box.contains(e.target)) {
+            box.classList.remove("active");
+          }
+        });
+      }
 
       document.addEventListener("DOMContentLoaded", () => {
         const joinQueueBtnFirst = document.getElementById("joinQueueBtnFirst");
@@ -474,7 +476,7 @@
         if (!slider) return;
 
         try {
-          const response = await fetch("/api/animals/random?limit=8");
+          const response = await fetch("/api/animals");
           if (!response.ok) throw new Error("Failed to fetch animals");
 
           const data = await response.json();

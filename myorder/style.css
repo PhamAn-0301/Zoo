@@ -29,7 +29,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 0 80px 0 20px;
-  background-color: #f77119;
+  background-color: #183c05;
 }
 
 header h2 {
@@ -85,7 +85,7 @@ header a {
 
 .tab.active {
   background: white;
-  color: #f77119;
+  color: #183c05;
   box-shadow: 0 2px 8px rgba(255, 106, 0, 0.15);
 }
 
@@ -109,7 +109,7 @@ header a {
 }
 
 .search-icon {
-  color: #f77119;
+  color: #183c05;
   font-size: 18px;
   margin-right: 12px;
 }
@@ -167,7 +167,7 @@ header a {
 }
 
 .order-id i {
-  color: #f77119;
+  color: #183c05;
   font-size: 20px;
 }
 
@@ -259,7 +259,7 @@ header a {
 .detail-row.total .value.price {
   font-size: 20px;
   font-weight: 800;
-  color: #f77119;
+  color: #183c05;
 }
 
 .order-actions {
@@ -291,7 +291,7 @@ header a {
 }
 
 .btn-primary {
-  background: #f77119;
+  background: #183c05;
   color: white;
   box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
 }
@@ -399,3 +399,4 @@ header a {
     grid-template-columns: 1fr;
   }
 }
+
