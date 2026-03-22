@@ -68,7 +68,7 @@ function findLocalAnswer(question) {
       /(con|loai|dong vat|co khong|co o)/.test(q);
 
     if (animalQuery && asksHasAnimal) {
-      return `Co, ${animalQuery} co trong Thao Cam Vien theo du lieu hien tai.`;
+      return `Có, ${animalQuery} có trong Thảo Cầm Viên theo dữ liệu hiện tại.`;
     }
   }
 
@@ -87,19 +87,19 @@ function findLocalAnswer(question) {
     {
       keywords: ["gio mo cua", "mo cua", "dong cua", "moi ngay may gio"],
       answer: info.open_time
-        ? `Thao Cam Vien mo cua tu ${info.open_time} moi ngay.`
+        ? `Thảo Cầm Viên mở cửa từ ${info.open_time} mỗi ngày.`
         : null,
     },
     {
       keywords: ["gia ve", "ve nguoi lon", "ve tre em", "bao nhieu tien"],
       answer: (info.adult_ticket || info.child_ticket)
-        ? `Gia ve hien tai: nguoi lon ${info.adult_ticket || "dang cap nhat"}, tre em ${info.child_ticket || "dang cap nhat"}.`
+        ? `Giá vé hiện tại: người lớn ${info.adult_ticket || "đang cập nhật"}, trẻ em ${info.child_ticket || "đang cập nhật"}.`
         : null,
     },
     {
       keywords: ["dia chi", "o dau", "vi tri"],
       answer: info.address
-        ? `Dia chi: ${info.address}.`
+        ? `Địa chỉ: ${info.address}.`
         : null,
     },
     {
@@ -111,13 +111,13 @@ function findLocalAnswer(question) {
     {
       keywords: ["thanh lap", "lich su", "nam thanh lap"],
       answer: info.founded
-        ? `Thao Cam Vien duoc thanh lap nam ${info.founded}.`
+        ? `Thảo Cầm Viên được thành lập năm ${info.founded}.`
         : null,
     },
     {
       keywords: ["dong vat", "co con gi", "loai vat"],
       answer: Array.isArray(info.animals) && info.animals.length
-        ? `Mot so loai dong vat noi bat: ${info.animals.join(", ")}.`
+        ? `Một số loài động vật nổi bật: ${info.animals.join(", ")}.`
         : null,
     },
   ];
