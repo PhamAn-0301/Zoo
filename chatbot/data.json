@@ -2,7 +2,7 @@
   "info": {
     "name": "Thảo Cầm Viên Sài Gòn",
     "address": "2 Nguyễn Bỉnh Khiêm, Quận 1, TP.HCM",
-    "open_time": "07:00 - 18:30",
+    "open_time": "07:00 - 18:00",
     "adult_ticket": "60.000 VNĐ",
     "child_ticket": "40.000 VNĐ",
     "parking": "Có bãi giữ xe máy và ô tô",
@@ -15,7 +15,8 @@
       "Cá sấu",
       "Khỉ",
       "Hà mã",
-      "Công"
+      "Công",
+      "..."
     ]
   },
   "menu": {
@@ -95,7 +96,7 @@
     },
     {
       "keywords": ["giờ mở cửa", "mấy giờ mở cửa"],
-      "answer": "Thảo Cầm Viên mở cửa từ 07:00 đến 18:30 mỗi ngày."
+      "answer": "Thảo Cầm Viên mở cửa từ 07:00 đến 18:00 mỗi ngày."
     },
     {
       "keywords": ["giá vé", "vé bao nhiêu"],
@@ -112,6 +113,34 @@
     {
       "keywords": ["động vật", "có con gì"],
       "answer": "Thảo Cầm Viên có nhiều loài như hổ, voi, gấu mèo, hươu cao cổ, cá sấu, khỉ, hà mã và nhiều loài chim."
+    },
+    {
+      "keywords": ["lộ trình", "gợi ý tham quan", "đi như thế nào"],
+      "answer": "Thảo Cầm Viên rất rộng nên mình gợi ý lộ trình như sau:\n\n🌅 Buổi sáng:\n- Đi khu thú lớn: Voi, Hươu cao cổ, Hổ\n\n👨‍👩‍👧 Gia đình:\n- Hồ Hồng Hạc → Khu thú ăn cỏ → Khu vui chơi\n\n👯 Bạn bè:\n- Khu linh trưởng → Bò sát → Vườn lan\n\n🧘 Đi 1 mình:\n- Khu chim → Vườn sinh thái"
+    },
+    {
+      "keywords": ["xe điện", "dịch vụ xe điện", "tour xe điện"],
+      "answer": "🚗 Dịch vụ xe điện:\n\n1. Dạo 1 vòng (15-20 phút):\n- Người lớn: 30K\n- Trẻ em: 20K\n\n2. Tour xe điện (60 phút):\n- Người lớn: 120K\n- Trẻ em: 100K\n\n3. VIP:\n- Người lớn: 200K\n- Có dừng + cho thú ăn\n\n⏰ Giờ hoạt động:\n- 8:00 - 16:30 (ngày thường)\n- 8:00 - 17:30 (cuối tuần)"
+    },
+    {
+      "keywords": ["xe lửa", "tàu lửa", "dạo vòng"],
+      "answer": "🚂 Dạo một vòng Thảo Cầm Viên:\n\n- Thời gian: 15-20 phút\n- Người lớn: 30K\n- Trẻ em: 20K\n\n📍 Đón tại cổng chính"
+    },
+    {
+      "keywords": ["tour đêm", "tham quan đêm"],
+      "answer": "🌙 Tour đêm \"Khi màn đêm buông xuống\":\n\n- Thời gian: Thứ 7\n- 19:00 hoặc 20:15\n- Giá: 200K/người\n\n👉 Trải nghiệm đời sống động vật ban đêm"
+    },
+    {
+      "keywords": ["khu vui chơi", "trò chơi"],
+      "answer": "🎡 Khu vui chơi:\n\n- Vòng quay: 30K\n- Xe điện sàn: 40K\n\n⏰ 9:00 - 17:00"
+    },
+    {
+      "keywords": ["thời gian tham quan", "đi bao lâu"],
+      "answer": "⏳ Thời gian tham quan:\n\n- Đi bộ: 3-4 tiếng\n- Xe lửa: 15-20 phút\n- Xe điện VIP: 60 phút"
+    },
+    {
+      "keywords": ["ghế nghỉ", "ngồi nghỉ"],
+      "answer": "Có rất nhiều ghế đá và khu bóng mát trong toàn bộ sở thú để bạn nghỉ ngơi nhé!"
     }
   ]
 }
