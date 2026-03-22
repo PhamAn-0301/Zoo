@@ -129,7 +129,7 @@
         width: 58px;
         height: 58px;
         border-radius: 50%;
-        background: #24421D;
+        background: #416D21;
         display: flex;
         justify-content: center;
         align-items: center;
