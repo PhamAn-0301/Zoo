@@ -989,6 +989,15 @@
                 summary: "Khu vận động và trò chơi dành cho thiếu nhi.",
             },
             {
+                id: "loc-khu-vui-choi-nuoc",
+                name: "Khu vui chơi nước",
+                map_x: 639,
+                map_y: 489,
+                type: "Khu vui chơi",
+                summary: "Khu vui chơi nước",
+                status: "Ngưng hoạt động",
+            },
+            {
                 id: "loc-wc-1",
                 name: "Nhà vệ sinh 1",
                 map_x: 566,
@@ -1268,6 +1277,7 @@
             ];
 
             if (location.summary) rows.push(`<div><b>Đặc điểm:</b> ${location.summary}</div>`);
+            if (location.status) rows.push(`<div><b>Trạng thái:</b> ${location.status}</div>`);
             if (location.history) rows.push(`<div><b>Lịch sử:</b> ${location.history}</div>`);
             if (location.scale) rows.push(`<div><b>Quy mô:</b> ${location.scale}</div>`);
             if (location.ecology) rows.push(`<div><b>Sinh thái:</b> ${location.ecology}</div>`);
@@ -1275,13 +1285,20 @@
             if (location.experience) rows.push(`<div><b>Trải nghiệm:</b> ${location.experience}</div>`);
             if (location.visit) rows.push(`<div><b>Tham quan:</b> ${location.visit}</div>`);
 
+            const locationStatusText = location.status || "Địa điểm tham quan";
+            const isInactiveLocation = String(location.status || "")
+                .trim()
+                .toLowerCase()
+                .includes("ngưng");
+            const locationStatusClass = isInactiveLocation ? "inactive" : "active";
+
             return `
 <div class="popup-card">
 <div class="popup-title">${location.name || "Địa điểm"}</div>
 <div class="popup-meta">
 ${rows.join("")}
 </div>
-<div class="popup-status"><span class="status-dot active"></span>Địa điểm tham quan</div>
+<div class="popup-status"><span class="status-dot ${locationStatusClass}"></span>${locationStatusText}</div>
 </div>
 `;
         }
@@ -1520,26 +1537,6 @@ ${rows.join("")}
                 applyFiltersAndRender()
 
             })
-
-
-    map.on("click", function (e) {
-            // Bo qua click tu cac layer interactive (vd: vong tron highlight)
-            if (e.originalEvent?.target?.closest?.(".leaflet-interactive")) {
-                return;
-            }
-
-            const x = e.latlng.lng;
-            const y = e.latlng.lat;
-
-            console.log("X:", x, "Y:", y);
-
-            // Hiển thị trực tiếp trên map
-            L.popup()
-                .setLatLng(e.latlng)
-                .setContent(`X: ${x.toFixed(0)}, Y: ${y.toFixed(0)}`)
-                .openOn(map);
-        });  
-
         
           
     </script>

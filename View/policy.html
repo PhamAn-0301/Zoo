@@ -61,12 +61,36 @@
       }
 
       /* Chinh rieng cho trang policy: ha logo map xuong them */
+      body .global-bottom-nav .menuItemContent {
+        font-size: 17px;
+        font-weight: 600;
+      }
+
+      body .global-bottom-nav .menuItemLink {
+        gap: 0;
+      }
+
+      body .global-bottom-nav .menuItemIcon {
+        margin-bottom: 0;
+        transform: translateY(12px);
+      }
+
       body .global-bottom-nav .menuMap {
-        transform: translateY(-2px);
+        transform: translateY(-8px);
       }
 
       body .global-bottom-nav .menuMapIcon {
-        transform: translateY(6px);
+        transform: translateY(3px);
+      }
+
+      @media (max-width: 480px) {
+        body .global-bottom-nav .menuItemContent {
+          font-size: 15px;
+        }
+
+        body .global-bottom-nav .menuItemLink {
+          gap: 0;
+        }
       }
     </style>
   </head>
