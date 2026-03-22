@@ -26,6 +26,13 @@ body {
   min-height: 100vh;
 }
 
+#ticket-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 header {
   width: 100%;
@@ -81,21 +88,16 @@ header a {
 
 .ticket-left {
   text-align: center;
-  margin-right: 30px;
+  margin-right: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-}
-
-.logo {
-  width: 140px;
-  height: auto;
+  gap: 10px;
 }
 
 .qr-box img {
-  width: 130px;
-  height: 130px;
+  width: 150px;
+  height: 150px;
   border-radius: 8px;
   display: block;
 }
@@ -145,6 +147,39 @@ header a {
   color: #666;
 }
 
+.ticket-code {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #274823;
+}
+
+.ticket-empty {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 180px;
+  border: 2px dashed #cdd9cb;
+  border-radius: 16px;
+  background: #fdfefd;
+  color: #466343;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.ticket-empty i {
+  font-size: 30px;
+  color: #183c05;
+}
+
+.ticket-empty p {
+  font-size: 15px;
+}
+
 .expire-box {
   background: #f8f9fa;
   border-radius: 12px;
@@ -181,13 +216,9 @@ header a {
     padding: 25px;
   }
 
-  .logo {
-    width: 120px;
-  }
-
   .qr-box img {
-    width: 110px;
-    height: 110px;
+    width: 135px;
+    height: 135px;
   }
 
   .ticket-right h2 {
@@ -268,13 +299,9 @@ header a {
     font-size: 20px;
   }
 
-  .logo {
-    width: 100px;
-  }
-
   .qr-box img {
-    width: 90px;
-    height: 90px;
+    width: 115px;
+    height: 115px;
   }
 
   .qr-box {

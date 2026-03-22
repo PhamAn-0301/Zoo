@@ -6,11 +6,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VinWonders</title>
-      <link rel="icon" type="image/png" href="../assets/iconlogo.png" />
+    <title>Vé của tôi </title>
+      <link rel="icon" type="image/png" href="../assets1/logo.jpg" />
     <link
       rel="stylesheet"
-      href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -23,51 +23,100 @@
         <h2>Vé của tôi</h2>
         <div></div>
       </header>
-      <div class="ticket">
-        <div class="ticket-left">
-          <img src="../assets/logoweb.webp" alt="VinWonders" class="logo" />
-          <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?data=VinWonders&amp;size=120x120" alt="QR Code" />
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="ticket-right">
-          <h2>VÉ ƯU ĐÃI / <span>Promotion Ticket</span></h2>
-          <h3>NGƯỜI LỚN</h3>
-          <p>Dành cho khách cao từ 140cm trở lên</p>
-          <p class="en">For guest 140cm above</p>
-
-          <div class="expire-box">
-            <span><strong>THỜI HẠN / Expired On:</strong></span>
-            <div class="expire-date">15/11/2025</div>
-          </div>
-        </div>
-      </div>
-         <div class="ticket">
-        <div class="ticket-left">
-          <img src="../assets/logoweb.webp" alt="VinWonders" class="logo" />
-          <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?data=VinWonders&amp;size=120x120" alt="QR Code" />
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="ticket-right">
-          <h2>VÉ ƯU ĐÃI / <span>Promotion Ticket</span></h2>
-          <h3>NGƯỜI LỚN</h3>
-          <p>Dành cho khách cao từ 140cm trở lên</p>
-          <p class="en">For guest 140cm above</p>
-
-          <div class="expire-box">
-            <span><strong>THỜI HẠN / Expired On:</strong></span>
-            <div class="expire-date">15/11/2025</div>
-          </div>
-        </div>
+      <div id="ticket-list"></div>
+      <div class="ticket-empty" id="ticket-empty" style="display: none;">
+        <i class="fa-solid fa-ticket"></i>
+        <p>Bạn chưa có vé nào. Hãy mua vé để nhận mã QR vào cổng.</p>
       </div>
     </div>
+
+    <script>
+      const ISSUED_TICKETS_STORAGE_KEY = "zoo-issued-tickets";
+      const ticketList = document.getElementById("ticket-list");
+      const ticketEmpty = document.getElementById("ticket-empty");
+
+      function readIssuedTickets() {
+        try {
+          const raw = localStorage.getItem(ISSUED_TICKETS_STORAGE_KEY);
+          if (!raw) {
+            return [];
+          }
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function createTicketNode(ticket) {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(ticket.qrPayload)}&size=180x180`;
+        const typeInfo = {
+          adult: {
+            descVi: "Dành cho khách cao từ 130cm trở lên",
+            descEn: "For guest 130cm above",
+          },
+          child: {
+            descVi: "Dành cho khách dưới 130cm theo quy định",
+            descEn: "For guest under 130cm",
+          },
+        };
+        const normalized = typeInfo[ticket.type] || {};
+        const safeTitle = ticket.title || "VÉ THAM QUAN";
+        const safeSubtitle = ticket.subtitle || "Entry Ticket";
+        const safeHolder = ticket.holder || "KHÁCH";
+        const safeDescVi = normalized.descVi || ticket.descVi || "Vé vào cổng sở thú";
+        const safeDescEn = normalized.descEn || ticket.descEn || "Zoo entry ticket";
+        const safeExpire = ticket.expireDate || "--/--/----";
+        const safeCode = ticket.ticketCode || "N/A";
+
+        const ticketEl = document.createElement("article");
+        ticketEl.className = "ticket";
+        ticketEl.innerHTML = `
+          <div class="ticket-left">
+            <div class="qr-box">
+              <img src="${qrUrl}" alt="QR ${safeCode}" />
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="ticket-right">
+            <h2>${safeTitle} / <span>${safeSubtitle}</span></h2>
+            <h3>${safeHolder}</h3>
+            <p>${safeDescVi}</p>
+            <p class="en">${safeDescEn}</p>
+            <p class="ticket-code">Mã vé: <strong>${safeCode}</strong></p>
+
+            <div class="expire-box">
+              <span><strong>THỜI HẠN / Expired On:</strong></span>
+              <div class="expire-date">${safeExpire}</div>
+            </div>
+          </div>
+        `;
+
+        return ticketEl;
+      }
+
+      function renderTickets() {
+        const tickets = readIssuedTickets().sort((a, b) => {
+          return new Date(b.issuedAt || 0) - new Date(a.issuedAt || 0);
+        });
+
+        ticketList.innerHTML = "";
+
+        if (!tickets.length) {
+          ticketEmpty.style.display = "flex";
+          return;
+        }
+
+        ticketEmpty.style.display = "none";
+        tickets.forEach((ticket) => {
+          ticketList.appendChild(createTicketNode(ticket));
+        });
+      }
+
+      renderTickets();
+    </script>
   </body>
 
 <!-- Mirrored from vinwondersnhatrang.vercel.app/myticket/myticket.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:36:10 GMT -->
