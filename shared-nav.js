@@ -6,32 +6,32 @@
       key: "home",
       label: "Trang chủ",
       href: "/",
-      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3l8.5 7.5v9a1 1 0 0 1-1 1h-5.5a1 1 0 0 1-1-1V15h-2v4.5a1 1 0 0 1-1 1H4.5a1 1 0 0 1-1-1v-9Z"/></svg>',
+      iconClass: "fa-solid fa-house",
     },
     {
       key: "ticket",
       label: "Mua vé",
       href: "/buy-tickets",
-      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2.2a2.3 2.3 0 0 0 0 4.6v2.2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2.2a2.3 2.3 0 0 0 0-4.6V8.5Zm6.4-.8v8.6m2.9-8.6v8.6m2.9-8.6v8.6"/></svg>',
+      iconClass: "fa-solid fa-ticket",
     },
     {
       key: "map",
       label: "Bản đồ",
       href: "/map",
       mapOnly: true,
-      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s6.2-5.9 6.2-11A6.2 6.2 0 1 0 5.8 11c0 5.1 6.2 11 6.2 11Zm0-8.2a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6Z"/></svg>',
+      iconClass: "fa-solid fa-location-dot",
     },
     {
       key: "policy",
       label: "Quy định",
       href: "/policy",
-      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8a9.2 9.2 0 1 0 0 18.4 9.2 9.2 0 0 0 0-18.4Zm.9 13h-1.8v-1.8h1.8v1.8Zm0-3.8h-1.8V7.4h1.8V12Z"/></svg>',
+      iconClass: "fa-solid fa-circle-info",
     },
     {
       key: "user",
       label: "Tài khoản",
       href: "/user",
-      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 2.2c-4.2 0-7.6 2.2-7.6 5v.3a.8.8 0 0 0 .8.8h13.6a.8.8 0 0 0 .8-.8v-.3c0-2.8-3.4-5-7.6-5Z"/></svg>',
+      iconClass: "fa-solid fa-circle-user",
     },
   ];
 
@@ -42,6 +42,8 @@
     policy: ["/policy"],
     user: ["/user"],
   };
+
+  const hiddenPaths = new Set(["/map"]);
 
   function normalizePath(pathname) {
     if (!pathname) {
@@ -78,9 +80,9 @@
 
       .global-bottom-nav {
         width: 100%;
-        height: 82px;
-        background: #fff;
-        box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.16);
+        height: 78px;
+        background: #f5f5f5;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.12);
         position: fixed;
         bottom: 0;
         left: 0;
@@ -88,7 +90,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 18px;
+        padding: 0 10px;
       }
 
       .global-bottom-nav .menuItem {
@@ -104,31 +106,32 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        color: #777;
+        color: #24421D;
         transition: color 0.25s ease;
-        gap: 4px;
+        gap: 5px;
       }
 
       .global-bottom-nav .menuItemIcon {
-        width: 22px;
-        height: 22px;
-        fill: currentColor;
+        font-size: 20px;
+        line-height: 1;
+        transform: translateY(2px);
       }
 
       .global-bottom-nav .menuItemContent {
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1;
       }
 
       .global-bottom-nav .menuMap {
-        width: 54px;
-        height: 54px;
+        width: 58px;
+        height: 58px;
         border-radius: 50%;
-        background: #416d21;
+        background: #24421D;
         display: flex;
         justify-content: center;
         align-items: center;
-        box-shadow: 0 8px 14px rgba(34, 73, 20, 0.28);
+        transform: translateY(-10px);
+        box-shadow: 0 8px 14px rgba(34, 73, 20, 0.25);
       }
 
       .global-bottom-nav .menuMap .menuItemLink {
@@ -137,14 +140,15 @@
       }
 
       .global-bottom-nav .menuMapIcon {
-        width: 30px;
-        height: 30px;
-        fill: #fff;
+        font-size: 30px;
+        line-height: 1;
+        color: #fff;
+        transform: translateY(2px);
       }
 
       .global-bottom-nav .menuItem.active .menuItemLink {
-        color: #0e500a;
-        font-weight: 600;
+        color: #24421D;
+        font-weight: 700;
       }
 
       @media (max-width: 480px) {
@@ -153,7 +157,7 @@
         }
 
         .global-bottom-nav .menuItemContent {
-          font-size: 12px;
+          font-size: 14px;
         }
 
         .global-bottom-nav .menuMap {
@@ -166,6 +170,22 @@
     document.head.appendChild(style);
   }
 
+  function ensureIconFont() {
+    const alreadyLoaded = document.querySelector(
+      'link[data-shared-nav="fa"]',
+    );
+    if (alreadyLoaded) {
+      return;
+    }
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css";
+    link.setAttribute("data-shared-nav", "fa");
+    document.head.appendChild(link);
+  }
+
   function buildNavMarkup(activeKey) {
     return navItems
       .map((item) => {
@@ -173,7 +193,7 @@
           return `
             <div class="menuMap ${activeKey === item.key ? "active" : ""}">
               <a href="${item.href}" class="menuItemLink" aria-label="Bản đồ">
-                <span class="menuMapIcon">${item.icon}</span>
+                <i class="${item.iconClass} menuMapIcon" aria-hidden="true"></i>
               </a>
             </div>
           `;
@@ -182,7 +202,7 @@
         return `
           <div class="menuItem ${activeKey === item.key ? "active" : ""}">
             <a href="${item.href}" class="menuItemLink">
-              <span class="menuItemIcon">${item.icon}</span>
+              <i class="${item.iconClass} menuItemIcon" aria-hidden="true"></i>
               <p class="menuItemContent">${item.label}</p>
             </a>
           </div>
@@ -212,7 +232,18 @@
       return;
     }
 
+    const currentPath = normalizePath(window.location.pathname);
+    if (hiddenPaths.has(currentPath)) {
+      const existingNav = document.querySelector(".global-bottom-nav");
+      if (existingNav) {
+        existingNav.remove();
+      }
+      document.body.classList.remove("has-global-bottom-nav");
+      return;
+    }
+
     ensureStyles();
+    ensureIconFont();
 
     let nav = findExistingMenu();
     if (!nav) {

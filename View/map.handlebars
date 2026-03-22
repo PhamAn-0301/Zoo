@@ -517,7 +517,7 @@
                     <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                 </svg>
             </span>
-            <input id="search" placeholder="Tìm động vật...">
+            <input id="search" placeholder="Tìm động vật, địa điểm...">
         </div>
 
         <div class="animal-list" id="animalList">
@@ -670,6 +670,96 @@
             ? animalsRaw.map(normalizeAnimalRecord).filter(a => Number.isFinite(a.map_x) && Number.isFinite(a.map_y))
             : [];
 
+        const locationsRaw = [
+            {
+                id: "loc-nhan-huong",
+                name: "Di tích quán Nhan Hương",
+                map_x: 1688,
+                map_y: 133,
+                type: "Di tích lịch sử",
+                summary: "Bề ngoài là quán ăn, bên trong là cơ sở bí mật của lực lượng Biệt động Sài Gòn.",
+                history: "Thành lập năm 1963, là hậu cứ quan trọng trong cuộc Tổng tiến công Tết Mậu Thân 1968.",
+                value: "Hiện trưng bày hiện vật, mô hình và giới thiệu đời sống, ẩm thực Sài Gòn xưa.",
+                experience: "Tham quan không gian tái hiện lịch sử, tìm hiểu hoạt động bí mật của Biệt động Sài Gòn và nét sinh hoạt Sài Gòn xưa.",
+            },
+            {
+                id: "loc-den-hung",
+                name: "Đền thờ Vua Hùng",
+                map_x: 874,
+                map_y: 209,
+                type: "Di tích lịch sử - văn hóa",
+                summary: "Kiến trúc cung đình với mái chồng diêm 3 tầng cong, trang trí rồng phượng tinh xảo.",
+                history: "Xây dựng năm 1926, trải qua nhiều lần đổi tên và được bảo tồn đến nay.",
+                value: "Nơi tưởng nhớ công lao dựng nước của các Vua Hùng, mang ý nghĩa văn hóa - lịch sử sâu sắc.",
+                visit: "Mở cửa hầu hết các ngày (trừ thứ Hai), có lễ giỗ Tổ mùng 10/3 âm lịch.",
+            },
+            {
+                id: "loc-bao-tang-dong-thuc-vat",
+                name: "Bảo tàng Động Thực Vật",
+                map_x: 1269,
+                map_y: 380,
+                type: "Khu trưng bày - giáo dục khoa học",
+                summary: "Trưng bày hơn 1.000 mẫu vật gồm tiêu bản động vật, xương, mẫu ngâm formol và thực vật ép khô.",
+                scale: "Diện tích khoảng 530 m² với nhiều phòng trưng bày.",
+                value: "Giúp du khách hiểu rõ hơn về đa dạng sinh học và hệ sinh thái tự nhiên.",
+                visit: "Mở cửa hằng ngày, miễn phí.",
+            },
+            {
+                id: "loc-butterfly",
+                name: "Khu trưng bày bướm",
+                map_x: 1015,
+                map_y: 313,
+                type: "Khu tham quan - giáo dục sinh học",
+                summary: "Không gian mở có lưới che, nơi hàng nghìn cá thể bướm bay tự nhiên giữa các loài cây chủ.",
+                ecology: "Khoảng 1.000 cá thể thuộc nhiều loài, có cả loài quý hiếm tại Việt Nam.",
+                experience: "Chụp ảnh với bướm, quan sát và tìm hiểu vòng đời từ trứng đến bướm trưởng thành.",
+                visit: "Đẹp nhất vào buổi sáng khi bướm hoạt động nhiều.",
+                value: "Góp phần bảo tồn và giáo dục về đa dạng sinh học.",
+            },
+            {
+                id: "loc-vuon-sach",
+                name: "Vườn Sách",
+                map_x: 1502,
+                map_y: 241,
+                type: "Không gian đọc sách - giáo dục",
+                summary: "Không gian yên tĩnh giữa thiên nhiên, gồm khu nhà lục giác và khu đọc ngoài trời dưới tán cây xanh.",
+                scale: "Hơn 1.000 đầu sách với nhiều thể loại, đặc biệt dành cho thiếu nhi.",
+                experience: "Đọc sách, tô màu, vẽ tranh và thư giãn trong không gian xanh mát.",
+                value: "Kết hợp tham quan và học tập, giúp hình thành thói quen đọc sách cho trẻ em.",
+            },
+            {
+                id: "loc-vuon-lan",
+                name: "Vườn Lan",
+                map_x: 1174,
+                map_y: 360,
+                type: "Khu trưng bày thực vật - không gian nghệ thuật",
+                summary: "Trưng bày nhiều loài lan với màu sắc và hình dáng đa dạng trong không gian xanh mát.",
+                scale: "Nhiều khu trưng bày được bố trí theo từng nhóm lan đặc trưng.",
+                experience: "Check-in, chụp ảnh và tận hưởng không gian hoa cùng thiên nhiên.",
+                value: "Mang tính thẩm mỹ cao, giúp du khách khám phá vẻ đẹp của thế giới hoa lan.",
+            },
+        ];
+
+        function normalizeLocationRecord(record) {
+            const source = record && typeof record === "object" ? record : {};
+
+            return {
+                ...source,
+                kind: "location",
+                map_x: Number(source.map_x),
+                map_y: Number(source.map_y),
+            };
+        }
+
+        const locations = locationsRaw
+            .map(normalizeLocationRecord)
+            .filter((item) => Number.isFinite(item.map_x) && Number.isFinite(item.map_y));
+
+        const combinedItems = [
+            ...animals.map((item) => ({ ...item, kind: "animal" })),
+            ...locations,
+        ];
+
         /* icon function */
 
         function animalIcon(type) {
@@ -790,6 +880,44 @@
 `;
         }
 
+        function locationIcon(type) {
+            const normalized = String(type || "").toLowerCase();
+            let icon = "📍";
+
+            if (normalized.includes("di tích")) icon = "🏛️";
+            else if (normalized.includes("bảo tàng")) icon = "🧪";
+            else if (normalized.includes("bướm")) icon = "🦋";
+            else if (normalized.includes("sách")) icon = "📚";
+            else if (normalized.includes("lan")) icon = "🌸";
+
+            return `<div style="font-size:22px;line-height:1">${icon}</div>`;
+        }
+
+        function buildLocationPopup(location) {
+            const rows = [
+                `<div><b>Loại:</b> ${location.type || "Chưa cập nhật"}</div>`,
+                `<div><b>Tọa độ:</b> X ${location.map_x}, Y ${location.map_y}</div>`,
+            ];
+
+            if (location.summary) rows.push(`<div><b>Đặc điểm:</b> ${location.summary}</div>`);
+            if (location.history) rows.push(`<div><b>Lịch sử:</b> ${location.history}</div>`);
+            if (location.scale) rows.push(`<div><b>Quy mô:</b> ${location.scale}</div>`);
+            if (location.ecology) rows.push(`<div><b>Sinh thái:</b> ${location.ecology}</div>`);
+            if (location.value) rows.push(`<div><b>Giá trị:</b> ${location.value}</div>`);
+            if (location.experience) rows.push(`<div><b>Trải nghiệm:</b> ${location.experience}</div>`);
+            if (location.visit) rows.push(`<div><b>Tham quan:</b> ${location.visit}</div>`);
+
+            return `
+<div class="popup-card">
+<div class="popup-title">${location.name || "Địa điểm"}</div>
+<div class="popup-meta">
+${rows.join("")}
+</div>
+<div class="popup-status"><span class="status-dot active"></span>Địa điểm tham quan</div>
+</div>
+`;
+        }
+
         animals.forEach(a => {
 
             // Dung circle marker trong suot voi ban kinh lon hon de de bam trung.
@@ -828,6 +956,36 @@
 
         })
 
+        locations.forEach((location) => {
+            const marker = L.circleMarker(
+                [location.map_y, location.map_x],
+                {
+                    radius: 18,
+                    stroke: true,
+                    weight: 18,
+                    color: "transparent",
+                    opacity: 0,
+                    fillColor: "transparent",
+                    fillOpacity: 0,
+                    interactive: true,
+                }
+            ).addTo(map);
+
+            markerMap[location.id] = marker;
+
+            marker.on("mouseover", () => {
+                showHighlight([location.map_y, location.map_x], marker, 40);
+            });
+
+            marker.bindPopup(buildLocationPopup(location), {
+                className: "animal-popup",
+                autoPan: true,
+                autoPanPadding: [30, 30],
+                maxWidth: 320,
+                minWidth: 260,
+            });
+        });
+
         function focusAnimalById(animalId) {
             const target = animals.find(a => String(a.id) === String(animalId));
             const marker = markerMap[animalId];
@@ -849,6 +1007,17 @@
             focusAnimalById(focusAnimalId);
         }
 
+        const focusLocationId = params.get("locationId");
+        if (focusLocationId && markerMap[focusLocationId]) {
+            const target = locations.find((item) => String(item.id) === String(focusLocationId));
+            if (target) {
+                const targetZoom = Math.min(Math.max(map.getMinZoom() + 1.1, 1), map.getMaxZoom());
+                map.flyTo([target.map_y, target.map_x], targetZoom, { duration: 0.8 });
+                markerMap[focusLocationId].openPopup();
+                showHighlight([target.map_y, target.map_x], markerMap[focusLocationId], 60);
+            }
+        }
+
         /* sidebar render */
 
         const list = document.getElementById("animalList")
@@ -858,7 +1027,7 @@
             list.innerHTML = ""
 
             if (!data.length) {
-                list.innerHTML = `<div class="empty-state">Khong tim thay dong vat phu hop.</div>`;
+                list.innerHTML = `<div class="empty-state">Khong tim thay ket qua phu hop.</div>`;
                 return;
             }
 
@@ -867,13 +1036,25 @@
                 const item = document.createElement("div")
                 item.className = "animal-item"
 
-                const zone = formatZoneLabel(a);
-                const zoneClass = getZoneClassName(a);
-                const active = isAnimalActive(a.status);
-                const statusClass = active ? "status-on" : "status-off";
-                const statusText = active ? "Dang hoat dong" : "Dang nghi";
+                if (a.kind === "location") {
+                    item.innerHTML = `
+<span class="animal-icon">${locationIcon(a.type)}</span>
+<div class="animal-main">
+<div class="animal-name">${a.name}</div>
+<div class="animal-meta">
+<span class="mini-badge">${a.type || "Địa điểm"}</span>
+<span class="mini-badge">X ${a.map_x} - Y ${a.map_y}</span>
+</div>
+</div>
+`;
+                } else {
+                    const zone = formatZoneLabel(a);
+                    const zoneClass = getZoneClassName(a);
+                    const active = isAnimalActive(a.status);
+                    const statusClass = active ? "status-on" : "status-off";
+                    const statusText = active ? "Dang hoat dong" : "Dang nghi";
 
-                item.innerHTML = `
+                    item.innerHTML = `
 <span class="animal-icon">${animalIcon(a.species).options.html}</span>
 <div class="animal-main">
 <div class="animal-name">${a.name}</div>
@@ -882,7 +1063,8 @@
 <span class="mini-badge ${statusClass}">${statusText}</span>
 </div>
 </div>
-`
+`;
+                }
 
                item.onclick = () => {
                     const marker = markerMap[a.id];
@@ -904,7 +1086,7 @@
 
         }
 
-        renderList(animals)
+        renderList(combinedItems)
 
         /* search */
 
@@ -914,9 +1096,28 @@
 
                 const keyword = e.target.value.toLowerCase()
 
-                const filtered = animals.filter(a =>
-                    a.name.toLowerCase().includes(keyword)
-                )
+                const filtered = combinedItems.filter((item) => {
+                    if (item.kind === "location") {
+                        const locationText = [
+                            item.name,
+                            item.type,
+                            item.summary,
+                            item.history,
+                            item.value,
+                            item.experience,
+                            item.visit,
+                            String(item.map_x),
+                            String(item.map_y),
+                        ]
+                            .filter(Boolean)
+                            .join(" ")
+                            .toLowerCase();
+
+                        return locationText.includes(keyword);
+                    }
+
+                    return String(item.name || "").toLowerCase().includes(keyword);
+                })
 
                 renderList(filtered)
 
