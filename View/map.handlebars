@@ -229,6 +229,67 @@
             box-shadow: 0 0 0 4px rgba(79, 140, 63, 0.15);
         }
 
+        .quick-filters {
+            padding: 0 12px 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .quick-filter-btn {
+            border: 1px solid #cde0c7;
+            background: #f4faf3;
+            color: #2f4738;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-filter-btn:hover {
+            border-color: #9dc78f;
+            background: #ecf7e9;
+        }
+
+        .quick-filter-btn.active {
+            border-color: #4f8c3f;
+            background: #4f8c3f;
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(26, 86, 31, 0.2);
+        }
+
+        .mini-badge.cat-historical {
+            border-color: #b8c8a2;
+            background: #f1f6e7;
+            color: #445b2c;
+        }
+
+        .mini-badge.cat-toilet {
+            border-color: #b7cdd8;
+            background: #eef7fb;
+            color: #2f5668;
+        }
+
+        .mini-badge.cat-food {
+            border-color: #dec7a7;
+            background: #fdf4ea;
+            color: #6f4a1f;
+        }
+
+        .mini-badge.cat-parking {
+            border-color: #c8c5e1;
+            background: #f3f1fb;
+            color: #3f3d71;
+        }
+
+        .mini-badge.cat-utility {
+            border-color: #c8d7c8;
+            background: #f2f8f2;
+            color: #37553a;
+        }
+
         .animal-list {
             flex: 1;
             overflow: auto;
@@ -484,6 +545,129 @@
                 width: 28px;
                 height: 72px;
             }
+
+            .sidebar-header {
+                padding: 12px 12px 10px;
+                gap: 8px;
+            }
+
+            .sidebar-title {
+                font-size: 24px;
+            }
+
+            .back-home {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+            }
+
+            .back-home svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .sidebar-collapse-btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            .search-box {
+                padding: 10px 10px 8px;
+            }
+
+            .search-icon {
+                left: 20px;
+            }
+
+            .search-box input {
+                padding: 10px 11px 10px 36px;
+                font-size: 13px;
+                border-radius: 11px;
+            }
+
+            .quick-filters {
+                padding: 0 10px 8px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .quick-filters::-webkit-scrollbar {
+                display: none;
+            }
+
+            .quick-filter-btn {
+                flex: 0 0 auto;
+                font-size: 11px;
+                padding: 5px 10px;
+                white-space: nowrap;
+            }
+
+            .animal-list {
+                padding: 6px 8px 10px;
+            }
+
+            .animal-item {
+                margin: 5px 0;
+                padding: 8px 10px;
+                border-radius: 12px;
+                gap: 8px;
+            }
+
+            .animal-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 9px;
+            }
+
+            .animal-name {
+                font-size: 15px;
+            }
+
+            .animal-meta {
+                margin-top: 3px;
+                gap: 5px;
+            }
+
+            .mini-badge {
+                font-size: 10px;
+                padding: 3px 7px;
+            }
+
+            .empty-state {
+                margin: 10px 6px;
+                padding: 11px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .sidebar {
+                height: 56%;
+            }
+
+            #map {
+                top: 56%;
+            }
+
+            .sidebar-title {
+                font-size: 21px;
+            }
+
+            .animal-name {
+                font-size: 14px;
+            }
+
+            .quick-filter-btn {
+                font-size: 10px;
+                padding: 4px 9px;
+            }
+
+            .mini-badge {
+                font-size: 9.5px;
+                padding: 2px 6px;
+            }
         }
     </style>
 
@@ -518,6 +702,16 @@
                 </svg>
             </span>
             <input id="search" placeholder="Tìm động vật, địa điểm...">
+        </div>
+
+        <div class="quick-filters" id="quickFilters">
+            <button class="quick-filter-btn active" data-filter="all" type="button">Tất cả</button>
+            <button class="quick-filter-btn" data-filter="animal" type="button">Động vật</button>
+            <button class="quick-filter-btn" data-filter="historical" type="button">Di tích lịch sử</button>
+            <button class="quick-filter-btn" data-filter="toilet" type="button">Nhà vệ sinh</button>
+            <button class="quick-filter-btn" data-filter="food" type="button">Khu ăn uống</button>
+            <button class="quick-filter-btn" data-filter="parking" type="button">Bãi gửi xe</button>
+            <button class="quick-filter-btn" data-filter="utility" type="button">Tiện ích</button>
         </div>
 
         <div class="animal-list" id="animalList">
@@ -738,14 +932,174 @@
                 experience: "Check-in, chụp ảnh và tận hưởng không gian hoa cùng thiên nhiên.",
                 value: "Mang tính thẩm mỹ cao, giúp du khách khám phá vẻ đẹp của thế giới hoa lan.",
             },
+            {
+                id: "loc-nha-an-1",
+                name: "Nhà ăn 1",
+                map_x: 396,
+                map_y: 513,
+                type: "Ẩm thực - dịch vụ",
+                summary: "Điểm ăn uống phục vụ du khách trong khu tham quan.",
+            },
+            {
+                id: "loc-nha-an-2",
+                name: "Nhà ăn 2",
+                map_x: 1202,
+                map_y: 563,
+                type: "Ẩm thực - dịch vụ",
+                summary: "Điểm ăn uống bổ sung với nhiều lựa chọn món nhanh.",
+            },
+            {
+                id: "loc-quay-ve-xe",
+                name: "Quầy bán vé xe lửa - xe điện",
+                map_x: 687,
+                map_y: 262,
+                type: "Dịch vụ giao thông nội khu",
+                summary: "Quầy bán vé cho các dịch vụ xe lửa và xe điện tham quan.",
+            },
+            {
+                id: "loc-tram-xe-lua",
+                name: "Trạm xe lửa",
+                map_x: 688,
+                map_y: 261,
+                type: "Trạm giao thông",
+                summary: "Điểm đón/trả khách của tuyến xe lửa tham quan.",
+            },
+            {
+                id: "loc-tram-xe-dien",
+                name: "Trạm xe điện",
+                map_x: 659,
+                map_y: 261,
+                type: "Trạm giao thông",
+                summary: "Điểm đón/trả khách của tuyến xe điện nội khu.",
+            },
+            {
+                id: "loc-san-khau",
+                name: "Sân khấu",
+                map_x: 789,
+                map_y: 602,
+                type: "Không gian sự kiện",
+                summary: "Khu vực biểu diễn và tổ chức các hoạt động tập trung.",
+            },
+            {
+                id: "loc-khu-vui-choi-tre-em",
+                name: "Khu vui chơi trẻ em",
+                map_x: 1704,
+                map_y: 545,
+                type: "Khu vui chơi",
+                summary: "Khu vận động và trò chơi dành cho thiếu nhi.",
+            },
+            {
+                id: "loc-wc-1",
+                name: "Nhà vệ sinh 1",
+                map_x: 566,
+                map_y: 686,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-2",
+                name: "Nhà vệ sinh 2",
+                map_x: 1010,
+                map_y: 507,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-3",
+                name: "Nhà vệ sinh 3",
+                map_x: 1208,
+                map_y: 306,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-4",
+                name: "Nhà vệ sinh 4",
+                map_x: 1266,
+                map_y: 211,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-5",
+                name: "Nhà vệ sinh 5",
+                map_x: 1778,
+                map_y: 378,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-6",
+                name: "Nhà vệ sinh 6",
+                map_x: 1578,
+                map_y: 229,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-parking-c",
+                name: "Bãi đỗ xe Cổng C",
+                map_x: 167,
+                map_y: 351,
+                type: "Bãi đỗ xe",
+                summary: "Khu vực gửi xe cho du khách tại cổng C.",
+            },
+            {
+                id: "loc-parking-d",
+                name: "Bãi đỗ xe Cổng D",
+                map_x: 161,
+                map_y: 597,
+                type: "Bãi đỗ xe",
+                summary: "Khu vực gửi xe cho du khách tại cổng D.",
+            },
+            {
+                id: "loc-parking-a",
+                name: "Bãi đỗ xe Cổng A",
+                map_x: 962,
+                map_y: 147,
+                type: "Bãi đỗ xe",
+                summary: "Khu vực gửi xe cho du khách tại cổng A.",
+            },
+            {
+                id: "loc-parking-b-car",
+                name: "Bãi đỗ xe ô tô Cổng B",
+                map_x: 1025,
+                map_y: 142,
+                type: "Bãi đỗ xe ô tô",
+                summary: "Khu vực gửi xe ô tô cho du khách tại cổng B.",
+            },
+            {
+                id: "loc-y-te",
+                name: "Phòng y tế",
+                map_x: 1131,
+                map_y: 113,
+                type: "Y tế",
+                summary: "Điểm hỗ trợ sơ cứu và chăm sóc y tế cơ bản cho du khách.",
+            },
         ];
 
         function normalizeLocationRecord(record) {
             const source = record && typeof record === "object" ? record : {};
 
+            const normalizeText = (value) =>
+                String(value || "")
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+
+            const mergedText = `${source.name || ""} ${source.type || ""} ${source.summary || ""}`;
+            const normalized = normalizeText(mergedText);
+
+            let category = "utility";
+            if (normalized.includes("di tich")) category = "historical";
+            else if (normalized.includes("nha ve sinh")) category = "toilet";
+            else if (normalized.includes("am thuc") || normalized.includes("nha an")) category = "food";
+            else if (normalized.includes("bai do xe") || normalized.includes("bai gui xe") || normalized.includes("o to")) category = "parking";
+
             return {
                 ...source,
                 kind: "location",
+                category,
                 map_x: Number(source.map_x),
                 map_y: Number(source.map_y),
             };
@@ -889,14 +1243,28 @@
             else if (normalized.includes("bướm")) icon = "🦋";
             else if (normalized.includes("sách")) icon = "📚";
             else if (normalized.includes("lan")) icon = "🌸";
+            else if (normalized.includes("nhà vệ sinh")) icon = "🚻";
+            else if (normalized.includes("bãi đỗ xe")) icon = "🅿️";
+            else if (normalized.includes("y tế")) icon = "🏥";
+            else if (normalized.includes("nhà ăn") || normalized.includes("ẩm thực")) icon = "🍽️";
+            else if (normalized.includes("trạm") || normalized.includes("giao thông") || normalized.includes("xe")) icon = "🚉";
+            else if (normalized.includes("vui chơi")) icon = "🎠";
+            else if (normalized.includes("sự kiện") || normalized.includes("sân khấu")) icon = "🎭";
 
             return `<div style="font-size:22px;line-height:1">${icon}</div>`;
+        }
+
+        function getLocationCategoryLabel(category) {
+            if (category === "historical") return "Di tích lịch sử";
+            if (category === "toilet") return "Nhà vệ sinh";
+            if (category === "food") return "Khu ăn uống";
+            if (category === "parking") return "Bãi gửi xe";
+            return "Tiện ích";
         }
 
         function buildLocationPopup(location) {
             const rows = [
                 `<div><b>Loại:</b> ${location.type || "Chưa cập nhật"}</div>`,
-                `<div><b>Tọa độ:</b> X ${location.map_x}, Y ${location.map_y}</div>`,
             ];
 
             if (location.summary) rows.push(`<div><b>Đặc điểm:</b> ${location.summary}</div>`);
@@ -1021,6 +1389,9 @@ ${rows.join("")}
         /* sidebar render */
 
         const list = document.getElementById("animalList")
+        const searchInput = document.getElementById("search")
+        const filterButtons = Array.from(document.querySelectorAll(".quick-filter-btn"));
+        let activeQuickFilter = "all";
 
         function renderList(data) {
 
@@ -1037,13 +1408,14 @@ ${rows.join("")}
                 item.className = "animal-item"
 
                 if (a.kind === "location") {
+                    const categoryLabel = getLocationCategoryLabel(a.category);
                     item.innerHTML = `
 <span class="animal-icon">${locationIcon(a.type)}</span>
 <div class="animal-main">
 <div class="animal-name">${a.name}</div>
 <div class="animal-meta">
+<span class="mini-badge cat-${a.category || "utility"}">${categoryLabel}</span>
 <span class="mini-badge">${a.type || "Địa điểm"}</span>
-<span class="mini-badge">X ${a.map_x} - Y ${a.map_y}</span>
 </div>
 </div>
 `;
@@ -1052,7 +1424,7 @@ ${rows.join("")}
                     const zoneClass = getZoneClassName(a);
                     const active = isAnimalActive(a.status);
                     const statusClass = active ? "status-on" : "status-off";
-                    const statusText = active ? "Dang hoat dong" : "Dang nghi";
+                    const statusText = active ? "Đang hoạt động" : "Đang nghỉ";
 
                     item.innerHTML = `
 <span class="animal-icon">${animalIcon(a.species).options.html}</span>
@@ -1086,40 +1458,66 @@ ${rows.join("")}
 
         }
 
-        renderList(combinedItems)
+        function applyFiltersAndRender() {
+            const keyword = String(searchInput?.value || "").trim().toLowerCase();
+
+            let baseItems = combinedItems;
+            if (activeQuickFilter === "animal") {
+                baseItems = combinedItems.filter((item) => item.kind === "animal");
+            } else if (["historical", "toilet", "food", "parking", "utility"].includes(activeQuickFilter)) {
+                baseItems = combinedItems.filter(
+                    (item) => item.kind === "location" && item.category === activeQuickFilter,
+                );
+            }
+
+            const filtered = baseItems.filter((item) => {
+                if (!keyword) return true;
+
+                if (item.kind === "location") {
+                    const locationText = [
+                        item.name,
+                        item.type,
+                        item.summary,
+                        item.history,
+                        item.value,
+                        item.experience,
+                        item.visit,
+                        String(item.map_x),
+                        String(item.map_y),
+                    ]
+                        .filter(Boolean)
+                        .join(" ")
+                        .toLowerCase();
+
+                    return locationText.includes(keyword);
+                }
+
+                return String(item.name || "").toLowerCase().includes(keyword);
+            });
+
+            renderList(filtered);
+        }
+
+        filterButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                activeQuickFilter = btn.dataset.filter || "all";
+
+                filterButtons.forEach((button) => {
+                    button.classList.toggle("active", button === btn);
+                });
+
+                applyFiltersAndRender();
+            });
+        });
+
+        applyFiltersAndRender();
 
         /* search */
 
         document
             .getElementById("search")
             .addEventListener("input", e => {
-
-                const keyword = e.target.value.toLowerCase()
-
-                const filtered = combinedItems.filter((item) => {
-                    if (item.kind === "location") {
-                        const locationText = [
-                            item.name,
-                            item.type,
-                            item.summary,
-                            item.history,
-                            item.value,
-                            item.experience,
-                            item.visit,
-                            String(item.map_x),
-                            String(item.map_y),
-                        ]
-                            .filter(Boolean)
-                            .join(" ")
-                            .toLowerCase();
-
-                        return locationText.includes(keyword);
-                    }
-
-                    return String(item.name || "").toLowerCase().includes(keyword);
-                })
-
-                renderList(filtered)
+                applyFiltersAndRender()
 
             })
 

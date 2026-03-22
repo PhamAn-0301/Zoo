@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quy định</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800;1,300..800&display=swap");
+
       html,
       body {
         margin: 0;
@@ -56,6 +58,86 @@
         object-fit: contain;
         object-position: center;
         display: block;
+      }
+
+      /* Keep nav on policy consistent with index sizing */
+      body.has-global-bottom-nav {
+        padding-bottom: 80px;
+      }
+
+      body .global-bottom-nav {
+        height: 80px;
+        background-color: #efefef;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 18px;
+        padding: 0 50px;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      body .global-bottom-nav .menuItem {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      body .global-bottom-nav .menuItemLink {
+        color: #777;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+      }
+
+      body .global-bottom-nav .menuItemIcon {
+        font-size: 20px;
+        margin-bottom: 4px;
+        transform: translateY(4px);
+      }
+
+      body .global-bottom-nav .menuItemContent {
+        font-size: 17px;
+        line-height: 1;
+        margin-top: 1px;
+      }
+
+      body .global-bottom-nav .menuItem.active .menuItemLink {
+        color: #0e500a;
+        font-weight: 700;
+      }
+
+      body .global-bottom-nav .menuMap {
+        width: 50px;
+        height: 50px;
+        background-color: #416D21;
+        transform: translateY(-10px);
+        box-shadow: none;
+      }
+
+      body .global-bottom-nav .menuMapIcon {
+        font-size: 30px;
+        color: #ffffff;
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 600px) {
+        body .global-bottom-nav {
+          padding: 0 12px;
+        }
+
+        body .global-bottom-nav .menuItemContent {
+          font-size: 16px;
+        }
+
+        body .global-bottom-nav .menuItemIcon {
+          transform: translateY(3px);
+        }
+
+        body .global-bottom-nav .menuMapIcon {
+          transform: translateY(-1px);
+        }
+
+        body .global-bottom-nav .menuMap {
+          transform: translateY(-8px);
+        }
       }
     </style>
   </head>
