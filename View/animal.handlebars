@@ -470,7 +470,7 @@
       
           <!-- BUTTON -->
           <div class="modal-footer">
-            <button class="direction-btn">📍 Chỉ đường đến đây</button>
+            <button id="modal-direction-btn" class="direction-btn" type="button">📍 Chỉ đường đến đây</button>
           </div>
       
         </div>
@@ -479,6 +479,7 @@
     <script>
       const modal = document.getElementById("modal");
       const modalCloseBtn = document.getElementById("modal-close-btn");
+      const modalDirectionBtn = document.getElementById("modal-direction-btn");
 
       function openModal(animal) {
           modal.classList.add("show");
@@ -524,6 +525,14 @@
         badge.style.backgroundColor = isActive
           ? "#2ecc71"   // xanh
           : "#bdc3c7";  // xám
+
+        const animalId = animal?.id ?? animal?.animalId ?? "";
+        modalDirectionBtn.onclick = function () {
+          const targetUrl = animalId
+            ? `/map?animalId=${encodeURIComponent(String(animalId))}`
+            : "/map";
+          window.location.href = targetUrl;
+        };
         }
         
 
