@@ -43,7 +43,7 @@
     user: ["/user"],
   };
 
-  const hiddenPaths = new Set(["/map"]);
+  const hiddenPaths = new Set(["/map", "/animals"]);
 
   function normalizePath(pathname) {
     if (!pathname) {
