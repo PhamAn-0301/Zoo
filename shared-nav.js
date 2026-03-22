@@ -83,6 +83,7 @@
         height: 78px;
         background: #f5f5f5;
         box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.12);
+        font-family: "Montserrat", sans-serif;
         position: fixed;
         bottom: 0;
         left: 0;
@@ -118,7 +119,9 @@
       }
 
       .global-bottom-nav .menuItemContent {
-        font-size: 16px;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 0.1px;
         line-height: 1;
       }
 
@@ -130,7 +133,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transform: translateY(-10px);
+        transform: translateY(-6px);
         box-shadow: 0 8px 14px rgba(34, 73, 20, 0.25);
       }
 
@@ -141,9 +144,9 @@
 
       .global-bottom-nav .menuMapIcon {
         font-size: 30px;
-        line-height: 1;
         color: #fff;
-        transform: translateY(2px);
+        line-height: 1;
+        transform: translateY(4px);
       }
 
       .global-bottom-nav .menuItem.active .menuItemLink {
@@ -157,7 +160,7 @@
         }
 
         .global-bottom-nav .menuItemContent {
-          font-size: 14px;
+          font-size: 15px;
         }
 
         .global-bottom-nav .menuMap {
