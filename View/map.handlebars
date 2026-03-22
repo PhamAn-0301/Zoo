@@ -40,6 +40,7 @@
             left: var(--sidebar-width);
             right: 0;
             bottom: 0;
+            transition: left 0.28s ease, top 0.28s ease;
         }
 
         .sidebar {
@@ -57,6 +58,16 @@
             border-right: 1px solid #cfdfcb;
             box-shadow: 8px 0 28px rgba(11, 43, 17, 0.18);
             overflow: hidden;
+            transition: transform 0.28s ease, box-shadow 0.28s ease;
+        }
+
+        body.sidebar-collapsed .sidebar {
+            transform: translateX(calc(-1 * var(--sidebar-width) - 14px));
+            box-shadow: none;
+        }
+
+        body.sidebar-collapsed #map {
+            left: 0;
         }
 
         .sidebar-header {
@@ -98,6 +109,67 @@
         .sidebar-title-wrap {
             min-width: 0;
             flex: 1;
+        }
+
+        .sidebar-collapse-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid #cfdfcb;
+            background: #ffffff;
+            color: #345e2f;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-collapse-btn:hover {
+            background: #f0f7ee;
+            transform: translateY(-1px);
+        }
+
+        .sidebar-collapse-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-show-btn {
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1200;
+            width: 30px;
+            height: 76px;
+            border-radius: 999px;
+            border: 1px solid rgba(58, 97, 43, 0.18);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(243, 250, 241, 0.95) 100%);
+            color: #2f7d1e;
+            box-shadow: 0 10px 20px rgba(22, 55, 24, 0.16);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            backdrop-filter: blur(3px);
+        }
+
+        .sidebar-show-btn:hover {
+            transform: translateY(-50%) translateX(1px);
+            box-shadow: 0 12px 22px rgba(22, 55, 24, 0.2);
+            background: #ffffff;
+        }
+
+        .sidebar-show-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        body.sidebar-collapsed .sidebar-show-btn {
+            display: inline-flex;
         }
 
         .sidebar-title {
@@ -397,6 +469,21 @@
                 left: 0;
                 top: 50%;
             }
+
+            body.sidebar-collapsed .sidebar {
+                transform: translateY(calc(-100% - 14px));
+            }
+
+            body.sidebar-collapsed #map {
+                top: 0;
+            }
+
+            .sidebar-show-btn {
+                left: 8px;
+                top: 50%;
+                width: 28px;
+                height: 72px;
+            }
         }
     </style>
 
@@ -416,6 +503,11 @@
                 <h1 class="sidebar-title">Bản Đồ </h1>
                 
             </div>
+            <button class="sidebar-collapse-btn" id="hideSidebarBtn" title="Thu gọn thanh bên" aria-label="Thu gọn thanh bên">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M14.5 5L8 12L14.5 19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
 
         <div class="search-box">
@@ -433,6 +525,12 @@
 
     </div>
 
+    <button class="sidebar-show-btn" id="showSidebarBtn" title="Mở thanh bên" aria-label="Mở thanh bên">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M9.5 5L16 12L9.5 19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
     <div id="map"></div>
 
     <script>
@@ -444,6 +542,7 @@
         const width = 2000;
         const height = 1100;
         const bounds = [[0, 0], [height, width]];
+        const SIDEBAR_STATE_KEY = "zoo-map-sidebar-collapsed";
 
         // Khởi tạo map, tạm thời chưa set minZoom
         const map = L.map("map", {
@@ -452,6 +551,31 @@
             zoomSnap: 0.1, // Bắt buộc phải có để mức zoom tính toán (số lẻ) hoạt động mượt
             maxBounds: bounds,
             maxBoundsViscosity: 1.0 // Không cho kéo nảy ra ngoài viền ảnh
+        });
+
+        const hideSidebarBtn = document.getElementById("hideSidebarBtn");
+        const showSidebarBtn = document.getElementById("showSidebarBtn");
+
+        function setSidebarCollapsed(collapsed) {
+            document.body.classList.toggle("sidebar-collapsed", collapsed);
+            localStorage.setItem(SIDEBAR_STATE_KEY, collapsed ? "1" : "0");
+
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 300);
+        }
+
+        const savedSidebarState = localStorage.getItem(SIDEBAR_STATE_KEY) === "1";
+        if (savedSidebarState) {
+            setSidebarCollapsed(true);
+        }
+
+        hideSidebarBtn.addEventListener("click", () => {
+            setSidebarCollapsed(true);
+        });
+
+        showSidebarBtn.addEventListener("click", () => {
+            setSidebarCollapsed(false);
         });
 
         L.imageOverlay("/assets1/zoo2.jpg", bounds).addTo(map);

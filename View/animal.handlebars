@@ -184,9 +184,34 @@
   max-height: 88vh;
   overflow-x: hidden;
   overflow-y: auto;
+  position: relative;
 
   transform: translateY(18px) scale(0.98);
   transition: 0.35s ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #2a2a2a;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  z-index: 2;
+}
+
+.modal-close:hover {
+  background: #ffffff;
 }
 
 .modal.show .modal-sheet {
@@ -415,6 +440,7 @@
       <!-- MODAL -->
       <div id="modal" class="modal">
         <div class="modal-sheet">
+          <button class="modal-close" id="modal-close-btn" type="button" aria-label="Đóng modal">&times;</button>
       
           <!-- HEADER IMAGE -->
           <div class="modal-header">
@@ -452,6 +478,7 @@
       
     <script>
       const modal = document.getElementById("modal");
+      const modalCloseBtn = document.getElementById("modal-close-btn");
 
       function openModal(animal) {
           modal.classList.add("show");
@@ -503,6 +530,8 @@
       function closeModal() {
         modal.classList.remove("show");
       }
+
+      modalCloseBtn.addEventListener("click", closeModal);
 
       /* click ngoài để đóng */
       modal.addEventListener("click", function (e) {
