@@ -208,6 +208,7 @@ return "Minh chua nhan duoc phan hoi hoan chinh tu AI. Ban thu gui lai cau hoi n
 function initChatbot() {
 
   loadData();
+  const BOT_AVATAR = "../assets1/logo4.jpg";
 
   const toggle = document.getElementById("chatbot-toggle");
   const closeBtn = document.getElementById("chatbot-close");
@@ -291,7 +292,7 @@ function initChatbot() {
 
       const avatar = document.createElement("img");
 
-      avatar.src = "../assets1/icon3.jpg";
+      avatar.src = BOT_AVATAR;
       avatar.alt = "AI";
       avatar.className = "message-avatar";
 
