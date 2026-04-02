@@ -150,6 +150,20 @@ app.post("/api/chat", async (req, res) => {
 // routes
 app.use("/", webRoutes);
 
+// Centralized error handler to avoid crashing serverless invocations.
+app.use((err, req, res, next) => {
+  console.error("Unhandled request error:", err);
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(500).json({
+    error: {
+      message: "Internal server error",
+    },
+  });
+});
+
 export default app;
 
 // Start HTTP server only for local/dev runtime.
