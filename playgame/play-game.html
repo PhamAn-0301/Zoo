@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
   
 <!-- Mirrored from vinwondersnhatrang.vercel.app/playgame/play-game.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:35:53 GMT -->
@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VinWonders</title>
-      <link rel="icon" type="image/png" href="../assets/iconlogo.png" />
+    <title>Thảo Cầm Viên</title>
+      <link rel="icon" type="image/png" href="../assets1/logo.jpg" />
     <link rel="stylesheet" href="playGame.css" />
     <link
       rel="stylesheet"
@@ -16,30 +16,28 @@
   </head>
   <body>
     <div class="container">
-      <header>
-        <a href="../index-2.html">
-          <i class="fa-solid fa-chevron-left"></i>
-        </a>
-        <h2>Điểm vui chơi</h2>
-        <i class="fa-solid fa-filter"></i>
-      </header>
-
-      <div class="search-bar">
-        <input type="text" placeholder="Tìm kiếm trò chơi" class="searchIcon" />
-        <i class="fa-solid fa-magnifying-glass iconSearch"></i>
+    <header class="main-header">
+      <div class="header-container">
+        <a href="/" class="back-home-btn" aria-label="Quay về trang chủ">&#8592;</a>
+    
+        <h2 class="page-title">Các động vật nổi bật</h2>
+    
+        <div class="header-right">
+          <i class="fa-solid fa-filter"></i>
+        </div>
       </div>
-
+    </header>
       <!-- Card 1 -->
       <div class="card" id="hammoCard">
-        <img src="../assets/hammo.webp" alt="Cuộc phiêu lưu hầm mỏ" />
+        <img src="../assets1/tegiac.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
         <div class="card-content">
           <div>
-            <h3>Cuộc phiêu lưu hầm mỏ 5.0 ⭐</h3>
-            <p><i class="fa-solid fa-map-pin"></i> Adventure Land</p>
-            <p><i class="fa-solid fa-ruler-vertical"></i> Trên 110cm</p>
-            <p><i class="fa-regular fa-clock"></i> 09:00 - 19:30</p>
+            <h3>Tê giác trắng</h3>
+            <p><i class="fa-solid fa-map-pin"></i> Khu nào ?</p>
+          
+            <p><i class="fa-regular fa-clock"></i> 07:00 - 17:30</p>
           </div>
-            <a href="../map-game.html">
+            <a href="/map-game">
               <button class="direction-btn">Chỉ đường</button>
             </a>
         </div>
@@ -47,26 +45,70 @@
 
       <!-- Card 2 -->
       <div class="card" id="tataCard">
-  <img src="../assets/vinpearlland-nha-trang.jpg" alt="Tata ở xứ sở thần tiên" />
+  <img src="../assets1/bao.png" alt="Tata ở xứ sở thần tiên" />
   <div class="card-content">
     <div>
-      <h3>Tata ở xứ sở thần tiên 5.0 ⭐</h3>
-      <p><i class="fa-solid fa-map-pin"></i> Fairy Land</p>
-      <p><i class="fa-solid fa-ruler-vertical"></i> Không giới hạn chiều cao</p>
-      <p><i class="fa-regular fa-clock"></i> 09:00 - 12:25 / 13:00 - 18:00</p>
+      <h3>Báo hoa mai</h3>
+      <p><i class="fa-solid fa-map-pin"></i> Khu nào ?</p>
+
+      <p><i class="fa-regular fa-clock"></i> 07:00 - 17:30</p>
     </div>
-      <a href="../map-game.html">
+      <a href="/map-game">
         <button class="direction-btn">Chỉ đường</button>
       </a>
   </div>
-</div>
-    </div>
 
+    </div>
+    <!-- Card 3 -->
+    <div class="card" id="ranCard">
+      <img src="../assets1/ran.jpg" alt="Rắn hổ mang chúa" />
+      <div class="card-content">
+        <div>
+          <h3>Rắn hổ mang chúa</h3>
+          <p><i class="fa-solid fa-map-pin"></i> Khu bò sát</p>
+          <p><i class="fa-regular fa-clock"></i> 07:00 - 17:30</p>
+        </div>
+        <a href="/map-game">
+          <button class="direction-btn">Chỉ đường</button>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Card 4 -->
+    <div class="card" id="huuCard">
+      <img src="../assets1/huu.jpg" alt="Hưu vàng" />
+      <div class="card-content">
+        <div>
+          <h3>Hưu vàng</h3>
+          <p><i class="fa-solid fa-map-pin"></i> Khu động vật ăn cỏ</p>
+          <p><i class="fa-regular fa-clock"></i> 07:00 - 17:30</p>
+        </div>
+        <a href="/map-game">
+          <button class="direction-btn">Chỉ đường</button>
+        </a>
+      </div>
+    </div>
+   
+    <!-- Card 5 -->
+    <div class="card" id="voiCard">
+      <img src="../assets1/voi.jpg" alt="Voi Châu Á" />
+      <div class="card-content">
+        <div>
+          <h3>Voi Châu Á</h3>
+          <p><i class="fa-solid fa-map-pin"></i> Khu thú lớn</p>
+          <p><i class="fa-regular fa-clock"></i> 07:00 - 17:30</p>
+        </div>
+        <a href="/map-game">
+          <button class="direction-btn">Chỉ đường</button>
+        </a>
+      </div>
+    </div>
+    </div>
     <!-- Modal chi tiết trò chơi -->
     <div class="modal" id="hammoModal">
       <div class="modal-content">
         <div class="modal-header">
-          <img src="../assets/hammo.webp" alt="Cuộc phiêu lưu hầm mỏ" />
+          <img src="../assets1/tegiac.jpg" alt="Cuộc phiêu lưu hầm mỏ" />
           <span class="close-btn" id="closeModal">&times;</span>
         </div>
         <div class="modal-body">
@@ -96,7 +138,7 @@
   <div class="modal" id="tataModal">
     <div class="modal-content">
       <div class="modal-header">
-        <img src="../assets/vinpearlland-nha-trang.jpg" alt="Tata ở xứ sở thần tiên" />
+        <img src="../assets1/bao.png" alt="Tata ở xứ sở thần tiên" />
         <span class="close-btn" id="closeTataModal">&times;</span>
       </div>
       <div class="modal-body">
@@ -116,13 +158,84 @@
           - Không quay phim hoặc chụp ảnh trong khi biểu diễn.
         </div>
       </div>
+      </div> <!-- đóng modal tata -->
   </div>
-
+        <div class="modal" id="ranModal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <img src="../assets1/ran.jpg" alt="Rắn hổ mang chúa" />
+              <span class="close-btn" id="closeRanModal">&times;</span>
+            </div>
+            <div class="modal-body">
+              <h2>Rắn hổ mang chúa</h2>
+              <div class="info-grid">
+                <p><i class="fa-solid fa-map-pin gameicon"></i> Khu bò sát</p>
+                <p><i class="fa-solid fa-user gameicon"></i> Người lớn</p>
+                <p><i class="fa-solid fa-heart-pulse gameicon"></i> Mức độ: Nguy hiểm</p>
+              </div>
+        
+              <div class="note">
+                <strong>Lưu ý:</strong><br />
+                - Không chạm vào kính hoặc khu vực nuôi.<br />
+                - Giữ khoảng cách an toàn.<br />
+                - Tuân theo hướng dẫn của nhân viên.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal" id="huuModal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <img src="../assets1/huu.jpg" alt="Hưu vàng" />
+              <span class="close-btn" id="closeHuuModal">&times;</span>
+            </div>
+            <div class="modal-body">
+              <h2>Hưu vàng</h2>
+              <div class="info-grid">
+                <p><i class="fa-solid fa-map-pin gameicon"></i> Khu động vật ăn cỏ</p>
+                <p><i class="fa-solid fa-user gameicon"></i> Mọi lứa tuổi</p>
+                <p><i class="fa-solid fa-heart-pulse gameicon"></i> Mức độ: Nhẹ nhàng</p>
+              </div>
+        
+              <div class="note">
+                <strong>Lưu ý:</strong><br />
+                - Không cho ăn thức ăn ngoài.<br />
+                - Giữ trật tự và không làm động vật hoảng sợ.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal" id="voiModal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <img src="../assets1/voi.jpg" alt="Voi Châu Á" />
+              <span class="close-btn" id="closeVoiModal">&times;</span>
+            </div>
+            <div class="modal-body">
+              <h2>Voi Châu Á</h2>
+              <div class="info-grid">
+                <p><i class="fa-solid fa-map-pin gameicon"></i> Khu thú lớn</p>
+                <p><i class="fa-solid fa-user gameicon"></i> Mọi lứa tuổi</p>
+                <p><i class="fa-solid fa-heart-pulse gameicon"></i> Mức độ: Trung bình</p>
+              </div>
+        
+              <div class="note">
+                <strong>Lưu ý:</strong><br />
+                - Không đến quá gần voi.<br />
+                - Không chọc phá hoặc gây tiếng ồn lớn.
+              </div>
+            </div>
+          </div>
+        </div>
     <script>
         const cards = [
-        { card: "hammoCard", modal: "hammoModal", close: "closeModal" },
-        { card: "tataCard", modal: "tataModal", close: "closeTataModal" },
-      ];
+            { card: "hammoCard", modal: "hammoModal", close: "closeModal" },
+            { card: "tataCard", modal: "tataModal", close: "closeTataModal" },
+
+            { card: "ranCard", modal: "ranModal", close: "closeRanModal" },
+            { card: "huuCard", modal: "huuModal", close: "closeHuuModal" },
+            { card: "voiCard", modal: "voiModal", close: "closeVoiModal" },
+          ];
 
       cards.forEach(({ card, modal, close }) => {
         const cardEl = document.getElementById(card);
@@ -151,3 +264,5 @@
 
 <!-- Mirrored from vinwondersnhatrang.vercel.app/playgame/play-game.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:35:54 GMT -->
 </html>
+
+

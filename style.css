@@ -263,7 +263,7 @@
 
 .cardIcon {
   font-size: 40px;
-  color: #f77119;
+  color: #183c05;
   margin-left: 25px;
 }
 
@@ -358,7 +358,7 @@
 
 .sliderLocation {
   font-size: 14px;
-  color: #f77119;
+  color: #000000;
   padding: 0 10px;
 }
 .bodySlider a {
@@ -386,14 +386,14 @@
 .sliderContent {
   font-size: 16px;
   font-weight: 600;
-  color: rgb(101, 101, 101);
+  color: #24421D;
   padding: 0 10px;
   margin-bottom: 10px;
 }
 
 .sliderLocation {
   font-size: 14px;
-  color: #f77119;
+  color: #000000;
   padding: 0 10px;
 }
 
@@ -490,6 +490,7 @@
   right: 0;
   bottom: 110px;
   z-index: 999999;
+  pointer-events: none;
 }
 
 .contact-btn {
@@ -499,18 +500,19 @@
   width: 65px;
   height: 65px;
   border-radius: 50%;
-  background-color: #f77119;
+  background-color: #416D21;  
   border: none;
   color: #fff;
   font-size: 28px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 4px 12px rgba(36, 66, 29, 0.4);
   transition: all 0.3s ease;
+  pointer-events: auto;
 }
 
 .contact-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.5);
+  box-shadow: 0 6px 16px rgba(36, 66, 29, 0.5);
 }
 
 .contact-btn i {
@@ -537,6 +539,7 @@
   width: 257px;
   overflow: hidden;
   animation: slideUp 0.3s ease;
+  pointer-events: auto;
 }
 
 .contactBox.active {
@@ -544,7 +547,7 @@
 }
 
 .contactBox i {
-  color: #f77119;
+  color: #0a5319;
 }
 
 .contact-email {
@@ -583,17 +586,41 @@
 .menuMap {
   width: 50px;
   height: 50px;
-  background-color: #f77119;
+  background-color: #416D21;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.menuMap:hover,
+.menuMap:active,
+.menuMap:focus-within {
+  background-color: #416D21;
+}
+.menuMap {
+  position: relative;
+  z-index: 100002;
+  /* cao hơn tất cả */
+}
+.menuMap {
+  pointer-events: auto;
+}
+
+.menuMap .menuItemLink {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.menuMap * {
+  pointer-events: auto;
+}
+
 .menuItem.active,
 .menuItem.active .menuItemIcon,
 .menuItem.active .menuItemContent {
-  color: #f77119;
+  color: #0e500a;
 }
 
 .menuItemIcon {
@@ -1371,34 +1398,96 @@
 
 .userImage {
   width: 100%;
-  height: 720px;
+  height: 360px;
   top: 0;
   left: 0;
-  
-  background-image: url('assets/TTCN.png');
+
+  background-image: url('assets1/user.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.userBackBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, #4f8a33 0%, #2d5f1f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 20px rgba(21, 59, 21, 0.3);
+  z-index: 6;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.userBackBtn i {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.userBackBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(21, 59, 21, 0.36);
+}
+
+.userHero {
+  width: min(92%, 760px);
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(28, 80, 24, 0.88) 0%, rgba(65, 109, 33, 0.82) 100%);
+  box-shadow: 0 14px 28px rgba(16, 54, 20, 0.34);
+  backdrop-filter: blur(2px);
+}
+
+.userHero h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.userHero p {
+  font-size: 14px;
+  opacity: 0.95;
 }
 
 .profile-grid {
-  top: -50px;
-  background-color: #fff;
-  border-radius: 30px;
+  top: -30px;
+  background: linear-gradient(180deg, #ffffff 0%, #f6fbf4 100%);
+  border-radius: 26px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 40px 40px;
+  gap: 14px;
+  padding: 30px 24px;
+  width: calc(100% - 24px);
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(17, 55, 26, 0.1);
 }
 
 .profile-grid a {
   text-decoration: none;
 }
 
+.sysinfoCardLink {
+  text-decoration: none;
+}
+
 .profile-card {
-  background-color: #fff;
+  background: #ffffff;
+  border: 1px solid #d9e8d4;
   border-radius: 16px;
-  box-shadow: rgba(0, 0, 0, 0.247) 0px 0px 10px;
+  box-shadow: 0 8px 18px rgba(19, 61, 28, 0.08);
   padding: 20px 0;
   display: flex;
   flex-direction: column;
@@ -1412,19 +1501,20 @@
 }
 
 .profile-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 26px rgba(19, 61, 28, 0.14);
+  border-color: #b9d3b0;
 }
 
 .icon {
   font-size: 28px;
-  color: #f77119;
+  color: #2f6f1d;
 }
 
 .profile-card p {
   font-size: 16px;
   font-weight: 550;
-  color: #222;
+  color: #1c4522;
   margin: 0;
 }
 
@@ -1432,20 +1522,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -65px;
+  margin-top: -40px;
   margin-bottom: 100px;
+  width: calc(100% - 24px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .sysinfoText {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.247) 0px 0px 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f5fbf2 100%);
+  border: 1px solid #d8e7d3;
+  border-radius: 14px;
+  box-shadow: 0 10px 22px rgba(18, 57, 27, 0.1);
   padding: 20px;
-  width: calc(100% - 80px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
   font-size: 16px;
   font-weight: 550;
-  color: #000;
+  color: #1e4325;
   margin-bottom: 10px;
   transition:
     transform 0.2s ease,
@@ -1453,12 +1550,20 @@
 }
 
 .sysinfoText i {
-  color: #f77119;
+  color: #2f6f1d;
 }
 
 .sysinfoText:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 14px 24px rgba(18, 57, 27, 0.16);
+}
+
+.sysinfoCard {
+  height: 100%;
+}
+
+.sysinfoCard p {
+  text-align: center;
 }
 
 .qr-modal {
@@ -1526,7 +1631,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px 0 20px;
-  background-color: #f77119;
+  background-color: #0b4c19;
 }
 
 .map-head p {
@@ -1630,7 +1735,7 @@
   text-align: center;
   font-size: 30px;
   font-weight: 700;
-  color: #f77119;
+  color: #0a5219;
   margin-top: 40px;
   margin-bottom: 15px;
 }
@@ -1682,7 +1787,7 @@
   margin-top: 15px;
   width: 80%;
   padding: 14px;
-  background: #f77119;
+  background: #0f4d09;
   border: none;
   border-radius: 5px;
   color: white;
@@ -1981,15 +2086,41 @@
   }
 
   .userImage {
-    height: 320px;
+    height: 300px;
+  }
+
+  .userBackBtn {
+    top: 14px;
+    left: 14px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .userHero {
+    width: calc(100% - 24px);
+    margin-bottom: 16px;
+    padding: 14px 16px;
+  }
+
+  .userHero h2 {
+    font-size: 21px;
+  }
+
+  .userHero p {
+    font-size: 12px;
   }
 
   .profile-grid {
-    padding: 40px 20px;
+    padding: 24px 16px;
+    width: calc(100% - 16px);
+  }
+
+  .sysinfo {
+    width: calc(100% - 16px);
   }
 
   .sysinfoText {
-    width: calc(100% - 40px);
+    width: 100%;
     font-size: 16px;
   }
 

@@ -1,0 +1,583 @@
+  <!doctype html>
+  <html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #122620;
+        --accent: #ee6c23;
+        --accent-deep: #c74f0b;
+        --mint: #dff3e7;
+        --paper: #fffdf8;
+        --line: #eedfce;
+        --muted: #5e6965;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        padding: 26px 18px 40px;
+        color: var(--ink);
+        background: #dcedd0;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+
+      .hero {
+        border-radius: 22px;
+        padding: 22px;
+        margin-bottom: 20px;
+        background: #416D21;
+        border: 1px solid var(--line);
+        box-shadow: 0 12px 34px rgba(18, 38, 32, 0.08);
+        animation: reveal 0.45s ease-out;
+      }
+
+      .hero-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(26px, 4vw, 38px);
+        letter-spacing: 0.2px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .subtitle {
+        margin: 7px 0 0;
+        color: #d6dde2;
+        font-weight: 500;
+      }
+
+      .home-link {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        padding: 10px 14px;
+        border-radius: 999px;
+        color: #000000;
+        text-decoration: none;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .home-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(199, 79, 11, 0.16);
+      }
+
+      .meta {
+        margin-top: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 11px;
+        border-radius: 999px;
+        background: var(--mint);
+        color: #1a6442;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .alert {
+        margin-top: 14px;
+        border: 1px solid #f2bd8f;
+        background: #fff4e8;
+        color: #8a490f;
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 14px;
+      }
+
+      /* CARD nâng cấp */
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(18, 38, 32, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .card-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+    .card-body {
+      padding: 12px 12px 14px;
+    }
+
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    opacity: 0;
+    transition: 0.4s;
+  }
+
+  .card:hover::after {
+    opacity: 1;
+  }
+
+  .card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(18, 38, 32, 0.18);
+  }
+
+  /* MODAL nâng cấp */
+  /* modal nền */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  z-index: 999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* centered modal */
+.modal-sheet {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 20px;
+  max-height: 88vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+
+  transform: translateY(18px) scale(0.98);
+  transition: 0.35s ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #2a2a2a;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  z-index: 2;
+}
+
+.modal-close:hover {
+  background: #ffffff;
+}
+
+.modal.show .modal-sheet {
+  transform: translateY(0);
+}
+
+/* HEADER */
+.modal-header {
+  position: relative;
+}
+
+.modal-header img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.status-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  background: #1ec773;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* BODY */
+.modal-body {
+  padding: 16px;
+}
+
+.modal-body h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.latin-name {
+  font-style: italic;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+/* info box */
+.info-box {
+  background: #e9f7ef;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+.info-box p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* fun fact */
+.fun-fact {
+  margin-top: 12px;
+  font-size: 14px;
+  background: #fff4e5;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* FOOTER */
+.modal-footer {
+  padding: 12px;
+}
+
+.direction-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #0b0b1f;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+      .name {
+        margin: 0;
+        font-weight: 800;
+        font-size: 19px;
+        color: #0f3528;
+      }
+
+      .species {
+        margin: 5px 0 10px;
+        font-style: italic;
+        color: #4e5f59;
+        font-size: 14px;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 10px;
+      }
+
+      .chip {
+        border-radius: 999px;
+        border: 1px solid #dfd5c8;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        background: #fffaf3;
+        color: #27443b;
+      }
+
+      .chip-zone {
+        border: 2px solid #5b5960;
+        color: #3f4751;
+      }
+
+      .chip-zone.zone-1 {
+        background: #d4d8d7;
+      }
+
+      .chip-zone.zone-2 {
+        background: #d4dcc2;
+      }
+
+      .chip-zone.zone-3 {
+        background: #ece3b8;
+      }
+
+      .chip-zone.zone-4 {
+        background: #f0d1c2;
+      }
+
+      .chip-zone.zone-5 {
+        background: #dcc9dc;
+      }
+
+      .chip-zone.zone-6 {
+        background: #bcd1c1;
+      }
+
+      .desc {
+        margin: 0;
+        color: #2f3f3a;
+        line-height: 1.42;
+        font-size: 14px;
+        min-height: 42px;
+      }
+
+      .empty {
+        margin-top: 8px;
+        border: 1px dashed #d7c8b4;
+        background: rgba(255, 255, 255, 0.78);
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        color: #5f605c;
+        font-weight: 600;
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          padding: 16px;
+        }
+
+        .hero-top {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .card-image {
+          height: 160px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <div class="hero-top">
+          <div>
+            <h1>Tham Quan Sở Thú</h1>
+            <p class="subtitle">{{subtitle}}</p>
+          </div>
+          <a class="home-link" href="/">Quay về trang chủ</a>
+        </div>
+
+        <div class="meta">Cập nhật: {{updatedAt}}</div>
+
+        {{#if errorMessage}}
+        <div class="alert">
+          Khong the tai du lieu Supabase: {{errorMessage}}
+        </div>
+        {{/if}}
+      </section>
+
+      {{#if hasAnimals}}
+      <section class="grid">
+        {{#each animals}}
+        <article class="card" onclick='openModal({{{json this}}})'>
+          <img class="card-image" src="{{imageUrl}}" alt="{{name}}" loading="lazy" />
+          <div class="card-body">
+            <h2 class="name">  {{name}}</h2>
+            <p class="species">  Họ: {{family}}</p>
+      
+            <div class="chips">
+              <span class="chip chip-zone" data-zone="{{zone}}">Khu: {{zone}}</span>
+              <span class="chip">{{conservationStatus}}</span>
+            
+        </article>
+        {{/each}}
+      </section>
+      
+      <!-- MODAL -->
+      <div id="modal" class="modal">
+        <div class="modal-sheet">
+          <button class="modal-close" id="modal-close-btn" type="button" aria-label="Đóng modal">&times;</button>
+      
+          <!-- HEADER IMAGE -->
+          <div class="modal-header">
+            <img id="modal-img" />
+            <div class="status-badge" id="modal-status-badge"></div>
+          </div>
+      
+          <!-- CONTENT -->
+          <div class="modal-body">
+            <h2 id="modal-name"></h2>
+            <p class="latin-name" id="modal-latin"></p>
+      
+            <div class="info-box">
+              <p><b>🔍 Thông tin chi tiết:</b> <span id="modal-description"></span></p>
+              <p><b>🌍 Môi trường sống:</b> <span id="modal-ecology"></span></p>
+              <p><b>🍖 Thức ăn:</b> <span id="modal-diet"></span></p>
+              <p><b>📍 Phân bố:</b> <span id="modal-distribution"></span></p>
+              <p><b>🍼 Sinh sản:</b> <span id="modal-reproduction"></span></p>
+              <p><b>🕒 Giờ cho ăn:</b> <span id="modal-feeding"></span></p>
+              <p><b>🌙 Sinh hoạt:</b> <span id="modal-active"></span></p>
+            </div>
+      
+            <div class="fun-fact" id="modal-fun-fact">
+              💡 <span id="modal-desc"></span>
+            </div>
+          </div>
+      
+          <!-- BUTTON -->
+          <div class="modal-footer">
+            <button id="modal-direction-btn" class="direction-btn" type="button">📍 Chỉ đường đến đây</button>
+          </div>
+      
+        </div>
+      </div>
+      
+    <script>
+      const modal = document.getElementById("modal");
+      const modalCloseBtn = document.getElementById("modal-close-btn");
+      const modalDirectionBtn = document.getElementById("modal-direction-btn");
+
+      function openModal(animal) {
+          modal.classList.add("show");
+
+          document.getElementById("modal-img").src = animal.imageUrl;
+          document.getElementById("modal-name").innerText = animal.name;
+
+          const funFactBox = document.getElementById("modal-fun-fact");
+          const funFactText = (animal.fun_fact || "").trim();
+
+          document.getElementById("modal-desc").innerText = funFactText;
+          funFactBox.style.display = funFactText ? "block" : "none";
+          document.getElementById("modal-ecology").innerText = animal.ecology || "";
+          document.getElementById("modal-diet").innerText = animal.diet || "";
+          document.getElementById("modal-distribution").innerText = animal.distribution || "";
+          document.getElementById("modal-reproduction").innerText = animal.reproduction || "";
+          document.getElementById("modal-description").innerText = animal.description || "";
+
+          // 🌙 Sinh hoạt
+          const activeMap = {
+            "Ban ngày": "🌞 Ban ngày",
+            "Ban đêm": "🌙 Ban đêm"
+          };
+
+          document.getElementById("modal-active").innerText =
+            activeMap[animal.activeTime] || animal.activeTime || "Chưa cập nhật";
+
+          // 🕒 Giờ cho ăn
+          document.getElementById("modal-feeding").innerText =
+            animal.feedingTime || "Chưa cập nhật";
+
+          // 🔥 STATUS BADGE (PHẦN QUAN TRỌNG)
+        const badge = document.getElementById("modal-status-badge");
+
+        const isActive = animal.status === true || animal.status === "true";
+
+        badge.innerText = isActive
+          ? "🟢 Đang hoạt động"
+          : "⚪ Đang nghỉ ngơi";
+        badge.style.color = isActive
+          ? "white"
+          : "black";
+        badge.style.backgroundColor = isActive
+          ? "#2ecc71"   // xanh
+          : "#bdc3c7";  // xám
+
+        const animalId = animal?.id ?? animal?.animalId ?? "";
+        modalDirectionBtn.onclick = function () {
+          const targetUrl = animalId
+            ? `/map?animalId=${encodeURIComponent(String(animalId))}`
+            : "/map";
+          window.location.href = targetUrl;
+        };
+        }
+        
+
+      function closeModal() {
+        modal.classList.remove("show");
+      }
+
+      modalCloseBtn.addEventListener("click", closeModal);
+
+      /* click ngoài để đóng */
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      /* ESC để đóng (xịn hơn) */
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      });
+
+      function applyZoneChipColors() {
+        const chips = document.querySelectorAll(".chip-zone");
+        chips.forEach((chip) => {
+          const zoneText = (chip.getAttribute("data-zone") || chip.textContent || "").toLowerCase();
+          const match = zoneText.match(/\d+/);
+          if (!match) return;
+
+          const zoneNum = Number(match[0]);
+          if (zoneNum >= 1 && zoneNum <= 6) {
+            chip.classList.add(`zone-${zoneNum}`);
+          }
+        });
+      }
+
+      applyZoneChipColors();
+    </script>
+      {{else}}
+      <section class="empty">
+        Chua co du lieu dong vat de hien thi.
+      </section>
+      {{/if}}
+    </div>
+    <script src="shared-nav.js"></script>
+  </body>
+  </html>

@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        :root {
+            --sidebar-width: 320px;
+            --green-900: #0e3417;
+            --green-800: #183c05;
+            --green-700: #245f13;
+            --green-100: #eaf7e7;
+            --green-050: #f6fbf4;
+            --text-main: #102118;
+            --text-soft: #4f6456;
+            --line-soft: #dce8d8;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            font-family: "Be Vietnam Pro", "Segoe UI", sans-serif;
+            color: var(--text-main);
+        }
+
+        body {
+            background: linear-gradient(145deg, #f8fcf7 0%, #ecf5ea 100%);
+        }
+
+        #map {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            bottom: 0;
+            transition: left 0.28s ease, top 0.28s ease;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            background:
+                radial-gradient(120% 80% at 0% 0%, rgba(36, 95, 19, 0.14) 0%, rgba(255, 255, 255, 0) 55%),
+                linear-gradient(180deg, #fbfefb 0%, #f3f8f2 100%);
+            border-right: 1px solid #cfdfcb;
+            box-shadow: 8px 0 28px rgba(11, 43, 17, 0.18);
+            overflow: hidden;
+            transition: transform 0.28s ease, box-shadow 0.28s ease;
+        }
+
+        body.sidebar-collapsed .sidebar {
+            transform: translateX(calc(-1 * var(--sidebar-width) - 14px));
+            box-shadow: none;
+        }
+
+        body.sidebar-collapsed #map {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 16px 16px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--line-soft);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 252, 246, 0.98) 100%);
+            backdrop-filter: blur(6px);
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(135deg, #2f7d1e 0%, #183c05 100%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 16px rgba(24, 60, 5, 0.32);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .back-home svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .back-home:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(24, 60, 5, 0.38);
+        }
+
+        .sidebar-title-wrap {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .sidebar-collapse-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid #cfdfcb;
+            background: #ffffff;
+            color: #345e2f;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-collapse-btn:hover {
+            background: #f0f7ee;
+            transform: translateY(-1px);
+        }
+
+        .sidebar-collapse-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-show-btn {
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1200;
+            width: 30px;
+            height: 76px;
+            border-radius: 999px;
+            border: 1px solid rgba(58, 97, 43, 0.18);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(243, 250, 241, 0.95) 100%);
+            color: #2f7d1e;
+            box-shadow: 0 10px 20px rgba(22, 55, 24, 0.16);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            backdrop-filter: blur(3px);
+        }
+
+        .sidebar-show-btn:hover {
+            transform: translateY(-50%) translateX(1px);
+            box-shadow: 0 12px 22px rgba(22, 55, 24, 0.2);
+            background: #ffffff;
+        }
+
+        .sidebar-show-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        body.sidebar-collapsed .sidebar-show-btn {
+            display: inline-flex;
+        }
+
+        .sidebar-title {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1;
+            letter-spacing: 0.2px;
+            color: var(--green-900);
+            font-weight: 700;
+        }
+
+        .sidebar-sub {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--text-soft);
+            font-weight: 500;
+        }
+
+        .search-box {
+            padding: 12px 12px 10px;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7a8d80;
+            pointer-events: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .search-box input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 12px 11px 38px;
+            border-radius: 12px;
+            border: 1px solid #cadad2;
+            background: rgba(255, 255, 255, 0.94);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #4f8c3f;
+            box-shadow: 0 0 0 4px rgba(79, 140, 63, 0.15);
+        }
+
+        .quick-filters {
+            padding: 0 12px 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .quick-filter-btn {
+            border: 1px solid #cde0c7;
+            background: #f4faf3;
+            color: #2f4738;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-filter-btn:hover {
+            border-color: #9dc78f;
+            background: #ecf7e9;
+        }
+
+        .quick-filter-btn.active {
+            border-color: #4f8c3f;
+            background: #4f8c3f;
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(26, 86, 31, 0.2);
+        }
+
+        .quick-action-btn {
+            border: 1px solid #b7cdb0;
+            background: #eef7eb;
+            color: #2f5f32;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 11px;
+            cursor: pointer;
+        }
+
+        .badge-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 27, 14, 0.42);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2200;
+            padding: 14px;
+        }
+
+        .badge-modal.open {
+            display: flex;
+        }
+
+        .badge-modal-card {
+            width: min(420px, 100%);
+            max-height: 75vh;
+            overflow: auto;
+            border-radius: 16px;
+            border: 1px solid #cadec8;
+            background:
+                radial-gradient(120% 80% at 15% -20%, rgba(111, 193, 96, 0.22) 0%, rgba(255, 255, 255, 0) 60%),
+                linear-gradient(180deg, #ffffff 0%, #f4faf2 100%);
+            box-shadow: 0 20px 40px rgba(12, 41, 17, 0.26);
+            padding: 14px;
+        }
+
+        .badge-modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 10px 10px 8px;
+            border-radius: 12px;
+            border: 1px solid #cfe1cb;
+            background: linear-gradient(120deg, #f7fcf5 0%, #edf8ea 100%);
+        }
+
+        .badge-modal-title {
+            margin: 0;
+            font-size: 24px;
+            color: #15361c;
+            letter-spacing: 0.2px;
+        }
+
+        .badge-modal-sub {
+            margin-top: 2px;
+            font-size: 12px;
+            color: #4f6a59;
+            font-weight: 600;
+        }
+
+        .badge-modal-close {
+            border: 1px solid #c7d9c2;
+            background: #ffffff;
+            color: #335c2f;
+            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .badge-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .badge-summary {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge-summary-chip {
+            border: 1px solid #c7dbc3;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #2a5b35;
+            background: #eff8ec;
+        }
+
+        .badge-item {
+            border: 1px solid #d5e3d2;
+            border-radius: 12px;
+            padding: 10px;
+            background: linear-gradient(150deg, #fcfffb 0%, #f3f9f1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .badge-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(20, 56, 27, 0.12);
+            border-color: #bdd7b7;
+        }
+
+        .badge-item.locked {
+            opacity: 0.75;
+            filter: grayscale(0.18);
+        }
+
+        .badge-item.unlocked {
+            border-color: #91c786;
+            background:
+                radial-gradient(80% 70% at 0% 0%, rgba(124, 205, 109, 0.28) 0%, rgba(255, 255, 255, 0) 65%),
+                linear-gradient(150deg, #fbfff9 0%, #eef9e9 100%);
+        }
+
+        .badge-item-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .badge-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 1px solid #c7dbc3;
+            background: #f4faf2;
+            flex: 0 0 auto;
+            margin-top: 1px;
+        }
+
+        .badge-item.unlocked .badge-item-icon {
+            border-color: #8bc37f;
+            background: linear-gradient(140deg, #dff3d8 0%, #bfe8b5 100%);
+        }
+
+        .badge-item-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1c3b24;
+            line-height: 1.15;
+        }
+
+        .badge-item-desc {
+            margin-top: 2px;
+            font-size: 16px;
+            color: #587062;
+        }
+
+        .badge-item-state {
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 4px 8px;
+            border: 1px solid #c9d6cd;
+            background: #f2f6f3;
+            color: #5b6d62;
+            white-space: nowrap;
+        }
+
+        .badge-item.unlocked .badge-item-state {
+            border-color: #99c893;
+            background: #e6f6e1;
+            color: #216a30;
+        }
+
+        .badge-item.locked .badge-item-state {
+            border-color: #cfd6d2;
+            background: #f0f3f1;
+            color: #7a8880;
+        }
+
+        .reward-popup {
+            position: fixed;
+            left: 50%;
+            top: 26px;
+            transform: translateX(-50%);
+            z-index: 2300;
+            display: none;
+            width: min(420px, calc(100vw - 20px));
+            background: linear-gradient(145deg, #2d7f24 0%, #174f11 100%);
+            color: #fff;
+            border-radius: 14px;
+            box-shadow: 0 16px 30px rgba(12, 46, 16, 0.36);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            padding: 12px 12px 10px;
+        }
+
+        .reward-popup.open {
+            display: block;
+            animation: reward-slide-in 0.22s ease-out;
+        }
+
+        .reward-popup-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .reward-popup-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .reward-popup-close {
+            margin-top: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .game-complete-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2400;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            background: rgba(8, 24, 12, 0.5);
+        }
+
+        .game-complete-modal.open {
+            display: flex;
+        }
+
+        .game-complete-card {
+            width: min(460px, 100%);
+            border-radius: 16px;
+            border: 1px solid #b9d9b2;
+            padding: 18px 16px;
+            background:
+                radial-gradient(100% 70% at 50% -20%, rgba(149, 220, 129, 0.3) 0%, rgba(255, 255, 255, 0) 65%),
+                linear-gradient(180deg, #ffffff 0%, #eef9ea 100%);
+            box-shadow: 0 24px 40px rgba(12, 44, 17, 0.34);
+            text-align: center;
+        }
+
+        .game-complete-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #184222;
+            margin: 0 0 8px;
+        }
+
+        .game-complete-message {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.55;
+            color: #2f4f39;
+            font-weight: 600;
+        }
+
+        .game-complete-close {
+            margin-top: 14px;
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(135deg, #2f7d1e 0%, #1a5c10 100%);
+            cursor: pointer;
+        }
+
+        @keyframes reward-slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .mini-badge.cat-historical {
+            border-color: #b8c8a2;
+            background: #f1f6e7;
+            color: #445b2c;
+        }
+
+        .mini-badge.cat-toilet {
+            border-color: #b7cdd8;
+            background: #eef7fb;
+            color: #2f5668;
+        }
+
+        .mini-badge.cat-food {
+            border-color: #dec7a7;
+            background: #fdf4ea;
+            color: #6f4a1f;
+        }
+
+        .mini-badge.cat-parking {
+            border-color: #c8c5e1;
+            background: #f3f1fb;
+            color: #3f3d71;
+        }
+
+        .mini-badge.cat-utility {
+            border-color: #c8d7c8;
+            background: #f2f8f2;
+            color: #37553a;
+        }
+
+        .animal-list {
+            flex: 1;
+            overflow: auto;
+            padding: 8px 10px 14px;
+        }
+
+        .animal-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            margin: 7px 0;
+            padding: 10px 12px;
+            border-radius: 14px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.82);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .animal-item:hover {
+            transform: translateY(-2px);
+            border-color: #c7dfc0;
+            box-shadow: 0 10px 18px rgba(34, 75, 16, 0.1);
+            background: #ffffff;
+        }
+
+        .animal-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #eff9ed 0%, #dff1da 100%);
+            border: 1px solid #cfe5c8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .animal-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .animal-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #122a17;
+        }
+
+        .animal-meta {
+            margin-top: 4px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .mini-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid #cde0c7;
+            color: #3e5d49;
+            background: #f4faf3;
+            line-height: 1;
+        }
+
+        .mini-badge.zone-1 {
+            background: #cfd3cf;
+            border-color: #a8afa9;
+            color: #2f3731;
+        }
+
+        .mini-badge.zone-2 {
+            background: #cfd8bf;
+            border-color: #a8b395;
+            color: #33402a;
+        }
+
+        .mini-badge.zone-3 {
+            background: #ece2bf;
+            border-color: #c5ba93;
+            color: #464025;
+        }
+
+        .mini-badge.zone-4 {
+            background: #efcfbe;
+            border-color: #c9a695;
+            color: #4a352b;
+        }
+
+        .mini-badge.zone-5 {
+            background: #dcc7da;
+            border-color: #b49eb1;
+            color: #473445;
+        }
+
+        .mini-badge.zone-6 {
+            background: #bfd5c3;
+            border-color: #97ae9c;
+            color: #2f4234;
+        }
+
+        .mini-badge.status-on {
+            border-color: #8ec78e;
+            color: #1c6d2e;
+            background: #ecf9ef;
+        }
+
+        .mini-badge.status-off {
+            border-color: #d2d9d1;
+            color: #66746b;
+            background: #f6f8f5;
+        }
+
+        .mini-badge.checkin-on {
+            border-color: #96ca8d;
+            color: #1e6f31;
+            background: #e8f8e4;
+        }
+
+        .mini-badge.checkin-off {
+            border-color: #d8dfd7;
+            color: #67756d;
+            background: #f5f7f5;
+        }
+
+        .empty-state {
+            margin: 16px 8px;
+            border-radius: 14px;
+            border: 1px dashed #c8d8c4;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 14px;
+            text-align: center;
+            color: #557060;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .animal-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .animal-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .animal-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #b3cdaa 0%, #8fb984 100%);
+            border-radius: 999px;
+            border: 2px solid #eef6eb;
+        }
+
+        /* popup */
+        .animal-popup .leaflet-popup-content-wrapper {
+            border-radius: 14px;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+            animation: popup-in 0.22s ease-out;
+        }
+
+        .animal-popup .leaflet-popup-content {
+            margin: 10px;
+        }
+
+        .popup-card {
+            width: 250px;
+        }
+
+        .popup-img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .popup-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #1f2a2b;
+        }
+
+        .popup-meta {
+            font-size: 13px;
+            color: #4d5b5c;
+            display: grid;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .popup-status {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #2f3a3b;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .popup-checkin-btn {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2f7d1e 0%, #1c5a10 100%);
+            color: #ffffff;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .popup-checkin-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .popup-checkin-btn:disabled {
+            background: #dce6d9;
+            color: #6f7c73;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            display: inline-block;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .status-dot.active {
+            background: #17b26a;
+        }
+
+        .status-dot.inactive {
+            background: #9aa4ad;
+        }
+
+        @keyframes popup-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 900px) {
+            :root {
+                --sidebar-width: 100%;
+            }
+
+            .sidebar {
+                height: 50%;
+                bottom: auto;
+                border-right: none;
+                border-bottom: 1px solid #cfdfcb;
+                box-shadow: 0 6px 22px rgba(11, 43, 17, 0.2);
+            }
+
+            #map {
+                left: 0;
+                top: 50%;
+            }
+
+            body.sidebar-collapsed .sidebar {
+                transform: translateY(calc(-100% - 14px));
+            }
+
+            body.sidebar-collapsed #map {
+                top: 0;
+            }
+
+            .sidebar-show-btn {
+                left: 8px;
+                top: 50%;
+                width: 28px;
+                height: 72px;
+            }
+
+            .sidebar-header {
+                padding: 12px 12px 10px;
+                gap: 8px;
+            }
+
+            .sidebar-title {
+                font-size: 24px;
+            }
+
+            .back-home {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+            }
+
+            .back-home svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .sidebar-collapse-btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            .search-box {
+                padding: 10px 10px 8px;
+            }
+
+            .search-icon {
+                left: 20px;
+            }
+
+            .search-box input {
+                padding: 10px 11px 10px 36px;
+                font-size: 13px;
+                border-radius: 11px;
+            }
+
+            .quick-filters {
+                padding: 0 10px 8px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .quick-filters::-webkit-scrollbar {
+                display: none;
+            }
+
+            .quick-filter-btn {
+                flex: 0 0 auto;
+                font-size: 11px;
+                padding: 5px 10px;
+                white-space: nowrap;
+            }
+
+            .animal-list {
+                padding: 6px 8px 10px;
+            }
+
+            .animal-item {
+                margin: 5px 0;
+                padding: 8px 10px;
+                border-radius: 12px;
+                gap: 8px;
+            }
+
+            .animal-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 9px;
+            }
+
+            .animal-name {
+                font-size: 15px;
+            }
+
+            .animal-meta {
+                margin-top: 3px;
+                gap: 5px;
+            }
+
+            .mini-badge {
+                font-size: 10px;
+                padding: 3px 7px;
+            }
+
+            .empty-state {
+                margin: 10px 6px;
+                padding: 11px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .sidebar {
+                height: 56%;
+            }
+
+            #map {
+                top: 56%;
+            }
+
+            .sidebar-title {
+                font-size: 21px;
+            }
+
+            .animal-name {
+                font-size: 14px;
+            }
+
+            .quick-filter-btn {
+                font-size: 10px;
+                padding: 4px 9px;
+            }
+
+            .mini-badge {
+                font-size: 9.5px;
+                padding: 2px 6px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <div class="sidebar-header">
+            <a class="back-home" href="/" title="Quay lại trang chủ" aria-label="Quay lại trang chủ">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <div class="sidebar-title-wrap">
+                <h1 class="sidebar-title">Bản Đồ </h1>
+                
+            </div>
+            <button class="sidebar-collapse-btn" id="hideSidebarBtn" title="Thu gọn thanh bên" aria-label="Thu gọn thanh bên">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M14.5 5L8 12L14.5 19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="search-box">
+            <span class="search-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"></circle>
+                    <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+            </span>
+            <input id="search" placeholder="Tìm động vật, địa điểm...">
+        </div>
+
+        <div class="quick-filters" id="quickFilters">
+            <button class="quick-filter-btn active" data-filter="all" type="button">Tất cả</button>
+            <button class="quick-filter-btn" data-filter="animal" type="button">Động vật</button>
+            <button class="quick-filter-btn" id="missionFilterBtn" data-filter="mission" type="button">Nhiệm vụ (0/12)</button>
+            <button class="quick-action-btn" id="openBadgesBtn" type="button">Huy hiệu (0)</button>
+            <button class="quick-filter-btn" data-filter="historical" type="button">Di tích lịch sử</button>
+            <button class="quick-filter-btn" data-filter="toilet" type="button">Nhà vệ sinh</button>
+            <button class="quick-filter-btn" data-filter="food" type="button">Khu ăn uống</button>
+            <button class="quick-filter-btn" data-filter="parking" type="button">Bãi gửi xe</button>
+            <button class="quick-filter-btn" data-filter="utility" type="button">Tiện ích</button>
+        </div>
+
+        <div class="animal-list" id="animalList">
+        </div>
+
+    </div>
+
+    <button class="sidebar-show-btn" id="showSidebarBtn" title="Mở thanh bên" aria-label="Mở thanh bên">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M9.5 5L16 12L9.5 19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <div id="map"></div>
+
+    <div class="badge-modal" id="badgeModal" aria-hidden="true">
+        <div class="badge-modal-card">
+            <div class="badge-modal-head">
+                <div>
+                    <h3 class="badge-modal-title">Danh sách huy hiệu</h3>
+                    <div class="badge-modal-sub">Săn huy hiệu theo nhiệm vụ check-in hôm nay</div>
+                </div>
+                <button class="badge-modal-close" id="closeBadgeModalBtn" type="button" aria-label="Đóng">&times;</button>
+            </div>
+            <div class="badge-summary" id="badgeSummary"></div>
+            <div class="badge-list" id="badgeList"></div>
+        </div>
+    </div>
+
+    <div class="reward-popup" id="rewardPopup" aria-live="polite">
+        <div class="reward-popup-title">Bạn đã nhận được huy hiệu mới</div>
+        <ul class="reward-popup-list" id="rewardPopupList"></ul>
+        <button class="reward-popup-close" id="closeRewardPopupBtn" type="button">Đóng</button>
+    </div>
+
+    <div class="game-complete-modal" id="gameCompleteModal" aria-hidden="true">
+        <div class="game-complete-card">
+            <h3 class="game-complete-title">Chúc mừng</h3>
+            <p class="game-complete-message">Chúc mừng bạn đã hoàn thành trò chơi, hãy ra quầy bán vé  ngay cổng và đưa 6 huy hiệu này cho nhân viên để đổi quà nhé.</p>
+            <button class="game-complete-close" id="closeGameCompleteBtn" type="button">Đã hiểu</button>
+        </div>
+    </div>
+
+    <script>
+
+        /* map setup */
+
+     /* map setup */
+       /* map setup */
+        const width = 2000;
+        const height = 1100;
+        const bounds = [[0, 0], [height, width]];
+        const SIDEBAR_STATE_KEY = "zoo-map-sidebar-collapsed";
+
+        // Khởi tạo map, tạm thời chưa set minZoom
+        const map = L.map("map", {
+            crs: L.CRS.Simple,
+            maxZoom: 2,
+            zoomSnap: 0.1, // Bắt buộc phải có để mức zoom tính toán (số lẻ) hoạt động mượt
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0 // Không cho kéo nảy ra ngoài viền ảnh
+        });
+
+        const hideSidebarBtn = document.getElementById("hideSidebarBtn");
+        const showSidebarBtn = document.getElementById("showSidebarBtn");
+
+        function setSidebarCollapsed(collapsed) {
+            document.body.classList.toggle("sidebar-collapsed", collapsed);
+            localStorage.setItem(SIDEBAR_STATE_KEY, collapsed ? "1" : "0");
+
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 300);
+        }
+
+        const savedSidebarState = localStorage.getItem(SIDEBAR_STATE_KEY) === "1";
+        if (savedSidebarState) {
+            setSidebarCollapsed(true);
+        }
+
+        hideSidebarBtn.addEventListener("click", () => {
+            setSidebarCollapsed(true);
+        });
+
+        showSidebarBtn.addEventListener("click", () => {
+            setSidebarCollapsed(false);
+        });
+
+        L.imageOverlay("/assets1/zoo2.jpg", bounds).addTo(map);
+
+        // Hàm tự động tính toán minZoom để ảnh luôn FULL khung bên phải
+        function updateMinZoom() {
+            const mapContainer = document.getElementById("map");
+
+            // Tính tỷ lệ giữa khung chứa bản đồ và kích thước thật của ảnh
+            const scaleX = mapContainer.clientWidth / width;
+            const scaleY = mapContainer.clientHeight / height;
+
+            // Math.max giúp ảnh luôn phủ kín viền (cover). 
+            // Không bao giờ để lộ khoảng trắng dù màn hình tỷ lệ nào.
+            const scale = Math.max(scaleX, scaleY);
+
+            // Đổi từ tỷ lệ (scale) sang mức zoom của Leaflet (hệ số logarit cơ số 2)
+            const minZoom = Math.log2(scale);
+
+            // Cập nhật minZoom mới cho bản đồ
+            map.setMinZoom(minZoom);
+        }
+
+        // Chạy hàm tính toán khi vừa load trang
+        updateMinZoom();
+
+        // Căn giữa bản đồ ở mức zoom nhỏ nhất vừa tính toán
+        map.setView([height / 2, width / 2], map.getMinZoom());
+
+        // Tự động tính toán lại nếu người dùng thay đổi kích thước cửa sổ trình duyệt
+        window.addEventListener("resize", () => {
+            updateMinZoom();
+        });
+
+        /* animals */
+
+        const animalsRaw = {{{ animals }}}
+
+        function normalizeAnimalRecord(record) {
+            const source = record && typeof record === "object" ? record : {};
+            const normalizedKeys = {};
+
+            Object.keys(source).forEach((key) => {
+                normalizedKeys[String(key).trim().toLowerCase()] = source[key];
+            });
+
+            const zoneValue =
+                source.zone ??
+                source.Zone ??
+                source.zone_id ??
+                source.zoneId ??
+                source.khu ??
+                normalizedKeys.zone ??
+                normalizedKeys.zone_id ??
+                normalizedKeys.zoneid ??
+                normalizedKeys.khu;
+
+            const zoneLabelValue =
+                source.zoneLabel ??
+                source.zone_label ??
+                normalizedKeys.zonelabel ??
+                normalizedKeys.zone_label;
+
+            const statusValue =
+                source.status ??
+                source.Status ??
+                normalizedKeys.status;
+
+            const mapX =
+                source.map_x ??
+                source.mapX ??
+                normalizedKeys.map_x ??
+                normalizedKeys.mapx;
+
+            const mapY =
+                source.map_y ??
+                source.mapY ??
+                normalizedKeys.map_y ??
+                normalizedKeys.mapy;
+
+            const checkinStatus =
+                source.checkin_status ??
+                source.checkinStatus ??
+                normalizedKeys.checkin_status ??
+                normalizedKeys.checkinstatus;
+
+            return {
+                ...source,
+                zone: zoneValue,
+                zoneLabel: zoneLabelValue,
+                status: statusValue,
+                map_x: Number(mapX),
+                map_y: Number(mapY),
+                checkin_status: parseCheckinStatus(checkinStatus),
+            };
+        }
+
+        const animals = Array.isArray(animalsRaw)
+            ? animalsRaw.map(normalizeAnimalRecord).filter(a => Number.isFinite(a.map_x) && Number.isFinite(a.map_y))
+            : [];
+
+        const locationsRaw = [
+            {
+                id: "loc-nhan-huong",
+                name: "Di tích quán Nhan Hương",
+                map_x: 1688,
+                map_y: 133,
+                type: "Di tích lịch sử",
+                summary: "Bề ngoài là quán ăn, bên trong là cơ sở bí mật của lực lượng Biệt động Sài Gòn.",
+                history: "Thành lập năm 1963, là hậu cứ quan trọng trong cuộc Tổng tiến công Tết Mậu Thân 1968.",
+                value: "Hiện trưng bày hiện vật, mô hình và giới thiệu đời sống, ẩm thực Sài Gòn xưa.",
+                experience: "Tham quan không gian tái hiện lịch sử, tìm hiểu hoạt động bí mật của Biệt động Sài Gòn và nét sinh hoạt Sài Gòn xưa.",
+            },
+            {
+                id: "loc-den-hung",
+                name: "Đền thờ Vua Hùng",
+                map_x: 874,
+                map_y: 209,
+                type: "Di tích lịch sử - văn hóa",
+                summary: "Kiến trúc cung đình với mái chồng diêm 3 tầng cong, trang trí rồng phượng tinh xảo.",
+                history: "Xây dựng năm 1926, trải qua nhiều lần đổi tên và được bảo tồn đến nay.",
+                value: "Nơi tưởng nhớ công lao dựng nước của các Vua Hùng, mang ý nghĩa văn hóa - lịch sử sâu sắc.",
+                visit: "Mở cửa hầu hết các ngày (trừ thứ Hai), có lễ giỗ Tổ mùng 10/3 âm lịch.",
+            },
+            {
+                id: "loc-bao-tang-dong-thuc-vat",
+                name: "Bảo tàng Động Thực Vật",
+                map_x: 1269,
+                map_y: 380,
+                type: "Khu trưng bày - giáo dục khoa học",
+                summary: "Trưng bày hơn 1.000 mẫu vật gồm tiêu bản động vật, xương, mẫu ngâm formol và thực vật ép khô.",
+                scale: "Diện tích khoảng 530 m² với nhiều phòng trưng bày.",
+                value: "Giúp du khách hiểu rõ hơn về đa dạng sinh học và hệ sinh thái tự nhiên.",
+                visit: "Mở cửa hằng ngày, miễn phí.",
+            },
+            {
+                id: "loc-butterfly",
+                name: "Khu trưng bày bướm",
+                map_x: 1015,
+                map_y: 313,
+                type: "Khu tham quan - giáo dục sinh học",
+                summary: "Không gian mở có lưới che, nơi hàng nghìn cá thể bướm bay tự nhiên giữa các loài cây chủ.",
+                ecology: "Khoảng 1.000 cá thể thuộc nhiều loài, có cả loài quý hiếm tại Việt Nam.",
+                experience: "Chụp ảnh với bướm, quan sát và tìm hiểu vòng đời từ trứng đến bướm trưởng thành.",
+                visit: "Đẹp nhất vào buổi sáng khi bướm hoạt động nhiều.",
+                value: "Góp phần bảo tồn và giáo dục về đa dạng sinh học.",
+            },
+            {
+                id: "loc-vuon-sach",
+                name: "Vườn Sách",
+                map_x: 1502,
+                map_y: 241,
+                type: "Không gian đọc sách - giáo dục",
+                summary: "Không gian yên tĩnh giữa thiên nhiên, gồm khu nhà lục giác và khu đọc ngoài trời dưới tán cây xanh.",
+                scale: "Hơn 1.000 đầu sách với nhiều thể loại, đặc biệt dành cho thiếu nhi.",
+                experience: "Đọc sách, tô màu, vẽ tranh và thư giãn trong không gian xanh mát.",
+                value: "Kết hợp tham quan và học tập, giúp hình thành thói quen đọc sách cho trẻ em.",
+            },
+            {
+                id: "loc-vuon-lan",
+                name: "Vườn Lan",
+                map_x: 1174,
+                map_y: 360,
+                type: "Khu trưng bày thực vật - không gian nghệ thuật",
+                summary: "Trưng bày nhiều loài lan với màu sắc và hình dáng đa dạng trong không gian xanh mát.",
+                scale: "Nhiều khu trưng bày được bố trí theo từng nhóm lan đặc trưng.",
+                experience: "Check-in, chụp ảnh và tận hưởng không gian hoa cùng thiên nhiên.",
+                value: "Mang tính thẩm mỹ cao, giúp du khách khám phá vẻ đẹp của thế giới hoa lan.",
+            },
+            {
+                id: "loc-nha-an-1",
+                name: "Nhà ăn 1",
+                map_x: 396,
+                map_y: 513,
+                type: "Ẩm thực - dịch vụ",
+                summary: "Điểm ăn uống phục vụ du khách trong khu tham quan.",
+            },
+            {
+                id: "loc-nha-an-2",
+                name: "Nhà ăn 2",
+                map_x: 1202,
+                map_y: 563,
+                type: "Ẩm thực - dịch vụ",
+                summary: "Điểm ăn uống bổ sung với nhiều lựa chọn món nhanh.",
+            },
+            {
+                id: "loc-quay-ve-xe",
+                name: "Quầy bán vé xe lửa - xe điện",
+                map_x: 687,
+                map_y: 262,
+                type: "Dịch vụ giao thông nội khu",
+                summary: "Quầy bán vé cho các dịch vụ xe lửa và xe điện tham quan.",
+            },
+            {
+                id: "loc-tram-xe-lua",
+                name: "Trạm xe lửa",
+                map_x: 688,
+                map_y: 261,
+                type: "Trạm giao thông",
+                summary: "Điểm đón/trả khách của tuyến xe lửa tham quan.",
+            },
+            {
+                id: "loc-tram-xe-dien",
+                name: "Trạm xe điện",
+                map_x: 659,
+                map_y: 261,
+                type: "Trạm giao thông",
+                summary: "Điểm đón/trả khách của tuyến xe điện nội khu.",
+            },
+            {
+                id: "loc-san-khau",
+                name: "Sân khấu",
+                map_x: 789,
+                map_y: 602,
+                type: "Không gian sự kiện",
+                summary: "Khu vực biểu diễn và tổ chức các hoạt động tập trung.",
+            },
+            {
+                id: "loc-khu-vui-choi-tre-em",
+                name: "Khu vui chơi trẻ em",
+                map_x: 1704,
+                map_y: 545,
+                type: "Khu vui chơi",
+                summary: "Khu vận động và trò chơi dành cho thiếu nhi.",
+            },
+            {
+                id: "loc-khu-vui-choi-nuoc",
+                name: "Khu vui chơi nước",
+                map_x: 639,
+                map_y: 489,
+                type: "Khu vui chơi",
+                summary: "Khu vui chơi nước",
+                status: "Ngưng hoạt động",
+            },
+            {
+                id: "loc-wc-1",
+                name: "Nhà vệ sinh 1",
+                map_x: 566,
+                map_y: 686,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-2",
+                name: "Nhà vệ sinh 2",
+                map_x: 1010,
+                map_y: 507,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-3",
+                name: "Nhà vệ sinh 3",
+                map_x: 1208,
+                map_y: 306,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-4",
+                name: "Nhà vệ sinh 4",
+                map_x: 1266,
+                map_y: 211,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-5",
+                name: "Nhà vệ sinh 5",
+                map_x: 1778,
+                map_y: 378,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-wc-6",
+                name: "Nhà vệ sinh 6",
+                map_x: 1578,
+                map_y: 229,
+                type: "Tiện ích - nhà vệ sinh",
+                summary: "Điểm nhà vệ sinh phục vụ khách tham quan.",
+            },
+            {
+                id: "loc-parking-c",
+                name: "Bãi đỗ xe Cổng C",
+                map_x: 167,
+                map_y: 351,
+                type: "Bãi đỗ xe",
+                summary: "Khu vực gửi xe cho du khách tại cổng C.",
+            },
+            {
+                id: "loc-parking-d",
+                name: "Bãi đỗ xe Cổng D",
+                map_x: 161,
+                map_y: 597,
+                type: "Bãi đỗ xe",
+                summary: "Khu vực gửi xe cho du khách tại cổng D.",
+            },
+            {
+                id: "loc-parking-a",
+                name: "Bãi đỗ xe Cổng A",
+                map_x: 962,
+                map_y: 147,
+                type: "Bãi đỗ xe",
+                summary: "Khu vực gửi xe cho du khách tại cổng A.",
+            },
+            {
+                id: "loc-parking-b-car",
+                name: "Bãi đỗ xe ô tô Cổng B",
+                map_x: 1025,
+                map_y: 142,
+                type: "Bãi đỗ xe ô tô",
+                summary: "Khu vực gửi xe ô tô cho du khách tại cổng B.",
+            },
+            {
+                id: "loc-y-te",
+                name: "Phòng y tế",
+                map_x: 1131,
+                map_y: 113,
+                type: "Y tế",
+                summary: "Điểm hỗ trợ sơ cứu và chăm sóc y tế cơ bản cho du khách.",
+            },
+        ];
+
+        function normalizeLocationRecord(record) {
+            const source = record && typeof record === "object" ? record : {};
+
+            const normalizeText = (value) =>
+                String(value || "")
+                    .toLowerCase()
+                    .replace(/đ/g, "d")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+
+            const mergedText = `${source.name || ""} ${source.type || ""} ${source.summary || ""}`;
+            const normalized = normalizeText(mergedText);
+
+            let category = "utility";
+            if (normalized.includes("di tich")) category = "historical";
+            else if (normalized.includes("nha ve sinh")) category = "toilet";
+            else if (normalized.includes("am thuc") || normalized.includes("nha an")) category = "food";
+            else if (normalized.includes("bai do xe") || normalized.includes("bai gui xe") || normalized.includes("o to")) category = "parking";
+
+            return {
+                ...source,
+                kind: "location",
+                category,
+                map_x: Number(source.map_x),
+                map_y: Number(source.map_y),
+            };
+        }
+
+        const locations = locationsRaw
+            .map(normalizeLocationRecord)
+            .filter((item) => Number.isFinite(item.map_x) && Number.isFinite(item.map_y));
+
+        function getCombinedItems() {
+            return [
+                ...animals.map((item) => ({ ...item, kind: "animal" })),
+                ...locations,
+            ];
+        }
+
+        function shuffleList(items) {
+            const cloned = [...items];
+            for (let i = cloned.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+            }
+            return cloned;
+        }
+
+        function pickMissionAnimalsByZone(sourceAnimals, zoneCount = 6, perZone = 2) {
+            const selected = [];
+
+            for (let zone = 1; zone <= zoneCount; zone += 1) {
+                const animalsInZone = sourceAnimals.filter((animal) => resolveZoneValue(animal) === zone);
+                const randomInZone = shuffleList(animalsInZone).slice(0, perZone);
+                selected.push(...randomInZone);
+            }
+
+            return selected;
+        }
+
+        const missionAnimals = pickMissionAnimalsByZone(animals, 6, 2);
+        const badgeCatalog = [
+            { id: "zone-1", name: "Huy hiệu Khu 1", description: "Check-in đủ 2 con ở Khu 1" },
+            { id: "zone-2", name: "Huy hiệu Khu 2", description: "Check-in đủ 2 con ở Khu 2" },
+            { id: "zone-3", name: "Huy hiệu Khu 3", description: "Check-in đủ 2 con ở Khu 3" },
+            { id: "zone-4", name: "Huy hiệu Khu 4", description: "Check-in đủ 2 con ở Khu 4" },
+            { id: "zone-5", name: "Huy hiệu Khu 5", description: "Check-in đủ 2 con ở Khu 5" },
+            { id: "zone-6", name: "Huy hiệu Khu 6", description: "Check-in đủ 2 con ở Khu 6" },
+            { id: "all-zones", name: "Huy hiệu Thám Hiểm 6 Khu", description: "Hoàn thành đủ 2 con ở tất cả 6 khu" },
+        ];
+        const earnedBadgeIds = new Set();
+
+        /* icon function */
+
+        function animalIcon(type) {
+
+            let icon = "🐾"
+
+            if (type?.toLowerCase().includes("tiger")) icon = "🐯"
+            else if (type?.toLowerCase().includes("elephant")) icon = "🐘"
+            else if (type?.toLowerCase().includes("giraffe")) icon = "🦒"
+            else if (type?.toLowerCase().includes("lion")) icon = "🦁"
+            else if (type?.toLowerCase().includes("bird")) icon = "🦜"
+
+            return L.divIcon({
+                html: `<div style="font-size:28px">${icon}</div>`,
+                iconSize: [1, 1],
+                className: "animal-marker"
+            })
+
+        }
+
+        /* markers */
+
+        const markerMap = {}
+
+        let highlightCircle
+
+        function showHighlight(latlng, marker, radius = 40) {
+            if (highlightCircle) map.removeLayer(highlightCircle);
+
+            highlightCircle = L.circle(latlng, {
+                radius,
+                color: "#00aaff",
+                weight: 2,
+                fillOpacity: 0.2,
+                interactive: true
+            }).addTo(map);
+
+            // Click vao vong tron xanh cung mo popup con vat.
+            highlightCircle.on("click", (e) => {
+                if (e.originalEvent) {
+                    L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                marker.openPopup();
+            });
+        }
+
+        function isAnimalActive(statusValue) {
+            if (statusValue === true || statusValue === 1) return true;
+            if (statusValue === false || statusValue === 0) return false;
+
+            const normalized = String(statusValue ?? "").trim().toLowerCase();
+
+            if (["false", "0", "inactive", "rest", "nghi", "nghi ngoi", "nghỉ", "nghỉ ngơi"].includes(normalized)) {
+                return false;
+            }
+
+            return ["true", "1", "active", "hoat dong", "hoạt động", "dang hoat dong", "đang hoạt động"].includes(normalized);
+        }
+
+        function parseCheckinStatus(value) {
+            if (value === true || value === 1) return true;
+            if (value === false || value === 0) return false;
+
+            const normalized = String(value ?? "").trim().toLowerCase();
+            if (["1", "true", "checked", "checked-in", "done", "da check-in", "da check in", "đã check-in", "đã check in"].includes(normalized)) {
+                return true;
+            }
+
+            if (["0", "false", "unchecked", "pending", "chua check-in", "chua check in", "chưa check-in", "chưa check in"].includes(normalized)) {
+                return false;
+            }
+
+            return Boolean(value);
+        }
+
+        function getCheckinLabel(isChecked) {
+            return isChecked ? "Đã check-in" : "Chưa check-in";
+        }
+
+        function resolveZoneValue(a) {
+            const rawZone = a?.zone ?? a?.Zone ?? a?.khu ?? a?.area ?? a?.zone_id;
+            if (rawZone === null || rawZone === undefined || rawZone === "") {
+                return null;
+            }
+
+            const asNumber = Number(rawZone);
+            if (!Number.isNaN(asNumber)) {
+                return asNumber;
+            }
+
+            const matched = String(rawZone).match(/\d+/);
+            if (matched) {
+                return Number(matched[0]);
+            }
+
+            return String(rawZone).trim();
+        }
+
+        function formatZoneLabel(a) {
+            if (a?.zoneLabel) return String(a.zoneLabel);
+            const zoneValue = resolveZoneValue(a);
+            if (zoneValue === null) return "Chua ro khu";
+            return typeof zoneValue === "number" ? `Khu ${zoneValue}` : zoneValue;
+        }
+
+        function getZoneClassName(a) {
+            const zoneValue = resolveZoneValue(a);
+            if (typeof zoneValue !== "number") return "";
+            if (zoneValue < 1 || zoneValue > 6) return "";
+            return `zone-${zoneValue}`;
+        }
+
+        function buildAnimalPopup(a) {
+            const imageUrl = a.image_url || a.imageUrl || "/images/animal.jpg";
+            const species = a.species || a.family || "Chưa cập nhật";
+            const zone = formatZoneLabel(a);
+            const feedingTime = a.feeding_time || a.feedingTime || "Chưa cập nhật";
+            const activeTime = a.active_time || a.activeTime || "Chưa cập nhật";
+            const conservation = a.conservation_status || a.conservationStatus || "Chưa cập nhật";
+
+            const active = isAnimalActive(a.status);
+            const statusText = active ? "Đang hoạt động" : "Đang nghỉ ngơi";
+            const statusClass = active ? "active" : "inactive";
+            const isChecked = parseCheckinStatus(a.checkin_status);
+            const checkinText = getCheckinLabel(isChecked);
+
+            return `
+<div class="popup-card">
+<img class="popup-img" src="${imageUrl}" alt="${a.name || "Animal"}">
+<div class="popup-title">${a.name || "Chưa cập nhật"}</div>
+<div class="popup-meta">
+<div><b>Họ:</b> ${species}</div>
+<div><b>Khu:</b> ${zone}</div>
+<div><b>Bảo tồn:</b> ${conservation}</div>
+<div><b>Giờ cho ăn:</b> ${feedingTime}</div>
+<div><b>Sinh hoạt:</b> ${activeTime}</div>
+<div><b>Check-in:</b> ${checkinText}</div>
+</div>
+<div class="popup-status"><span class="status-dot ${statusClass}"></span>${statusText}</div>
+<button class="popup-checkin-btn" data-checkin-id="${a.id}" ${isChecked ? "disabled" : ""}>${isChecked ? "Đã hoàn thành" : "Check-in"}</button>
+</div>
+`;
+        }
+
+        function locationIcon(type) {
+            const normalized = String(type || "").toLowerCase();
+            let icon = "📍";
+
+            if (normalized.includes("di tích")) icon = "🏛️";
+            else if (normalized.includes("bảo tàng")) icon = "🧪";
+            else if (normalized.includes("bướm")) icon = "🦋";
+            else if (normalized.includes("sách")) icon = "📚";
+            else if (normalized.includes("lan")) icon = "🌸";
+            else if (normalized.includes("nhà vệ sinh")) icon = "🚻";
+            else if (normalized.includes("bãi đỗ xe")) icon = "🅿️";
+            else if (normalized.includes("y tế")) icon = "🏥";
+            else if (normalized.includes("nhà ăn") || normalized.includes("ẩm thực")) icon = "🍽️";
+            else if (normalized.includes("trạm") || normalized.includes("giao thông") || normalized.includes("xe")) icon = "🚉";
+            else if (normalized.includes("vui chơi")) icon = "🎠";
+            else if (normalized.includes("sự kiện") || normalized.includes("sân khấu")) icon = "🎭";
+
+            return `<div style="font-size:22px;line-height:1">${icon}</div>`;
+        }
+
+        function getLocationCategoryLabel(category) {
+            if (category === "historical") return "Di tích lịch sử";
+            if (category === "toilet") return "Nhà vệ sinh";
+            if (category === "food") return "Khu ăn uống";
+            if (category === "parking") return "Bãi gửi xe";
+            return "Tiện ích";
+        }
+
+        function buildLocationPopup(location) {
+            const rows = [
+                `<div><b>Loại:</b> ${location.type || "Chưa cập nhật"}</div>`,
+            ];
+
+            if (location.summary) rows.push(`<div><b>Đặc điểm:</b> ${location.summary}</div>`);
+            if (location.status) rows.push(`<div><b>Trạng thái:</b> ${location.status}</div>`);
+            if (location.history) rows.push(`<div><b>Lịch sử:</b> ${location.history}</div>`);
+            if (location.scale) rows.push(`<div><b>Quy mô:</b> ${location.scale}</div>`);
+            if (location.ecology) rows.push(`<div><b>Sinh thái:</b> ${location.ecology}</div>`);
+            if (location.value) rows.push(`<div><b>Giá trị:</b> ${location.value}</div>`);
+            if (location.experience) rows.push(`<div><b>Trải nghiệm:</b> ${location.experience}</div>`);
+            if (location.visit) rows.push(`<div><b>Tham quan:</b> ${location.visit}</div>`);
+
+            const locationStatusText = location.status || "Địa điểm tham quan";
+            const isInactiveLocation = String(location.status || "")
+                .trim()
+                .toLowerCase()
+                .includes("ngưng");
+            const locationStatusClass = isInactiveLocation ? "inactive" : "active";
+
+            return `
+<div class="popup-card">
+<div class="popup-title">${location.name || "Địa điểm"}</div>
+<div class="popup-meta">
+${rows.join("")}
+</div>
+<div class="popup-status"><span class="status-dot ${locationStatusClass}"></span>${locationStatusText}</div>
+</div>
+`;
+        }
+
+        animals.forEach(a => {
+
+            // Dung circle marker trong suot voi ban kinh lon hon de de bam trung.
+            const marker = L.circleMarker(
+                [a.map_y, a.map_x],
+                {
+                    radius: 18,
+                    stroke: true,
+                    weight: 18,
+                    color: "transparent",
+                    opacity: 0,
+                    fillColor: "transparent",
+                    fillOpacity: 0,
+                    interactive: true,
+                }
+            ).addTo(map)
+
+            markerMap[a.id] = marker
+
+            /* hover highlight */
+
+            marker.on("mouseover", () => {
+                showHighlight([a.map_y, a.map_x], marker, 40);
+
+            })
+
+            /* popup */
+
+            marker.bindPopup(buildAnimalPopup(a), {
+                className: "animal-popup",
+                autoPan: true,
+                autoPanPadding: [30, 30],
+                maxWidth: 280,
+                minWidth: 240
+            })
+
+        })
+
+        locations.forEach((location) => {
+            const marker = L.circleMarker(
+                [location.map_y, location.map_x],
+                {
+                    radius: 18,
+                    stroke: true,
+                    weight: 18,
+                    color: "transparent",
+                    opacity: 0,
+                    fillColor: "transparent",
+                    fillOpacity: 0,
+                    interactive: true,
+                }
+            ).addTo(map);
+
+            markerMap[location.id] = marker;
+
+            marker.on("mouseover", () => {
+                showHighlight([location.map_y, location.map_x], marker, 40);
+            });
+
+            marker.bindPopup(buildLocationPopup(location), {
+                className: "animal-popup",
+                autoPan: true,
+                autoPanPadding: [30, 30],
+                maxWidth: 320,
+                minWidth: 260,
+            });
+        });
+
+        map.on("popupopen", (event) => {
+            const popupRoot = event.popup?.getElement?.();
+            if (!popupRoot) return;
+
+            const checkinButton = popupRoot.querySelector(".popup-checkin-btn[data-checkin-id]");
+            if (!checkinButton) return;
+
+            checkinButton.addEventListener("click", async () => {
+                const targetId = checkinButton.getAttribute("data-checkin-id");
+                if (!targetId) return;
+
+                checkinButton.disabled = true;
+                await checkinAnimalById(targetId);
+            });
+        });
+
+        function focusAnimalById(animalId) {
+            const target = animals.find(a => String(a.id) === String(animalId));
+            const marker = markerMap[animalId];
+            if (!target || !marker) return;
+
+            const targetZoom = Math.min(Math.max(map.getMinZoom() + 1.1, 1), map.getMaxZoom());
+
+            map.flyTo([target.map_y, target.map_x], targetZoom, {
+                duration: 0.8
+            });
+
+            marker.openPopup();
+            showHighlight([target.map_y, target.map_x], marker, 60);
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const focusAnimalId = params.get("animalId");
+        if (focusAnimalId) {
+            focusAnimalById(focusAnimalId);
+        }
+
+        const focusLocationId = params.get("locationId");
+        if (focusLocationId && markerMap[focusLocationId]) {
+            const target = locations.find((item) => String(item.id) === String(focusLocationId));
+            if (target) {
+                const targetZoom = Math.min(Math.max(map.getMinZoom() + 1.1, 1), map.getMaxZoom());
+                map.flyTo([target.map_y, target.map_x], targetZoom, { duration: 0.8 });
+                markerMap[focusLocationId].openPopup();
+                showHighlight([target.map_y, target.map_x], markerMap[focusLocationId], 60);
+            }
+        }
+
+        /* sidebar render */
+
+        const list = document.getElementById("animalList")
+        const searchInput = document.getElementById("search")
+        const filterButtons = Array.from(document.querySelectorAll(".quick-filter-btn[data-filter]"));
+        const missionFilterBtn = document.getElementById("missionFilterBtn");
+        const openBadgesBtn = document.getElementById("openBadgesBtn");
+        const badgeModal = document.getElementById("badgeModal");
+        const closeBadgeModalBtn = document.getElementById("closeBadgeModalBtn");
+        const badgeList = document.getElementById("badgeList");
+        const badgeSummary = document.getElementById("badgeSummary");
+        const rewardPopup = document.getElementById("rewardPopup");
+        const rewardPopupList = document.getElementById("rewardPopupList");
+        const closeRewardPopupBtn = document.getElementById("closeRewardPopupBtn");
+        const gameCompleteModal = document.getElementById("gameCompleteModal");
+        const closeGameCompleteBtn = document.getElementById("closeGameCompleteBtn");
+        let activeQuickFilter = "all";
+        let hasShownGameCompletePopup = false;
+
+        function getMissionCheckedCount() {
+            return missionAnimals.reduce((total, animal) => {
+                return total + (parseCheckinStatus(animal.checkin_status) ? 1 : 0);
+            }, 0);
+        }
+
+        function updateMissionFilterLabel() {
+            if (!missionFilterBtn) return;
+            missionFilterBtn.textContent = `Nhiệm vụ (${getMissionCheckedCount()}/${missionAnimals.length})`;
+        }
+
+        function updateBadgeButtonLabel() {
+            if (!openBadgesBtn) return;
+            openBadgesBtn.textContent = `Huy hiệu (${earnedBadgeIds.size})`;
+        }
+
+        function renderBadgeList() {
+            if (!badgeList) return;
+
+            const totalBadges = badgeCatalog.length;
+            const unlockedBadges = earnedBadgeIds.size;
+            const lockedBadges = Math.max(0, totalBadges - unlockedBadges);
+            const missionChecked = getMissionCheckedCount();
+            const missionTotal = missionAnimals.length;
+
+            if (badgeSummary) {
+                badgeSummary.innerHTML = `
+<span class="badge-summary-chip">Đã nhận ${unlockedBadges}/${totalBadges}</span>
+<span class="badge-summary-chip">Chưa nhận ${lockedBadges}</span>
+<span class="badge-summary-chip">Nhiệm vụ ${missionChecked}/${missionTotal}</span>
+`;
+            }
+
+            badgeList.innerHTML = "";
+            badgeCatalog.forEach((badge) => {
+                const unlocked = earnedBadgeIds.has(badge.id);
+                const badgeIcon = unlocked ? "🏅" : "🔒";
+                const row = document.createElement("div");
+                row.className = `badge-item ${unlocked ? "unlocked" : "locked"}`;
+                row.innerHTML = `
+<div class="badge-item-main">
+<span class="badge-item-icon" aria-hidden="true">${badgeIcon}</span>
+<div>
+<div class="badge-item-name">${badge.name}</div>
+<div class="badge-item-desc">${badge.description}</div>
+</div>
+</div>
+<span class="badge-item-state">${unlocked ? "Đã nhận" : "Chưa nhận"}</span>
+`;
+                badgeList.appendChild(row);
+            });
+        }
+
+        function showRewardPopup(newBadgeIds) {
+            if (!rewardPopup || !rewardPopupList || !newBadgeIds.length) return;
+
+            rewardPopupList.innerHTML = "";
+            newBadgeIds.forEach((badgeId) => {
+                const badge = badgeCatalog.find((item) => item.id === badgeId);
+                if (!badge) return;
+
+                const item = document.createElement("li");
+                item.textContent = badge.name;
+                rewardPopupList.appendChild(item);
+            });
+
+            rewardPopup.classList.add("open");
+        }
+
+        function hideRewardPopup() {
+            if (!rewardPopup) return;
+            rewardPopup.classList.remove("open");
+        }
+
+        function showGameCompletePopup() {
+            if (!gameCompleteModal) return;
+            gameCompleteModal.classList.add("open");
+            gameCompleteModal.setAttribute("aria-hidden", "false");
+        }
+
+        function hideGameCompletePopup() {
+            if (!gameCompleteModal) return;
+            gameCompleteModal.classList.remove("open");
+            gameCompleteModal.setAttribute("aria-hidden", "true");
+        }
+
+        function calculateCompletedZones() {
+            const checkedByZone = new Map();
+
+            missionAnimals.forEach((animal) => {
+                const zone = resolveZoneValue(animal);
+                if (typeof zone !== "number") return;
+
+                const checked = parseCheckinStatus(animal.checkin_status);
+                if (!checked) return;
+
+                checkedByZone.set(zone, (checkedByZone.get(zone) || 0) + 1);
+            });
+
+            const completedZones = new Set();
+            for (let zone = 1; zone <= 6; zone += 1) {
+                if ((checkedByZone.get(zone) || 0) >= 2) {
+                    completedZones.add(zone);
+                }
+            }
+
+            return completedZones;
+        }
+
+        function evaluateAndAwardBadges(showPopup = false) {
+            const completedZones = calculateCompletedZones();
+            const recalculatedBadgeIds = new Set();
+
+            completedZones.forEach((zone) => {
+                recalculatedBadgeIds.add(`zone-${zone}`);
+            });
+
+            if (completedZones.size === 6) {
+                recalculatedBadgeIds.add("all-zones");
+            }
+
+            const newlyAwarded = Array.from(recalculatedBadgeIds).filter(
+                (badgeId) => !earnedBadgeIds.has(badgeId),
+            );
+
+            earnedBadgeIds.clear();
+            recalculatedBadgeIds.forEach((badgeId) => earnedBadgeIds.add(badgeId));
+
+            updateBadgeButtonLabel();
+            renderBadgeList();
+
+            if (showPopup && newlyAwarded.length) {
+                showRewardPopup(newlyAwarded);
+            }
+        }
+
+        function findAnimalById(id) {
+            return animals.find((item) => String(item.id) === String(id));
+        }
+
+        function refreshPopupIfOpen(id) {
+            const marker = markerMap[id];
+            const record = findAnimalById(id);
+            if (!marker || !record) return;
+
+            marker.setPopupContent(buildAnimalPopup(record));
+            if (marker.isPopupOpen()) {
+                marker.openPopup();
+            }
+        }
+
+        async function checkinAnimalById(id) {
+            const record = findAnimalById(id);
+            if (!record) return;
+
+            if (parseCheckinStatus(record.checkin_status)) {
+                return;
+            }
+
+            try {
+                const missionCheckedBefore = getMissionCheckedCount();
+
+                const response = await fetch(`/api/map/animals/${id}/checkin`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ checkin_status: true }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Không thể check-in lúc này.");
+                }
+
+                record.checkin_status = true;
+
+                const missionRecord = missionAnimals.find((item) => String(item.id) === String(id));
+                if (missionRecord) missionRecord.checkin_status = true;
+
+                refreshPopupIfOpen(id);
+                updateMissionFilterLabel();
+                evaluateAndAwardBadges(true);
+                applyFiltersAndRender();
+
+                const missionCheckedAfter = getMissionCheckedCount();
+                const missionTotal = missionAnimals.length;
+                if (!hasShownGameCompletePopup && missionCheckedBefore < missionTotal && missionCheckedAfter === missionTotal && missionTotal > 0) {
+                    hasShownGameCompletePopup = true;
+                    showGameCompletePopup();
+                }
+            } catch (error) {
+                window.alert(error.message || "Đã có lỗi khi check-in.");
+            }
+        }
+
+        function renderList(data) {
+
+            list.innerHTML = ""
+
+            if (!data.length) {
+                list.innerHTML = `<div class="empty-state">Khong tim thay ket qua phu hop.</div>`;
+                return;
+            }
+
+            data.forEach(a => {
+
+                const item = document.createElement("div")
+                item.className = "animal-item"
+
+                if (a.kind === "location") {
+                    const categoryLabel = getLocationCategoryLabel(a.category);
+                    item.innerHTML = `
+<span class="animal-icon">${locationIcon(a.type)}</span>
+<div class="animal-main">
+<div class="animal-name">${a.name}</div>
+<div class="animal-meta">
+<span class="mini-badge cat-${a.category || "utility"}">${categoryLabel}</span>
+<span class="mini-badge">${a.type || "Địa điểm"}</span>
+</div>
+</div>
+`;
+                } else {
+                    const zone = formatZoneLabel(a);
+                    const zoneClass = getZoneClassName(a);
+                    const active = isAnimalActive(a.status);
+                    const statusClass = active ? "status-on" : "status-off";
+                    const statusText = active ? "Đang hoạt động" : "Đang nghỉ";
+                    const isChecked = parseCheckinStatus(a.checkin_status);
+                    const checkinClass = isChecked ? "checkin-on" : "checkin-off";
+
+                    item.innerHTML = `
+<span class="animal-icon">${animalIcon(a.species).options.html}</span>
+<div class="animal-main">
+<div class="animal-name">${a.name}</div>
+<div class="animal-meta">
+<span class="mini-badge ${zoneClass}">${zone}</span>
+<span class="mini-badge ${statusClass}">${statusText}</span>
+<span class="mini-badge ${checkinClass}">${getCheckinLabel(isChecked)}</span>
+</div>
+</div>
+`;
+                }
+
+               item.onclick = () => {
+                    const marker = markerMap[a.id];
+
+                    // 1. Lướt đến vị trí với mức zoom = 1 (hoặc thay bằng map.getZoom() nếu bạn muốn giữ nguyên mức zoom hiện tại không bị giật vào trong)
+                    map.flyTo([a.map_y, a.map_x], 1, {
+                        animate: true,
+                        duration: 1.2 // Lướt đi trong 1.2 giây
+                    });
+
+                    // 2. Lắng nghe sự kiện: Đợi bản đồ dừng hẳn hiệu ứng lướt thì mới mở Popup
+                    map.once('moveend', () => {
+                        marker.openPopup();
+                    });
+                };
+                list.appendChild(item)
+
+            })
+
+        }
+
+        function applyFiltersAndRender() {
+            const keyword = String(searchInput?.value || "").trim().toLowerCase();
+            const combinedItems = getCombinedItems();
+
+            let baseItems = combinedItems;
+            if (activeQuickFilter === "animal") {
+                baseItems = combinedItems.filter((item) => item.kind === "animal");
+            } else if (activeQuickFilter === "mission") {
+                const missionIdSet = new Set(missionAnimals.map((item) => String(item.id)));
+                baseItems = combinedItems.filter(
+                    (item) => item.kind === "animal" && missionIdSet.has(String(item.id)),
+                );
+            } else if (["historical", "toilet", "food", "parking", "utility"].includes(activeQuickFilter)) {
+                baseItems = combinedItems.filter(
+                    (item) => item.kind === "location" && item.category === activeQuickFilter,
+                );
+            }
+
+            const filtered = baseItems.filter((item) => {
+                if (!keyword) return true;
+
+                if (item.kind === "location") {
+                    const locationText = [
+                        item.name,
+                        item.type,
+                        item.summary,
+                        item.history,
+                        item.value,
+                        item.experience,
+                        item.visit,
+                        String(item.map_x),
+                        String(item.map_y),
+                    ]
+                        .filter(Boolean)
+                        .join(" ")
+                        .toLowerCase();
+
+                    return locationText.includes(keyword);
+                }
+
+                return String(item.name || "").toLowerCase().includes(keyword);
+            });
+
+            renderList(filtered);
+        }
+
+        filterButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                activeQuickFilter = btn.dataset.filter || "all";
+
+                filterButtons.forEach((button) => {
+                    button.classList.toggle("active", button === btn);
+                });
+
+                applyFiltersAndRender();
+            });
+        });
+
+        openBadgesBtn?.addEventListener("click", () => {
+            badgeModal?.classList.add("open");
+            badgeModal?.setAttribute("aria-hidden", "false");
+        });
+
+        closeBadgeModalBtn?.addEventListener("click", () => {
+            badgeModal?.classList.remove("open");
+            badgeModal?.setAttribute("aria-hidden", "true");
+        });
+
+        badgeModal?.addEventListener("click", (event) => {
+            if (event.target === badgeModal) {
+                badgeModal.classList.remove("open");
+                badgeModal.setAttribute("aria-hidden", "true");
+            }
+        });
+
+        closeRewardPopupBtn?.addEventListener("click", () => {
+            hideRewardPopup();
+        });
+
+        closeGameCompleteBtn?.addEventListener("click", () => {
+            hideGameCompletePopup();
+        });
+
+        gameCompleteModal?.addEventListener("click", (event) => {
+            if (event.target === gameCompleteModal) {
+                hideGameCompletePopup();
+            }
+        });
+
+        evaluateAndAwardBadges(false);
+        updateMissionFilterLabel();
+        updateBadgeButtonLabel();
+        renderBadgeList();
+
+        applyFiltersAndRender();
+
+        /* search */
+
+        document
+            .getElementById("search")
+            .addEventListener("input", e => {
+                applyFiltersAndRender()
+
+            })
+        
+          
+    </script>
+
+    <script src="shared-nav.js"></script>
+
+</body>
+
+</html>

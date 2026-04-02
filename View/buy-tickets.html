@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mua vé</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --green-900: #12371d;
+        --green-700: #2f6523;
+        --green-600: #416d21;
+        --green-100: #e8f3e3;
+        --line: #c6dcb9;
+        --accent: #f6b73c;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Montserrat", "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(165deg, #f4faf2 0%, #ecf5e8 100%);
+        color: var(--green-900);
+        min-height: 100vh;
+        padding: 16px;
+      }
+
+      .page {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .back-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4f8a33 0%, #2d5f1f 100%);
+        color: #fff;
+        text-decoration: none;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 8px 16px rgba(25, 69, 21, 0.25);
+      }
+
+      .title {
+        font-size: 30px;
+        font-weight: 800;
+      }
+
+      .cart-btn {
+        border: 0;
+        background: linear-gradient(145deg, #3f7225 0%, #2a581a 100%);
+        color: #fff;
+        border-radius: 18px;
+        width: 62px;
+        height: 62px;
+        padding: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        box-shadow: 0 10px 20px rgba(24, 65, 19, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .cart-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 26px rgba(20, 56, 17, 0.28);
+        filter: saturate(1.05);
+      }
+
+      .cart-btn:active {
+        transform: translateY(0);
+      }
+
+      .cart-icon-wrap {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.06) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        color: #f6fff2;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 4px 10px rgba(16, 43, 13, 0.16);
+        backdrop-filter: blur(1px);
+        transform: translateZ(0);
+      }
+
+      .cart-icon-wrap i {
+        transform: translateY(-0.5px);
+      }
+
+      .cart-badge {
+        min-width: 26px;
+        height: 26px;
+        padding: 0 7px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #ffe9a7 0%, #f7bf4d 72%);
+        color: #18320f;
+        font-size: 12px;
+        font-weight: 900;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 12px rgba(58, 43, 7, 0.24);
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        border: 2px solid #e9f3e4;
+      }
+
+      .section {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: 0 10px 20px rgba(18, 55, 29, 0.1);
+      }
+
+      .section + .section {
+        margin-top: 16px;
+      }
+
+      .section h2 {
+        font-size: 24px;
+        color: var(--green-700);
+        margin-bottom: 12px;
+      }
+
+      .ticket-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .ticket-card {
+        border: 1.5px solid #b8d2ab;
+        border-radius: 16px;
+        background: #fcfffb;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .ticket-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 18px rgba(21, 70, 24, 0.16);
+      }
+
+      .ticket-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #d7edd0 0%, #eaf6e3 100%);
+        color: var(--green-700);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+
+      .ticket-body {
+        padding: 0;
+      }
+
+      .ticket-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--green-700);
+      }
+
+      .ticket-price {
+        margin-top: 6px;
+        font-size: 20px;
+        font-weight: 800;
+        color: #224f1e;
+      }
+
+      .ticket-desc {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #4a5d4e;
+      }
+
+      .ticket-actions {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .qty-control {
+        display: inline-flex;
+        align-items: center;
+        border: 1.5px solid #b8d2ab;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .qty-btn {
+        width: 34px;
+        height: 38px;
+        border: 0;
+        background: #eef6ea;
+        color: #274f21;
+        font-size: 18px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .qty-input {
+        width: 44px;
+        height: 38px;
+        border: 0;
+        background: #fff;
+        text-align: center;
+        color: #1f3c1e;
+        font-weight: 600;
+      }
+
+      .add-btn {
+        border: 0;
+        border-radius: 8px;
+        padding: 0 12px;
+        height: 36px;
+        background: linear-gradient(135deg, #4b7f2a 0%, #36621f 100%);
+        color: #fff;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(31, 77, 22, 0.14);
+      }
+
+      .cart-panel {
+        display: none;
+        background: linear-gradient(180deg, #ffffff 0%, #f9fdf7 100%);
+        border-color: #d2e4c7;
+        box-shadow: 0 16px 30px rgba(18, 55, 29, 0.12);
+      }
+
+      .cart-panel.show {
+        display: block;
+      }
+
+      .cart-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .cart-heading-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: linear-gradient(145deg, #e7f3df 0%, #f4faf1 100%);
+        color: #2f6523;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #d4e5c8;
+      }
+
+      .cart-heading h2 {
+        margin: 0;
+      }
+
+      .cart-empty {
+        padding: 12px;
+        border: 1px dashed #cfe0c6;
+        border-radius: 12px;
+        background: #fcfefb;
+        font-size: 15px;
+        color: #567057;
+      }
+
+      .cart-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .cart-item {
+        border: 1px solid #d5e4ca;
+        border-radius: 14px;
+        padding: 12px;
+        background: #ffffff;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+        box-shadow: 0 6px 14px rgba(20, 58, 18, 0.06);
+      }
+
+      .cart-item-name {
+        font-weight: 800;
+        color: #2f5f23;
+      }
+
+      .cart-item-meta {
+        margin-top: 4px;
+        color: #5d745f;
+        font-size: 13px;
+      }
+
+      .cart-item-total {
+        font-weight: 800;
+        color: #21481c;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: #f0f8ec;
+        border: 1px solid #d4e7c8;
+      }
+
+      .remove-item-btn {
+        margin-top: 6px;
+        border: 1px solid #f3cccc;
+        border-radius: 8px;
+        padding: 6px 10px;
+        background: #fff6f6;
+        color: #8f3232;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+      }
+
+      .remove-item-btn:hover {
+        background: #ffeaea;
+        border-color: #eab7b7;
+      }
+
+      .cart-summary {
+        margin-top: 14px;
+        border: 1px dashed #cfe0c3;
+        border-radius: 12px;
+        padding: 11px 12px;
+        background: #f8fcf6;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 17px;
+        font-weight: 800;
+        color: #1f4218;
+      }
+
+      .checkout-btn {
+        margin-top: 14px;
+        width: 100%;
+        height: 44px;
+        border: 1px solid #29531b;
+        border-radius: 12px;
+        background: linear-gradient(145deg, #3e7124 0%, #2a581b 100%);
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        cursor: pointer;
+        box-shadow: 0 8px 16px rgba(24, 60, 18, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .checkout-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 20px rgba(24, 60, 18, 0.22);
+      }
+
+      .checkout-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(8, 30, 12, 0.4);
+        backdrop-filter: blur(2px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        z-index: 30;
+      }
+
+      .checkout-modal.show {
+        display: flex;
+      }
+
+      .modal-card {
+        width: 100%;
+        max-width: 460px;
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid #d2e4c7;
+        box-shadow: 0 18px 36px rgba(14, 39, 18, 0.24);
+        overflow: hidden;
+      }
+
+      .modal-head {
+        padding: 14px 16px;
+        background: linear-gradient(135deg, #e6f3de 0%, #f4faf1 100%);
+        border-bottom: 1px solid #d3e4c9;
+      }
+
+      .modal-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--green-700);
+      }
+
+      .modal-body {
+        padding: 14px 16px;
+      }
+
+      .modal-text {
+        color: #415744;
+        font-size: 14px;
+      }
+
+      .modal-summary {
+        margin-top: 10px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 10px;
+        background: #fbfef9;
+      }
+
+      .modal-summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        color: #335334;
+      }
+
+      .modal-summary-row + .modal-summary-row {
+        margin-top: 6px;
+      }
+
+      .modal-summary-total {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px dashed #cfe2c5;
+        font-size: 18px;
+        font-weight: 800;
+        color: #1f4218;
+      }
+
+      .modal-actions {
+        padding: 0 16px 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .modal-btn {
+        border: 0;
+        height: 40px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .modal-btn.cancel {
+        background: #f1f6ef;
+        color: #365534;
+        border: 1px solid #d6e3cf;
+      }
+
+      .modal-btn.confirm {
+        background: linear-gradient(145deg, #3e7124 0%, #2a581b 100%);
+        color: #fff;
+      }
+
+      .hint {
+        margin-top: 8px;
+        color: #4f6352;
+        font-size: 13px;
+      }
+
+      .toast {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        background: #163b16;
+        color: #fff;
+        border-radius: 10px;
+        padding: 10px 14px;
+        box-shadow: 0 10px 16px rgba(15, 50, 18, 0.28);
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 700px) {
+        .ticket-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .title {
+          font-size: 24px;
+        }
+
+        .section h2 {
+          font-size: 20px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .cart-btn {
+          width: 56px;
+          height: 56px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="topbar">
+        <div class="topbar-left">
+          <a href="/" class="back-btn" aria-label="Quay lại trang chủ" title="Quay lại trang chủ">
+            <i class="fa-solid fa-chevron-left"></i>
+          </a>
+          <h1 class="title">Mua vé</h1>
+        </div>
+        <button type="button" id="cart-button" class="cart-btn" aria-label="Mở giỏ hàng">
+          <span class="cart-icon-wrap" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+
+      <section class="section">
+        <h2>Chọn loại vé và số lượng</h2>
+        <div class="ticket-grid">
+          <article class="ticket-card">
+            <div class="ticket-icon"><i class="fa-solid fa-moon"></i></div>
+            <div class="ticket-body">
+              <p class="ticket-name">Vé tour đêm</p>
+              <p class="ticket-price" data-price-text="200000">200.000 VNĐ</p>
+              <p class="ticket-desc">Khám phá sở thú về đêm với lộ trình đặc biệt.</p>
+            </div>
+            <div class="ticket-actions">
+              <div class="qty-control">
+                <button type="button" class="qty-btn" data-input="qty-night" data-step="-1" aria-label="Giảm số lượng vé tour đêm">-</button>
+                <input type="text" value="1" class="qty-input" id="qty-night" readonly />
+                <button type="button" class="qty-btn" data-input="qty-night" data-step="1" aria-label="Tăng số lượng vé tour đêm">+</button>
+              </div>
+              <button type="button" class="add-btn" data-key="night" data-name="Vé tour đêm" data-price="200000" data-input="qty-night">Thêm vào giỏ</button>
+            </div>
+          </article>
+
+          <article class="ticket-card">
+            <div class="ticket-icon"><i class="fa-solid fa-user"></i></div>
+            <div class="ticket-body">
+              <p class="ticket-name">Vé người lớn</p>
+              <p class="ticket-price" data-price-text="60000">60.000 VNĐ</p>
+              <p class="ticket-desc">Áp dụng cho khách người lớn tham quan trong ngày.</p>
+            </div>
+            <div class="ticket-actions">
+              <div class="qty-control">
+                <button type="button" class="qty-btn" data-input="qty-adult" data-step="-1" aria-label="Giảm số lượng vé người lớn">-</button>
+                <input type="text" value="1" class="qty-input" id="qty-adult" readonly />
+                <button type="button" class="qty-btn" data-input="qty-adult" data-step="1" aria-label="Tăng số lượng vé người lớn">+</button>
+              </div>
+              <button type="button" class="add-btn" data-key="adult" data-name="Vé người lớn" data-price="60000" data-input="qty-adult">Thêm vào giỏ</button>
+            </div>
+          </article>
+
+          <article class="ticket-card">
+            <div class="ticket-icon"><i class="fa-solid fa-child-reaching"></i></div>
+            <div class="ticket-body">
+              <p class="ticket-name">Vé trẻ em</p>
+              <p class="ticket-price" data-price-text="40000">40.000 VNĐ</p>
+              <p class="ticket-desc">Áp dụng cho trẻ em dưới 130cm theo quy định của sở thú.</p>
+            </div>
+            <div class="ticket-actions">
+              <div class="qty-control">
+                <button type="button" class="qty-btn" data-input="qty-child" data-step="-1" aria-label="Giảm số lượng vé trẻ em">-</button>
+                <input type="text" value="1" class="qty-input" id="qty-child" readonly />
+                <button type="button" class="qty-btn" data-input="qty-child" data-step="1" aria-label="Tăng số lượng vé trẻ em">+</button>
+              </div>
+              <button type="button" class="add-btn" data-key="child" data-name="Vé trẻ em" data-price="40000" data-input="qty-child">Thêm vào giỏ</button>
+            </div>
+          </article>
+        </div>
+        <p class="hint">Giá vé: Tour đêm 200.000 VNĐ, Người lớn 60.000 VNĐ, Trẻ em dưới 1m3 40.000 VNĐ.</p>
+      </section>
+
+      <section class="section cart-panel" id="cart-panel">
+        <div class="cart-heading">
+          <span class="cart-heading-icon" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span>
+          <h2>Giỏ hàng</h2>
+        </div>
+        <p class="cart-empty" id="cart-empty">Chưa có vé nào trong giỏ.</p>
+        <div class="cart-list" id="cart-list"></div>
+        <div class="cart-summary">
+          <span>Tổng cộng</span>
+          <span id="cart-total">0 VNĐ</span>
+        </div>
+        <button type="button" class="checkout-btn" id="checkout-btn">Thanh toán</button>
+      </section>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="checkout-modal" id="checkout-modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title">
+        <div class="modal-head">
+          <h3 class="modal-title" id="checkout-modal-title">Xác nhận thanh toán</h3>
+        </div>
+        <div class="modal-body">
+          <p class="modal-text">Vui lòng kiểm tra lại đơn vé trước khi xác nhận.</p>
+          <div class="modal-summary">
+            <div class="modal-summary-row">
+              <span>Tổng số vé</span>
+              <strong id="modal-total-qty">0</strong>
+            </div>
+            <div class="modal-summary-row modal-summary-total">
+              <span>Tổng tiền</span>
+              <strong id="modal-total-price">0 VNĐ</strong>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn cancel" id="modal-cancel-btn">Hủy</button>
+          <button type="button" class="modal-btn confirm" id="modal-confirm-btn">Xác nhận thanh toán</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const cartButton = document.getElementById("cart-button");
+      const cartBadge = document.getElementById("cart-badge");
+      const cartPanel = document.getElementById("cart-panel");
+      const cartList = document.getElementById("cart-list");
+      const cartTotal = document.getElementById("cart-total");
+      const cartEmpty = document.getElementById("cart-empty");
+      const toast = document.getElementById("toast");
+      const addButtons = document.querySelectorAll(".add-btn");
+      const qtyButtons = document.querySelectorAll(".qty-btn");
+      const checkoutButton = document.getElementById("checkout-btn");
+      const checkoutModal = document.getElementById("checkout-modal");
+      const modalTotalQty = document.getElementById("modal-total-qty");
+      const modalTotalPrice = document.getElementById("modal-total-price");
+      const modalCancelBtn = document.getElementById("modal-cancel-btn");
+      const modalConfirmBtn = document.getElementById("modal-confirm-btn");
+      const CART_STORAGE_KEY = "zoo-ticket-cart";
+      const ISSUED_TICKETS_STORAGE_KEY = "zoo-issued-tickets";
+
+      const cart = {
+        night: { name: "Vé tour đêm", price: 200000, quantity: 0 },
+        adult: { name: "Vé người lớn", price: 60000, quantity: 0 },
+        child: { name: "Vé trẻ em", price: 40000, quantity: 0 },
+      };
+
+      const ticketMeta = {
+        night: {
+          title: "VÉ TOUR ĐÊM",
+          subtitle: "Night Tour Ticket",
+          holder: "TOUR ĐÊM",
+          descVi: "Dành cho khách tham quan trải nghiệm ban đêm",
+          descEn: "Valid for night tour experience",
+        },
+        adult: {
+          title: "VÉ VÀO CỔNG",
+          subtitle: "Gate Ticket",
+          holder: "NGƯỜI LỚN",
+          descVi: "Dành cho khách cao từ 130cm trở lên",
+          descEn: "For guest 130cm above",
+        },
+        child: {
+          title: "VÉ VÀO CỔNG",
+          subtitle: "Gate Ticket",
+          holder: "TRẺ EM",
+          descVi: "Dành cho khách dưới 130cm theo quy định",
+          descEn: "For guest under 130cm",
+        },
+      };
+
+      function formatCurrency(value) {
+        return `${value.toLocaleString("vi-VN")} VNĐ`;
+      }
+
+      function formatDate(value) {
+        const day = String(value.getDate()).padStart(2, "0");
+        const month = String(value.getMonth() + 1).padStart(2, "0");
+        const year = value.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+
+      function createTicketCode() {
+        const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+        const timePart = Date.now().toString(36).slice(-6).toUpperCase();
+        return `ZOO-${timePart}-${randomPart}`;
+      }
+
+      function issueTicketsFromCart(items) {
+        const issuedRaw = localStorage.getItem(ISSUED_TICKETS_STORAGE_KEY);
+        const issuedTickets = issuedRaw ? JSON.parse(issuedRaw) : [];
+
+        const expireDate = new Date();
+        expireDate.setDate(expireDate.getDate() + 30);
+
+        items.forEach((item) => {
+          const meta = ticketMeta[item.key];
+
+          for (let i = 0; i < item.quantity; i += 1) {
+            const ticketCode = createTicketCode();
+            const payload = `${window.location.origin}/scanner?ticket=${ticketCode}`;
+
+            issuedTickets.push({
+              id: `${ticketCode}-${i}`,
+              type: item.key,
+              price: item.price,
+              ticketCode,
+              qrPayload: payload,
+              title: meta.title,
+              subtitle: meta.subtitle,
+              holder: meta.holder,
+              descVi: meta.descVi,
+              descEn: meta.descEn,
+              expireDate: formatDate(expireDate),
+              issuedAt: new Date().toISOString(),
+            });
+          }
+        });
+
+        localStorage.setItem(ISSUED_TICKETS_STORAGE_KEY, JSON.stringify(issuedTickets.slice(-200)));
+      }
+
+      function saveCart() {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      }
+
+      function loadCart() {
+        try {
+          const raw = localStorage.getItem(CART_STORAGE_KEY);
+          if (!raw) {
+            return;
+          }
+
+          const stored = JSON.parse(raw);
+          Object.keys(cart).forEach((key) => {
+            const qty = Number(stored?.[key]?.quantity);
+            if (Number.isFinite(qty) && qty >= 0) {
+              cart[key].quantity = Math.floor(qty);
+            }
+          });
+        } catch {
+          localStorage.removeItem(CART_STORAGE_KEY);
+        }
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 1300);
+      }
+
+      function getCartTotals() {
+        const items = Object.entries(cart)
+          .filter(([, item]) => item.quantity > 0)
+          .map(([key, item]) => ({ key, ...item }));
+
+        const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+        return { items, totalQty, totalPrice };
+      }
+
+      function closeCheckoutModal() {
+        checkoutModal.classList.remove("show");
+        checkoutModal.setAttribute("aria-hidden", "true");
+      }
+
+      function openCheckoutModal(totalQty, totalPrice) {
+        modalTotalQty.textContent = String(totalQty);
+        modalTotalPrice.textContent = formatCurrency(totalPrice);
+        checkoutModal.classList.add("show");
+        checkoutModal.setAttribute("aria-hidden", "false");
+      }
+
+      function renderCart() {
+        const { items, totalQty, totalPrice } = getCartTotals();
+
+        cartBadge.textContent = String(totalQty);
+        cartList.innerHTML = "";
+
+        if (!items.length) {
+          cartEmpty.style.display = "block";
+        } else {
+          cartEmpty.style.display = "none";
+          items.forEach((item) => {
+            const row = document.createElement("div");
+            row.className = "cart-item";
+            row.innerHTML = `
+              <div>
+                <p class="cart-item-name">${item.name}</p>
+                <p class="cart-item-meta">${item.quantity} x ${formatCurrency(item.price)}</p>
+                <button type="button" class="remove-item-btn" data-remove-key="${item.key}"><i class="fa-regular fa-trash-can"></i> Xóa loại vé này</button>
+              </div>
+              <p class="cart-item-total">${formatCurrency(item.quantity * item.price)}</p>
+            `;
+            cartList.appendChild(row);
+          });
+
+          const removeButtons = cartList.querySelectorAll(".remove-item-btn");
+          removeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+              const key = button.dataset.removeKey;
+              if (!key || !cart[key]) {
+                return;
+              }
+
+              cart[key].quantity = 0;
+              saveCart();
+              renderCart();
+              showToast("Đã xóa loại vé khỏi giỏ");
+            });
+          });
+        }
+
+        cartTotal.textContent = formatCurrency(totalPrice);
+      }
+
+      qtyButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const input = document.getElementById(button.dataset.input);
+          const step = Number(button.dataset.step);
+          const current = Number(input.value) || 1;
+          const next = Math.min(99, Math.max(1, current + step));
+          input.value = String(next);
+        });
+      });
+
+      addButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const key = button.dataset.key;
+          const input = document.getElementById(button.dataset.input);
+          const qty = Number(input.value);
+
+          if (!Number.isInteger(qty) || qty < 1) {
+            showToast("Số lượng không hợp lệ");
+            input.value = 1;
+            return;
+          }
+
+          cart[key].quantity += qty;
+          saveCart();
+          renderCart();
+          showToast(`Đã thêm ${qty} ${cart[key].name.toLowerCase()} vào giỏ`);
+        });
+      });
+
+      checkoutButton.addEventListener("click", () => {
+        const { totalQty, totalPrice } = getCartTotals();
+
+        if (!totalQty) {
+          showToast("Giỏ hàng đang trống");
+          return;
+        }
+
+        openCheckoutModal(totalQty, totalPrice);
+      });
+
+      modalCancelBtn.addEventListener("click", () => {
+        closeCheckoutModal();
+      });
+
+      modalConfirmBtn.addEventListener("click", () => {
+        const { items, totalQty, totalPrice } = getCartTotals();
+        issueTicketsFromCart(items);
+        Object.keys(cart).forEach((key) => {
+          cart[key].quantity = 0;
+        });
+        saveCart();
+        renderCart();
+        closeCheckoutModal();
+        showToast(`Đã thanh toán ${totalQty} vé - mở mục Vé của tôi để xem QR`);
+      });
+
+      checkoutModal.addEventListener("click", (event) => {
+        if (event.target === checkoutModal) {
+          closeCheckoutModal();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && checkoutModal.classList.contains("show")) {
+          closeCheckoutModal();
+        }
+      });
+
+      cartButton.addEventListener("click", () => {
+        cartPanel.classList.toggle("show");
+        if (cartPanel.classList.contains("show")) {
+          cartPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+
+      loadCart();
+      renderCart();
+    </script>
+  </body>
+</html>

@@ -1,7 +1,6 @@
 // ===== CHATBOT THẢO CẦM VIÊN SÀI GÒN =====
 
 // API KEY
-let OPENAI_API_KEY = "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";
 let zooData = null;
 
 // ---------------- LOAD DATA ----------------
@@ -34,23 +33,100 @@ function normalize(text){
 }
 
 function findLocalAnswer(question) {
-
-  if (!zooData || !zooData.faq) return null;
+  if (!zooData) return null;
 
   const q = normalize(question);
 
-  for (const item of zooData.faq) {
+  // Tra loi uu tien cho cau hoi co/khong ve dong vat cu the.
+  if (Array.isArray(zooData?.info?.animals) && zooData.info.animals.length) {
+    const animalsNormalized = zooData.info.animals.map((name) => ({
+      raw: name,
+      norm: normalize(name),
+    }));
 
-    for (const keyword of item.keywords) {
+    const animalAliases = {
+      "gau meo": "gau meo",
+      raccoon: "gau meo",
+    };
 
-      if (q.includes(normalize(keyword))) {
+    const detectedAnimal = animalsNormalized.find((a) => q.includes(a.norm));
+    let animalQuery = detectedAnimal?.raw || null;
 
-        return item.answer;
-
+    if (!animalQuery) {
+      for (const [alias, canonicalNorm] of Object.entries(animalAliases)) {
+        if (!q.includes(alias)) continue;
+        const hit = animalsNormalized.find((a) => a.norm === canonicalNorm);
+        if (hit) {
+          animalQuery = hit.raw;
+          break;
+        }
       }
-
     }
 
+    const asksHasAnimal =
+      /co|khong|trong|thao cam vien|so thu|o day/.test(q) &&
+      /(con|loai|dong vat|co khong|co o)/.test(q);
+
+    if (animalQuery && asksHasAnimal) {
+      return `Có, ${animalQuery} có trong Thảo Cầm Viên theo dữ liệu hiện tại.`;
+    }
+  }
+
+  if (Array.isArray(zooData.faq)) {
+    for (const item of zooData.faq) {
+      for (const keyword of item.keywords || []) {
+        if (q.includes(normalize(keyword))) {
+          return item.answer;
+        }
+      }
+    }
+  }
+
+  const info = zooData.info || {};
+  const infoRules = [
+    {
+      keywords: ["gio mo cua", "mo cua", "dong cua", "moi ngay may gio"],
+      answer: info.open_time
+        ? `Thảo Cầm Viên mở cửa từ ${info.open_time} mỗi ngày.`
+        : null,
+    },
+    {
+      keywords: ["gia ve", "ve nguoi lon", "ve tre em", "bao nhieu tien"],
+      answer: (info.adult_ticket || info.child_ticket)
+        ? `Giá vé hiện tại: người lớn ${info.adult_ticket || "đang cập nhật"}, trẻ em ${info.child_ticket || "đang cập nhật"}.`
+        : null,
+    },
+    {
+      keywords: ["dia chi", "o dau", "vi tri"],
+      answer: info.address
+        ? `Địa chỉ: ${info.address}.`
+        : null,
+    },
+    {
+      keywords: ["gui xe", "bai xe", "cho de xe"],
+      answer: info.parking
+        ? `${info.parking}.`
+        : null,
+    },
+    {
+      keywords: ["thanh lap", "lich su", "nam thanh lap"],
+      answer: info.founded
+        ? `Thảo Cầm Viên được thành lập năm ${info.founded}.`
+        : null,
+    },
+    {
+      keywords: ["dong vat", "co con gi", "loai vat"],
+      answer: Array.isArray(info.animals) && info.animals.length
+        ? `Một số loài động vật nổi bật: ${info.animals.join(", ")}.`
+        : null,
+    },
+  ];
+
+  for (const rule of infoRules) {
+    if (!rule.answer) continue;
+    if (rule.keywords.some((k) => q.includes(k))) {
+      return rule.answer;
+    }
   }
 
   return null;
@@ -59,64 +135,64 @@ function findLocalAnswer(question) {
 
 // ---------------- GỌI OPENAI ----------------
 async function askOpenAI(userMessage) {
-
-  if (!zooData)
-    return "Xin lỗi, dữ liệu chưa sẵn sàng.";
+  const internalInfo = zooData?.info
+    ? JSON.stringify(zooData.info, null, 2)
+    : "Du lieu noi bo tam thoi chua tai xong.";
 
   const systemPrompt = `
 Bạn là trợ lý AI của Thảo Cầm Viên Sài Gòn.
 
-Hãy giúp khách tham quan trả lời các câu hỏi về:
+Muc tieu: Tra loi dung, ngan gon, huu ich. Uu tien su chinh xac hon la tra loi dai.
 
-- giờ mở cửa
-- giá vé
-- các loài động vật
-- lịch sử Thảo Cầm Viên
-- đường tham quan
-- tiện ích
+Nguyen tac bat buoc:
+1) Neu cau hoi lien quan Thao Cam Vien va co du lieu noi bo, uu tien dung du lieu noi bo.
+2) Neu du lieu noi bo khong du, van duoc tra loi kien thuc chung nhu ChatGPT.
+3) Tuyet doi khong doan boi, khong bịa chi tiet (ten rieng, so lieu, moc thoi gian) khi khong chac.
+4) Neu khong chac, phai noi ro muc do khong chac (vi du: "Minh khong chac 100%...") va dua huong kiem tra.
+5) Voi cau hoi can do chinh xac cao (y te, phap ly, tai chinh, so lieu hien hanh, tin tuc moi), luon kem canh bao xac minh nguon chinh thuc.
+6) Khong tra loi theo kieu "khong co thong tin" chung chung. Thay vao do: dua cau tra loi an toan + neu ro gioi han.
 
-Nếu câu hỏi không liên quan, vẫn có thể trả lời như một trợ lý AI thân thiện.
-
-Dữ liệu:
-${JSON.stringify(zooData.info, null, 2)}
+Du lieu noi bo:
+${internalInfo}
 `;
 
   const payload = {
 
-    model: "gpt-3.5-turbo",
+    model: "openai/gpt-4o-mini",
 
     messages: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userMessage }
     ],
 
-    temperature: 0.3,
+    temperature: 0,
+    top_p: 0.2,
     max_tokens: 512
   };
 
   try {
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      }
-    );
+    const response = await fetch("/api/chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+});
 
-    const data = await response.json();
+const data = await response.json();
 
-    if (data.choices && data.choices[0]) {
+if (data.error) {
+  return "Lỗi AI: " + data.error.message;
+}
 
-      return data.choices[0].message.content.trim();
+if (data.choices?.length > 0) {
+  return data.choices[0].message.content.trim();
+}
 
-    }
+return "Minh chua nhan duoc phan hoi hoan chinh tu AI. Ban thu gui lai cau hoi nhe.";
+             
 
-    return "Xin lỗi, tôi chưa có câu trả lời.";
 
   } catch (error) {
 
@@ -132,6 +208,7 @@ ${JSON.stringify(zooData.info, null, 2)}
 function initChatbot() {
 
   loadData();
+  const BOT_AVATAR = "../assets1/logo4.jpg";
 
   const toggle = document.getElementById("chatbot-toggle");
   const closeBtn = document.getElementById("chatbot-close");
@@ -215,7 +292,7 @@ function initChatbot() {
 
       const avatar = document.createElement("img");
 
-      avatar.src = "../assets/avartar2.png";
+      avatar.src = BOT_AVATAR;
       avatar.alt = "AI";
       avatar.className = "message-avatar";
 
@@ -269,10 +346,10 @@ function initChatbot() {
 
     showTyping();
 
-    // ƯU TIÊN FAQ
+    // Uu tien cau tra loi tu data local truoc
     let reply = findLocalAnswer(message);
 
-    // NẾU KHÔNG CÓ FAQ → GỌI AI
+    // Neu data local khong co, goi AI tra loi tu do nhu ChatGPT
     if (!reply) {
 
       reply = await askOpenAI(message);

@@ -1,0 +1,128 @@
+﻿<!doctype html>
+<html lang="en">
+  
+<!-- Mirrored from vinwondersnhatrang.vercel.app/user.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:36:04 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thảo Cầm Viên</title>
+      <link rel="icon" type="image/png" href="assets1/logo.png" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="chatbot/chatbot.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="userImage">
+      <a href="/" class="userBackBtn" aria-label="Quay lại trang chủ" title="Quay lại trang chủ">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </div>
+    <div class="profile-grid">
+      <a href="profile/profile.html">
+        <div class="profile-card">
+          <i class="fa-solid fa-user icon"></i>
+          <p>Hồ sơ của tôi</p>
+        </div>
+      </a>
+
+      <a href="myticket/myticket.html">
+        <div class="profile-card">
+          <i class="fa-solid fa-ticket icon"></i>
+          <p>Vé của tôi</p>
+        </div>
+      </a>
+      <a href="/cart">
+        <div class="profile-card">
+          <i class="fa-solid fa-cart-shopping icon"></i>
+          <p>Giỏ hàng</p>
+        </div>
+      </a>
+
+      <a href="#" class="sysinfoCardLink">
+        <div class="profile-card sysinfoCard">
+          <i class="fa-solid fa-leaf icon"></i>
+          <p>Thông tin chung Thảo Cầm Viên</p>
+        </div>
+      </a>
+
+
+    </div>
+
+    <div class="menu">
+      <div class="menuItem">
+        <a href="/" class="menuItemLink">
+          <i class="fa-solid fa-house menuItemIcon"></i>
+          <p class="menuItemContent">Trang chủ</p>
+        </a>
+      </div>
+      <div class="menuItem">
+        <a href="/buy-tickets" class="menuItemLink">
+          <i class="fa-solid fa-ticket menuItemIcon"></i>
+          <p class="menuItemContent">Mua vé</p>
+        </a>
+      </div>
+      <div class="menuMap">
+        <a href="/map-game" class="menuItemLink">
+          <i class="fa-solid fa-location-dot menuMapIcon"></i>
+        </a>
+      </div>
+      <div class="menuItem">
+        <a href="/shopping" class="menuItemLink">
+          <i class="fa-solid fa-bag-shopping menuItemIcon"></i>
+          <p class="menuItemContent">Mua sắm</p>
+        </a>
+      </div>
+      <div class="menuItem active">
+        <a href="/user" class="menuItemLink">
+          <i class="fa-solid fa-circle-user menuItemIcon"></i>
+          <p class="menuItemContent">Tài khoản</p>
+        </a>
+      </div>
+      <script src="config.js"></script>
+      <script src="route/routes.js"></script>
+      <script src="model/storageModel.js"></script>
+      <script src="main.js"></script>
+    </div>
+
+    <!-- ========== CHATBOT BÉ VIN ========== -->
+    
+    <div id="chatbot-root"></div>
+    <script>
+      fetch("chatbot/chatbot.html")
+        .then((res) => res.text())
+        .then((html) => {
+          document.getElementById("chatbot-root").innerHTML = html;
+          const script = document.createElement("script");
+          script.src = "chatbot/chatbot.js";
+          document.body.appendChild(script);
+        });
+    </script>
+    <!-- ========== END CHATBOT ========== -->
+
+    <!-- ========== CONTACT ========== -->
+    <div id="contact-root"></div>
+    <script>
+      fetch("contact/contact.html")
+        .then((res) => res.text())
+        .then((html) => {
+          document.getElementById("contact-root").innerHTML = html;
+          const script = document.createElement("script");
+          script.src = "contact/contact.js";
+          document.body.appendChild(script);
+        });
+    </script>
+    <!-- ========== END CONTACT ========== -->
+    <script src="shared-nav.js"></script>
+  </body>
+
+<!-- Mirrored from vinwondersnhatrang.vercel.app/user.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Mar 2026 08:36:06 GMT -->
+</html>
+
+

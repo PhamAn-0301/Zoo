@@ -9,9 +9,9 @@ body {
 }
 
 .header {
-  background: linear-gradient(135deg, #f77119 0%, #e55b00 100%);
+  background: linear-gradient(135deg, #183c05 0%, #183c05 100%);
   padding: 16px 20px;
-  box-shadow: 0 4px 12px rgba(247, 113, 25, 0.3);
+  box-shadow: 0 4px 12px rgba(24, 60, 5, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -59,7 +59,7 @@ body {
 
 h2 {
   text-align: center;
-  color: #f77119;
+  color: #183c05;
   margin-bottom: 30px;
   font-size: 24px;
   font-weight: 700;
@@ -92,13 +92,13 @@ h2 {
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(135deg, #f77119 0%, #e55b00 100%);
+  background: linear-gradient(135deg, #183c05 0%, #183c05 100%);
 }
 
 .cart-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(247, 113, 25, 0.15);
-  border-color: #f77119;
+  box-shadow: 0 8px 24px rgba(24, 60, 5, 0.15);
+  border-color: #183c05;
 }
 
 .cart-item img {
@@ -130,12 +130,12 @@ h2 {
   font-size: 12px;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, #f77119 0%, #e55b00 100%);
+  background: linear-gradient(135deg, #183c05 0%, #183c05 100%);
   border-radius: 12px;
   padding: 4px 12px;
   display: inline-block;
   margin-bottom: 4px;
-  box-shadow: 0 2px 6px rgba(247, 113, 25, 0.3);
+  box-shadow: 0 2px 6px rgba(24, 60, 5, 0.3);
   align-self: flex-start;
 }
 
@@ -153,7 +153,7 @@ h2 {
 }
 
 .cart-info .time i {
-  color: #f77119;
+  color: #183c05;
   font-size: 14px;
 }
 
@@ -166,7 +166,7 @@ h2 {
 }
 
 .cart-info .players i {
-  color: #f77119;
+  color: #183c05;
   font-size: 14px;
 }
 
@@ -196,13 +196,13 @@ h2 {
 }
 
 .cart-info .order b {
-  color: #f77119;
+  color: #183c05;
   font-size: 16px;
 }
 
 .cart-info .price {
   font-size: 16px;
-  color: #f77119;
+  color: #183c05;
   font-weight: 700;
   margin-top: 8px;
 }
@@ -305,3 +305,5 @@ h2 {
     font-size: 20px;
   }
 }
+
+
