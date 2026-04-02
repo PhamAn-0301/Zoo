@@ -2,13 +2,73 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": "{View/**,assets/**,assets1/**,calender/**,chatbot/**,contact/**,css/**,food/**,game-cart/**,myorder/**,myticket/**,playgame/**,ship/**,voucher/**,main.js,style.css,shared-nav.js,config.js}"
+      "includeFiles": "View/{animal.handlebars,map.handlebars}"
     }
   },
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "destination": "/api/index"
+    },
+    {
+      "source": "/map",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/animals",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/",
+      "destination": "/View/index.html"
+    },
+    {
+      "source": "/ticket",
+      "destination": "/View/buy-tickets.html"
+    },
+    {
+      "source": "/buy-tickets",
+      "destination": "/View/buy-tickets.html"
+    },
+    {
+      "source": "/shopping",
+      "destination": "/View/shopping.html"
+    },
+    {
+      "source": "/user",
+      "destination": "/View/user.html"
+    },
+    {
+      "source": "/policy",
+      "destination": "/View/policy.html"
+    },
+    {
+      "source": "/themepark",
+      "destination": "/View/themepark.html"
+    },
+    {
+      "source": "/cuisine",
+      "destination": "/View/cuisine.html"
+    },
+    {
+      "source": "/map-game",
+      "destination": "/View/map-game.html"
+    },
+    {
+      "source": "/game",
+      "destination": "/View/game.html"
+    },
+    {
+      "source": "/cart",
+      "destination": "/View/cart.html"
+    },
+    {
+      "source": "/scanner",
+      "destination": "/View/scanner.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ]
 }
