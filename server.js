@@ -150,15 +150,19 @@ app.post("/api/chat", async (req, res) => {
 // routes
 app.use("/", webRoutes);
 
-// server
-const server = app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+export default app;
 
-server.on("error", (error) => {
-  if (error && error.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use.`);
-    process.exit(1);
-  }
-  throw error;
-});
+// Start HTTP server only for local/dev runtime.
+if (process.env.VERCEL !== "1") {
+  const server = app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+
+  server.on("error", (error) => {
+    if (error && error.code === "EADDRINUSE") {
+      console.error(`Port ${PORT} is already in use.`);
+      process.exit(1);
+    }
+    throw error;
+  });
+}
