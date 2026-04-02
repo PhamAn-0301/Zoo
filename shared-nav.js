@@ -19,7 +19,7 @@
       label: "Bản đồ",
       href: "/map",
       mapOnly: true,
-      iconClass: "fa-solid fa-location-dot",
+      iconClass: "fa-solid fa-map",
     },
     {
       key: "policy",
@@ -125,30 +125,6 @@
         line-height: 1;
       }
 
-      .global-bottom-nav .menuMap {
-        width: 58px;
-        height: 58px;
-        border-radius: 50%;
-        background: #416D21;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: translateY(-6px);
-        box-shadow: 0 8px 14px rgba(34, 73, 20, 0.25);
-      }
-
-      .global-bottom-nav .menuMap .menuItemLink {
-        width: 100%;
-        height: 100%;
-      }
-
-      .global-bottom-nav .menuMapIcon {
-        font-size: 30px;
-        color: #fff;
-        line-height: 1;
-        transform: translateY(4px);
-      }
-
       .global-bottom-nav .menuItem.active .menuItemLink {
         color: #24421D;
         font-weight: 700;
@@ -163,10 +139,6 @@
           font-size: 15px;
         }
 
-        .global-bottom-nav .menuMap {
-          width: 50px;
-          height: 50px;
-        }
       }
     `;
 
@@ -192,16 +164,6 @@
   function buildNavMarkup(activeKey) {
     return navItems
       .map((item) => {
-        if (item.mapOnly) {
-          return `
-            <div class="menuMap ${activeKey === item.key ? "active" : ""}">
-              <a href="${item.href}" class="menuItemLink" aria-label="Bản đồ">
-                <i class="${item.iconClass} menuMapIcon" aria-hidden="true"></i>
-              </a>
-            </div>
-          `;
-        }
-
         return `
           <div class="menuItem ${activeKey === item.key ? "active" : ""}">
             <a href="${item.href}" class="menuItemLink">

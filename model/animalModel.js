@@ -1,5 +1,20 @@
 import db from '../utils/db.js';
 
+function parseCheckinStatus(value) {
+  if (value === true || value === 1) return true;
+  if (value === false || value === 0) return false;
+
+  const normalized = String(value ?? '').trim().toLowerCase();
+  if (['1', 'true', 'checked', 'checked-in', 'done', 'da check-in', 'da check in', 'đã check-in', 'đã check in'].includes(normalized)) {
+    return true;
+  }
+  if (['0', 'false', 'unchecked', 'pending', 'chua check-in', 'chua check in', 'chưa check-in', 'chưa check in'].includes(normalized)) {
+    return false;
+  }
+
+  return Boolean(value);
+}
+
 function formatAnimalRecord(record) {
   return {
     id: record.id,
@@ -23,6 +38,8 @@ function formatAnimalRecord(record) {
     zone: record.zone,
     mapX: record.map_x,
     mapY: record.map_y,
+    checkinStatus: parseCheckinStatus(record.checkin_status),
+    checkin_status: parseCheckinStatus(record.checkin_status),
     
     
   };
@@ -78,4 +95,31 @@ export function findPage(limit, offset) {
     .orderBy('id', 'asc')
     .limit(limit)
     .offset(offset);
+}
+
+export async function findRandom(limit = 10) {
+  const safeLimit = Math.max(1, Number(limit) || 10);
+  const rows = await db('animal')
+    .select('*')
+    .orderByRaw('RANDOM()')
+    .limit(safeLimit);
+
+  return rows.map(formatAnimalRecord);
+}
+
+export async function updateCheckinStatusById(id, checkinStatus = true) {
+  const parsedId = Number(id);
+  if (!Number.isInteger(parsedId) || parsedId <= 0) {
+    return null;
+  }
+
+  const rows = await db('animal')
+    .where('id', parsedId)
+    .update({ checkin_status: Boolean(checkinStatus) })
+    .returning('*');
+
+  const updatedRow = Array.isArray(rows) ? rows[0] : rows;
+  if (!updatedRow) return null;
+
+  return formatAnimalRecord(updatedRow);
 }
