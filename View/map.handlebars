@@ -824,6 +824,30 @@
             transform: none;
         }
 
+        .popup-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .popup-route-btn {
+            width: 100%;
+            border: 1px solid #bad3b4;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            background: #f3fbf1;
+            color: #1f5f14;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .popup-route-btn:hover {
+            transform: translateY(-1px);
+            background: #e8f6e5;
+        }
+
         .status-dot {
             width: 10px;
             height: 10px;
@@ -838,6 +862,224 @@
 
         .status-dot.inactive {
             background: #9aa4ad;
+        }
+
+        .route-panel {
+            position: fixed;
+            right: 14px;
+            top: 14px;
+            width: min(390px, calc(100vw - 20px));
+            max-height: calc(100vh - 28px);
+            overflow: auto;
+            z-index: 2100;
+            border-radius: 22px;
+            border: 1px solid #d5e7d8;
+            background:
+                radial-gradient(100% 80% at 90% 0%, rgba(162, 230, 185, 0.35) 0%, rgba(255, 255, 255, 0) 45%),
+                linear-gradient(180deg, #ffffff 0%, #f3faf4 100%);
+            box-shadow: 0 24px 42px rgba(11, 40, 15, 0.3);
+            display: none;
+        }
+
+        .route-panel.open {
+            display: block;
+            animation: popup-in 0.2s ease-out;
+        }
+
+        .route-panel-head {
+            padding: 15px 15px 12px;
+            border-bottom: 1px solid #e1ede3;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .route-panel-title {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
+            color: #13281a;
+            line-height: 1.2;
+        }
+
+        .route-panel-subtitle {
+            margin-top: 3px;
+            font-size: 24px;
+            color: #5b6f62;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .route-animal-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid #b7d9bb;
+            background: #ecf7ee;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #2f6f44;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .route-animal-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .route-panel-head-meta {
+            margin-top: 10px;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .route-meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid #c9ddcc;
+            background: #f5fbf5;
+            border-radius: 999px;
+            padding: 5px 10px;
+            color: #20392a;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .route-meta-icon {
+            width: 17px;
+            height: 17px;
+            display: inline-flex;
+            color: #2d6d40;
+        }
+
+        .route-close-btn {
+            border: 1px solid #cedfca;
+            background: linear-gradient(180deg, #ffffff 0%, #f3faf2 100%);
+            color: #516358;
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            font-size: 19px;
+            line-height: 1;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .route-steps {
+            list-style: none;
+            margin: 0;
+            padding: 10px 11px 13px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .route-step {
+            background: linear-gradient(155deg, #f6f8f7 0%, #edf2ef 100%);
+            border: 1px solid #e4ece5;
+            border-radius: 16px;
+            padding: 11px 10px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            position: relative;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: route-step-in 0.36s ease forwards;
+        }
+
+        .route-step:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            left: 26px;
+            bottom: -12px;
+            width: 2px;
+            height: 16px;
+            background: linear-gradient(180deg, #9fd4b2 0%, rgba(159, 212, 178, 0.2) 100%);
+        }
+
+        .route-step-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #bff0d4 0%, #9de6c2 100%);
+            border: 1px solid #9ad7b9;
+            color: #155539;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .route-step-icon svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .route-step-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .route-step-title {
+            font-size: 16px;
+            line-height: 1.2;
+            font-weight: 700;
+            color: #172630;
+        }
+
+        .route-step-sub {
+            margin-top: 2px;
+            font-size: 14px;
+            color: #697b70;
+            font-weight: 600;
+        }
+
+        .route-step-meta {
+            font-size: 12px;
+            color: #4f6557;
+            font-weight: 700;
+            white-space: nowrap;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .route-step-meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #d4e1d8;
+            background: #f7fbf8;
+        }
+
+        .route-step-meta-chip svg {
+            width: 12px;
+            height: 12px;
+            color: #4b6756;
+        }
+
+        @keyframes route-step-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes popup-in {
@@ -1006,6 +1248,15 @@
                 font-size: 9.5px;
                 padding: 2px 6px;
             }
+
+            .route-panel {
+                right: 8px;
+                left: 8px;
+                top: auto;
+                bottom: 8px;
+                width: auto;
+                max-height: 58vh;
+            }
         }
     </style>
 
@@ -1093,6 +1344,18 @@
             <p class="game-complete-message">Chúc mừng bạn đã hoàn thành trò chơi, hãy ra quầy bán vé  ngay cổng và đưa 6 huy hiệu này cho nhân viên để đổi quà nhé.</p>
             <button class="game-complete-close" id="closeGameCompleteBtn" type="button">Đã hiểu</button>
         </div>
+    </div>
+
+    <div class="route-panel" id="routePanel" aria-hidden="true">
+        <div class="route-panel-head">
+            <div>
+                <h3 class="route-panel-title" id="routePanelTitle">Chi tiết</h3>
+                <div class="route-panel-subtitle" id="routePanelSubtitle"></div>
+                <div class="route-panel-head-meta" id="routePanelMeta"></div>
+            </div>
+            <button class="route-close-btn" id="closeRoutePanelBtn" type="button" aria-label="Đóng">&times;</button>
+        </div>
+        <ul class="route-steps" id="routeSteps"></ul>
     </div>
 
     <script>
@@ -1659,6 +1922,10 @@
             const statusClass = active ? "active" : "inactive";
             const isChecked = parseCheckinStatus(a.checkin_status);
             const checkinText = getCheckinLabel(isChecked);
+            const routeConfig = getAnimalRouteConfig(a);
+            const routeButtonHtml = routeConfig
+                ? `<button class="popup-route-btn" data-route-animal-id="${a.id}">Chỉ đường</button>`
+                : "";
 
             return `
 <div class="popup-card">
@@ -1673,9 +1940,141 @@
 <div><b>Check-in:</b> ${checkinText}</div>
 </div>
 <div class="popup-status"><span class="status-dot ${statusClass}"></span>${statusText}</div>
+<div class="popup-actions">
 <button class="popup-checkin-btn" data-checkin-id="${a.id}" ${isChecked ? "disabled" : ""}>${isChecked ? "Đã hoàn thành" : "Check-in"}</button>
+${routeButtonHtml}
+</div>
 </div>
 `;
+        }
+
+        function normalizeTextForCompare(value) {
+            return String(value || "")
+                .toLowerCase()
+                .replace(/đ/g, "d")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim();
+        }
+
+        function getAnimalRouteConfig(animal) {
+            const normalizedName = normalizeTextForCompare(animal?.name);
+
+            if (!normalizedName.includes("bao hoa mai")) {
+                return null;
+            }
+
+            return {
+                title: "Chi tiết đến",
+                subtitle: animal?.name || "Báo hoa mai",
+                avatarImage: animal?.image_url || animal?.imageUrl || "",
+                totalDistance: "600m",
+                totalTime: "6 phút",
+                steps: [
+                    {
+                        iconType: "straight",
+                        title: "Vị trí của bạn",
+                        subtitle: "Thiên Nga",
+                        distance: "",
+                        time: "",
+                    },
+                    {
+                        iconType: "straight",
+                        title: "Đi tới Sân khấu",
+                        subtitle: "",
+                        distance: "178m",
+                        time: "2 phút",
+                    },
+                    {
+                        iconType: "left",
+                        title: "Quẹo đường bên trái sân khấu",
+                        subtitle: "",
+                        distance: "89m",
+                        time: "1 phút",
+                    },
+                    {
+                        iconType: "straight",
+                        title: "Đi tới Chuồng báo hoa mai",
+                        subtitle: "",
+                        distance: "333m",
+                        time: "3 phút",
+                    },
+                ],
+            };
+        }
+
+        function routeSvgIcon(name) {
+            const icons = {
+                distance: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>',
+                time: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+                straight: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 9l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+                left: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 7H10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M10 7v-3L4 9l6 5v-3h4.5a4.5 4.5 0 0 1 4.5 4.5V20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            };
+
+            return icons[name] || icons.straight;
+        }
+
+        function openRoutePanel(routeConfig) {
+            if (!routeConfig || !routePanel || !routePanelTitle || !routePanelSubtitle || !routePanelMeta || !routeSteps) {
+                return;
+            }
+
+            routePanelTitle.textContent = routeConfig.title || "Chi tiết";
+            const avatarHtml = routeConfig.avatarImage
+                ? `<span class="route-animal-avatar"><img src="${routeConfig.avatarImage}" alt="${routeConfig.subtitle || "Báo hoa mai"}"></span>`
+                : '<span class="route-animal-avatar" aria-hidden="true">🐆</span>';
+
+            routePanelSubtitle.innerHTML = `${avatarHtml}<span>${routeConfig.subtitle || ""}</span>`;
+
+            routePanelMeta.innerHTML = `
+<span class="route-meta-chip"><span class="route-meta-icon">${routeSvgIcon("distance")}</span>${routeConfig.totalDistance || ""}</span>
+<span class="route-meta-chip"><span class="route-meta-icon">${routeSvgIcon("time")}</span>${routeConfig.totalTime || ""}</span>
+`;
+
+            routeSteps.innerHTML = "";
+            (routeConfig.steps || []).forEach((step, index) => {
+                const row = document.createElement("li");
+                row.className = "route-step";
+
+                const distanceChip = step.distance
+                    ? `<span class="route-step-meta-chip">${routeSvgIcon("distance")}${step.distance}</span>`
+                    : "";
+                const timeChip = step.time
+                    ? `<span class="route-step-meta-chip">${routeSvgIcon("time")}${step.time}</span>`
+                    : "";
+                const stepIconName = step.iconType || "straight";
+                row.style.animationDelay = `${index * 90}ms`;
+
+                row.innerHTML = `
+<span class="route-step-icon">${routeSvgIcon(stepIconName)}</span>
+<div class="route-step-main">
+<div class="route-step-title">${step.title || ""}</div>
+${step.subtitle ? `<div class="route-step-sub">${step.subtitle}</div>` : ""}
+</div>
+${distanceChip || timeChip ? `<div class="route-step-meta">${distanceChip}${timeChip}</div>` : ""}
+`;
+
+                routeSteps.appendChild(row);
+            });
+
+            routePanel.classList.add("open");
+            routePanel.setAttribute("aria-hidden", "false");
+        }
+
+        function closeRoutePanel() {
+            if (!routePanel) return;
+            routePanel.classList.remove("open");
+            routePanel.setAttribute("aria-hidden", "true");
+        }
+
+        function openRouteForAnimalById(animalId) {
+            const target = findAnimalById(animalId);
+            if (!target) return;
+
+            const routeConfig = getAnimalRouteConfig(target);
+            if (!routeConfig) return;
+
+            openRoutePanel(routeConfig);
         }
 
         function locationIcon(type) {
@@ -1811,15 +2210,25 @@ ${rows.join("")}
             if (!popupRoot) return;
 
             const checkinButton = popupRoot.querySelector(".popup-checkin-btn[data-checkin-id]");
-            if (!checkinButton) return;
+            const routeButton = popupRoot.querySelector(".popup-route-btn[data-route-animal-id]");
 
-            checkinButton.addEventListener("click", async () => {
-                const targetId = checkinButton.getAttribute("data-checkin-id");
-                if (!targetId) return;
+            if (checkinButton) {
+                checkinButton.addEventListener("click", async () => {
+                    const targetId = checkinButton.getAttribute("data-checkin-id");
+                    if (!targetId) return;
 
-                checkinButton.disabled = true;
-                await checkinAnimalById(targetId);
-            });
+                    checkinButton.disabled = true;
+                    await checkinAnimalById(targetId);
+                });
+            }
+
+            if (routeButton) {
+                routeButton.addEventListener("click", () => {
+                    const targetAnimalId = routeButton.getAttribute("data-route-animal-id");
+                    if (!targetAnimalId) return;
+                    openRouteForAnimalById(targetAnimalId);
+                });
+            }
         });
 
         function focusAnimalById(animalId) {
@@ -1870,6 +2279,12 @@ ${rows.join("")}
         const closeRewardPopupBtn = document.getElementById("closeRewardPopupBtn");
         const gameCompleteModal = document.getElementById("gameCompleteModal");
         const closeGameCompleteBtn = document.getElementById("closeGameCompleteBtn");
+        const routePanel = document.getElementById("routePanel");
+        const routePanelTitle = document.getElementById("routePanelTitle");
+        const routePanelSubtitle = document.getElementById("routePanelSubtitle");
+        const routePanelMeta = document.getElementById("routePanelMeta");
+        const routeSteps = document.getElementById("routeSteps");
+        const closeRoutePanelBtn = document.getElementById("closeRoutePanelBtn");
         let activeQuickFilter = "all";
         let hasShownGameCompletePopup = false;
 
@@ -2215,6 +2630,10 @@ ${rows.join("")}
 
         closeGameCompleteBtn?.addEventListener("click", () => {
             hideGameCompletePopup();
+        });
+
+        closeRoutePanelBtn?.addEventListener("click", () => {
+            closeRoutePanel();
         });
 
         gameCompleteModal?.addEventListener("click", (event) => {
