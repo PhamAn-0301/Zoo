@@ -2,26 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": [
-        "View/**",
-        "assets/**",
-        "assets1/**",
-        "calender/**",
-        "chatbot/**",
-        "contact/**",
-        "css/**",
-        "food/**",
-        "game-cart/**",
-        "myorder/**",
-        "myticket/**",
-        "playgame/**",
-        "ship/**",
-        "voucher/**",
-        "main.js",
-        "style.css",
-        "shared-nav.js",
-        "config.js"
-      ]
+      "includeFiles": "{View/**,assets/**,assets1/**,calender/**,chatbot/**,contact/**,css/**,food/**,game-cart/**,myorder/**,myticket/**,playgame/**,ship/**,voucher/**,main.js,style.css,shared-nav.js,config.js}"
     }
   },
   "rewrites": [
