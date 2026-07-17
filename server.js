@@ -25,7 +25,12 @@ const hbs = exphbs.create({
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "View"));
-
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "OK",
+        timestamp: new Date()
+    });
+});
 // ✅ LIVE RELOAD (only when running `npm run dev`)
 if (enableLiveReload) {
   const livereload = (await import("livereload")).default;
