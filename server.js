@@ -25,7 +25,12 @@ const hbs = exphbs.create({
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "View"));
-
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "OK",
+        timestamp: new Date()
+    });
+});
 // ✅ LIVE RELOAD (only when running `npm run dev`)
 if (enableLiveReload) {
   const livereload = (await import("livereload")).default;
@@ -150,15 +155,33 @@ app.post("/api/chat", async (req, res) => {
 // routes
 app.use("/", webRoutes);
 
-// server
-const server = app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+// Centralized error handler to avoid crashing serverless invocations.
+app.use((err, req, res, next) => {
+  console.error("Unhandled request error:", err);
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(500).json({
+    error: {
+      message: "Internal server error",
+    },
+  });
 });
 
-server.on("error", (error) => {
-  if (error && error.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use.`);
-    process.exit(1);
-  }
-  throw error;
-});
+export default app;
+
+// Start HTTP server only for local/dev runtime.
+if (process.env.VERCEL !== "1") {
+  const server = app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+
+  server.on("error", (error) => {
+    if (error && error.code === "EADDRINUSE") {
+      console.error(`Port ${PORT} is already in use.`);
+      process.exit(1);
+    }
+    throw error;
+  });
+}
