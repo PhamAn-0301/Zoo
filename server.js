@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import exphbs from "express-handlebars";
 import webRoutes from "./route/webRoutes.js";
+import db from "./utils/db.js";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 dotenv.config();
@@ -30,6 +31,26 @@ app.get("/health", (req, res) => {
         status: "OK",
         timestamp: new Date()
     });
+});
+
+app.get("/health/db", async (req, res) => {
+  try {
+    await db.raw("SELECT 1");
+
+    res.status(200).json({
+      status: "OK",
+      database: "connected",
+      timestamp: new Date()
+    });
+  } catch (error) {
+    console.error("Database health check failed:", error);
+
+    res.status(503).json({
+      status: "ERROR",
+      database: "disconnected",
+      timestamp: new Date()
+    });
+  }
 });
 // ✅ LIVE RELOAD (only when running `npm run dev`)
 if (enableLiveReload) {
